@@ -1,0 +1,1 @@
+export const statusList = ['Active', 'In Active', 'Closed']
