@@ -1,0 +1,112 @@
+import { formatDate } from "@/util/dateformat";
+import { set } from "mongoose";
+import { useSession } from "next-auth/react";
+import { useEffect, useState } from "react";
+import Loading from "../Layout/Loading";
+
+const Comments = ({ ticketId }: any) => {
+  
+  const { data }: any = useSession();
+  const [commentInput, setCommentInput] = useState<string>("");
+  const [comments, setComments] = useState<any[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  
+  /**
+   * Fetch comments for the given ticketId
+   */
+  const getComments = async () => {
+    // Fetch comments for the given ticketId
+    try {
+      const results = await fetch(`/api/comments/ticketId/${ticketId}`);
+      const comments = await results.json();
+      const formattedComments = await Promise.all(comments.map(async (comment: any) => {
+        const user = await fetch(`/api/users/${comment.commentBy}`);
+        comment.user = await user.json();
+        return {
+          id: comment._id,
+          content: comment.content,
+          userName: `${comment.user.lastName}, ${comment.user.firstName} ${comment.user.middleName}`,
+          createdAt: formatDate(comment.createdDate, true)
+        } 
+      }));
+      setLoading(false);
+      setComments(formattedComments);
+    } catch (error) {
+      alert(`Failed to fetch comment: ${error}`);
+    }
+  }
+  
+  /**
+   * Handle comment submission
+   * @returns 
+   */
+  const onSubmitComment = async () => {
+    try {
+      const textarea = commentInput;
+      if (textarea.trim() === "") return;
+
+      const newComment = {
+        content: textarea,
+        commentBy: data.user.id,
+        ticketId: ticketId,
+        createdDate: new Date()
+      };
+
+      await fetch(`/api/comments/ticketId/${ticketId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newComment),
+      });
+
+      setCommentInput("");
+      getComments();
+    } catch (error) {
+      alert(`Failed to submit comment: ${error}`);
+    }
+  };
+
+  useEffect(() => {
+    setLoading(true);
+    if (ticketId) getComments();
+  }, [ticketId]);
+
+  if (loading) {
+    return <Loading />;
+  }
+
+  return (
+    <div className="flex flex-col bg-white min-w-96 justify-center py-5 px-10 shadow-lg rounded-lg text-sm">
+      <h2 className="text-lg font-semibold mb-4">Comments</h2>
+      { comments.length > 0 && (
+        <div className="space-y-4">
+          {/* Example Comment */}
+          { comments.map((comment: any) => (
+            <div key={comment.id} className="border-b border-gray-100 pb-2">
+              <p className="font-semibold">{comment.userName} <span className="text-gray-500 text-xs">- {new Date(comment.createdAt).toLocaleString()}</span></p>
+              <p className="text-gray-500">{comment.content}</p>
+            </div>
+          )) }
+        </div>
+      )}
+      <div>
+        <textarea
+          className="border border-gray-100 py-1 px-2 rounded w-full outline-gray-200 bg-white mt-4"
+          rows={3}
+          value={commentInput}
+          onChange={(e) => setCommentInput(e.target.value)}
+          placeholder="Add a comment..."
+        ></textarea>
+        <button 
+          className="bg-green-700 text-white font-semibold px-10 py-1 rounded border border-green-700 cursor-pointer hover:bg-green-600 mt-1"
+          onClick={onSubmitComment}
+        >
+          Submit
+        </button>
+      </div>
+    </div>
+  );
+};
+
+export default Comments;
