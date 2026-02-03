@@ -7,7 +7,7 @@ if (process.env.NODE_ENV === "development") {
   const DATABASE = process.env.DATABASE_NAME
   uri = `mongodb://${HOST}:${PORT}/${DATABASE}`
 } else {
-  uri = `mongodb+srv://antoniotejuco:HpGLSYoBVYn58QZP@cluster0.yy01kze.mongodb.net/ticketing_system`
+  uri = process.env.MONGODB_URI || ""
 }
 const options = {};
 
