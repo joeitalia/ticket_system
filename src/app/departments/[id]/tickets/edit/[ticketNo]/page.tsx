@@ -136,15 +136,15 @@ const EditTicket = () => {
         if (apiData.success) {
           const data = {
             emailTo: emails,
-            subject: `#${ticketId}: ${title}`,
+            subject: `#${issueNo}: ${title}`,
             message: `
               <p>Project: </p>
-              <p>Ticket no: #${ticketId}</p>
+              <p>Ticket no: #${issueNo}</p>
               <p>Users: ${assignee.label}</p>
               <p>Status: ${ticketStatus}</p>
               <p>Issue Content: ${description}</p>
             `,
-            qrcodeText: window.location.href.replace("new", "edit/"+ticketId)
+            qrcodeText: window.location.href.replace("new", "edit/"+issueNo)
           };
           await sendEmail(data);
           alert("Ticket has been updated successfully.")
@@ -404,7 +404,7 @@ const EditTicket = () => {
           </div>
         </Form>
         {/* Comments Component */}
-        <Comments ticketId={ticketId} />
+        <Comments ticketId={ticketId} managers={managers} />
       </div>
     </DefaultLayout>
   )

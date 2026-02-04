@@ -36,7 +36,7 @@ export const authOptions: any = {
         return {
           id: user._id.toString(),
           email: user.email,
-          isAdmin: department?.name == 'Admin',
+          isAdmin: user.isAdmin ?? false,
           firstName: user.firstName,
           lastName: user.lastName,
           middleName: user.middleName

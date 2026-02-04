@@ -1,10 +1,10 @@
 import { formatDate } from "@/util/dateformat";
-import { set } from "mongoose";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import Loading from "../Layout/Loading";
+import { sendEmail } from "@/util/send-email";
 
-const Comments = ({ ticketId }: any) => {
+const Comments = ({ ticketId, managers }: any) => {
   
   const { data }: any = useSession();
   const [commentInput, setCommentInput] = useState<string>("");
@@ -59,13 +59,49 @@ const Comments = ({ ticketId }: any) => {
         },
         body: JSON.stringify(newComment),
       });
-
+      
+      emailSending()
       setCommentInput("");
       getComments();
     } catch (error) {
       alert(`Failed to submit comment: ${error}`);
     }
   };
+
+  const emailSending = async () => {
+    const ticketResponse = await fetch(`/api/tickets/${ticketId}`);
+    const ticketData = await ticketResponse.json();
+    const { title, description, assigneeId, status: ticketStatus, issueNo } = ticketData;
+    const emails = []
+    // get assignee user details to send email
+    const fetchAssignee = await fetch(`/api/users/${assigneeId}`);
+    const assignee = await fetchAssignee.json();
+
+    emails.push(assignee.email);
+    // get managers user details to send email
+    if (managers.length > 0) {
+      emails.push(...managers);
+    }
+
+    const data = {
+      emailTo: emails,
+      subject: `#${issueNo}: ${title}`,
+      message: `
+        <p>Project: </p>
+        <p>Ticket no: #${issueNo}</p>
+        <p>Users: ${assignee.lastName}, ${assignee.firstName} ${assignee.middleName}</p>
+        <p>Status: ${ticketStatus}</p>
+        <p>Issue Content: ${description}</p>
+        <div>
+          <p>New comment added:</p>
+          <p>${commentInput}</p>
+        </div>
+      `,
+      qrcodeText: window.location.href.replace("new", "edit/"+issueNo)
+    };
+    await sendEmail(data);
+  }
+  
 
   useEffect(() => {
     setLoading(true);

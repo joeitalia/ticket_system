@@ -7,6 +7,7 @@ import { isValidEmail } from "../../util/email-validation"
 import { signIn  } from "next-auth/react";
 import Loading from "@/components/Layout/Loading";
 import Image from "next/image";
+import Link from "next/link";
 
 const Login = () => {
   const router = useRouter();
@@ -98,13 +99,16 @@ const Login = () => {
             />
           </div>
         </div>
-        <div className="flex flex-row gap-2">
-          <button 
+        <div className="flex flex-col gap-2">
+          <button
             className="flex-1 bg-blue-700 text-white text-lg py-2 rounded hover:bg-blue-500 cursor-pointer font-semibold"
             onClick={handleLogin}
           >
             Login
           </button>
+          <Link href="/forgot-password" className="text-sm text-blue-700 hover:underline">
+            Forgot Password?
+          </Link>
         </div>
       </Form>
     </div>

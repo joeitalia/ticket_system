@@ -20,6 +20,7 @@ const AddUser = () => {
   const [department, setDepartment] = useState("")
   const [position, setPosition] = useState("")
   const [email, setEmail] = useState("")
+  const [isAdmin, setIsAdmin] = useState(false)
   const [password, setPassword] = useState("")
   const [departmentList, setDepartmentList] = useState([])
   const [fieldErrors, setFieldErrors] = useState<string[]>([])
@@ -56,6 +57,7 @@ const AddUser = () => {
               departmentId: department,
               position,
               email,
+              isAdmin,
               password: await hashText(password),
               createdBy: data?.user?.email,
               createdDate: new Date()
@@ -194,6 +196,19 @@ const AddUser = () => {
                   />
                 </div>
               </div>
+            </div>
+            <div className="flex flex-row gap-4">
+              <div className="flex flex-col w-full gap-1">
+                <label className="font-semibold flex w-full gap-2 self-start">
+                  <input
+                    defaultChecked={isAdmin}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setIsAdmin(e.target.checked)}
+                    type="checkbox"
+                  />
+                  <span className="font-semibold">Administrator</span>
+                </label>
+              </div>
+              <div className="flex flex-col w-full gap-1"></div>
             </div>
             <div className="flex flex-row gap-3 mt-5">
               <button

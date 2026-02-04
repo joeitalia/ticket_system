@@ -80,13 +80,13 @@ const Departments = () => {
                         <td className="px-2 py-1">{dept.createdBy}</td>
                         <td className="text-right px-2 py-1">
                           <div className="flex gap-x-1 justify-end w-full">
-                            <button className="text-[11px] border-blue-500 rounded px-2 py-1 bg-blue-500 text-white hover:bg-blue-600 shadow whitespace-nowrap">Generate QRCode</button>
+                            {/* <button className="text-[11px] border-blue-500 rounded px-2 py-1 bg-blue-500 text-white hover:bg-blue-600 shadow whitespace-nowrap">Generate QRCode</button> */}
                             <Link 
                               href={`/departments/edit/${dept._id}`}
                               className="text-[11px] border-yellow-500 rounded px-2 py-1 bg-yellow-500 text-white hover:bg-yellow-600 shadow items-center flex">
                                 Edit
                             </Link>
-                            { data?.user?.isAdmin && dept.name != "Admin" && 
+                            { data?.user?.isAdmin && 
                               <button
                                 onClick={() => onDeleteDepartment(dept._id)}
                                 className="text-[11px] border-red-500 rounded px-2 py-1 bg-red-500 text-white hover:bg-red-600 shadow cursor-pointer">

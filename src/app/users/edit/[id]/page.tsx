@@ -22,6 +22,7 @@ const AddUser = () => {
   const [password, setPassword] = useState("")
   const [departmentList, setDepartmentList] = useState([])
   const [editPassword, setEditPassword] = useState(false)
+  const [isAdmin, setIsAdmin] = useState(false)
   const [fieldErrors, setFieldErrors] = useState<string[]>([])
   const [isLoading, setIsLoading] = useState(false)
 
@@ -47,6 +48,7 @@ const AddUser = () => {
             lastName,
             middleName,
             departmentId: department,
+            isAdmin,
             position,
             ...(password && editPassword ? { password: await hashText(password) } : {})
           }),
@@ -82,6 +84,7 @@ const AddUser = () => {
         setDepartment(userApi.departmentId)
         setPosition(userApi.position)
         setEmail(userApi.email)
+        setIsAdmin(userApi.isAdmin ?? false)
       }
     } catch (error: any) {
       alert(error)
@@ -191,7 +194,7 @@ const AddUser = () => {
             <div className="flex flex-row gap-4">
               <div className="flex flex-col w-full gap-1">
                 <label className="font-semibold">Email Address:</label>
-                <div className="flex w-full">
+                <div className="flex flex-col w-full gap-2">
                   <input
                     defaultValue={email}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
@@ -199,6 +202,16 @@ const AddUser = () => {
                     type="text" 
                     className="border border-gray-100 px-2 py-1.5 rounded w-full outline-gray-200 bg-gray-100"
                   />
+                  <label className="flex items-center">
+                    <input
+                      type="checkbox"
+                      defaultChecked={isAdmin}
+                      onChange={() => {
+                        setIsAdmin(!isAdmin);
+                      }}
+                    />
+                    &nbsp; Administrator
+                  </label>
                 </div>
               </div>
               <div className="flex flex-col w-full gap-1">
