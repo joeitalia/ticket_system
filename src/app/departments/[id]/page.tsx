@@ -3,7 +3,6 @@
 import DefaultLayout from "@/components/Layout/DefaultLayout"
 import Loading from "@/components/Layout/Loading"
 import { formatDate } from "@/util/dateformat"
-import { set } from "mongoose"
 import Link from "next/link"
 import { useParams } from "next/navigation"
 import { useEffect, useState } from "react"
@@ -92,6 +91,7 @@ const ShowDepartment = () => {
               description: ticket.description,
               importance: ticket.importance,
               status: ticket.status,
+              type: ticket.type,
               startDate: formatDate(ticket.startDate),
               targetDate: formatDate(ticket.targetDate),
               createdDate: formatDate(ticket.createdDate),
@@ -100,11 +100,12 @@ const ShowDepartment = () => {
           })
         )
         // 2️⃣ CSV headers
-        const headers = ["Issue No.", "Title", "Description", "Importance", "Status", "Start Date", "Target Date", "Created Date", "Created By"];
+        const headers = ["Issue No.", "Title", "Description", "Importance", "Status", "Type", "Start Date", "Target Date", "Created Date", "Created By"];
+        const fields = ["issueNo", "title", "description", "importance", "status", "type", "startDate", "targetDate", "createdDate", "createdBy"];
         const rows = [
           headers.join(","), // header row
           ...ticketsWithReporter.map((row: any) =>
-            headers.map((field: any) => `"${row[field]}"`).join(",")
+            fields.map((field: any) => `"${row[field]}"`).join(",")
           ),
         ];
         const csv = rows.join("\n");
@@ -116,7 +117,6 @@ const ShowDepartment = () => {
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
-        
       } else {
         alert(reportApi.message || "Error generating report")
       }
