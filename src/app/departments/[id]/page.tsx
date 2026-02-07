@@ -78,6 +78,52 @@ const ShowDepartment = () => {
     }
   }
 
+  const generateReport = async () => {
+    try {
+      const res = await fetch(`/api/tickets/department/${deptId}`)
+      const reportApi = await res.json()
+      if (reportApi.length) {
+        const ticketsWithReporter: any = await Promise.all(
+          reportApi.map(async (ticket: any) => {
+            const reportedBy = await getReportedBy(ticket)
+            return {
+              issueNo: ticket.issueNo,
+              title: ticket.title,
+              description: ticket.description,
+              importance: ticket.importance,
+              status: ticket.status,
+              startDate: formatDate(ticket.startDate),
+              targetDate: formatDate(ticket.targetDate),
+              createdDate: formatDate(ticket.createdDate),
+              createdBy: reportedBy
+            }
+          })
+        )
+        // 2️⃣ CSV headers
+        const headers = ["Issue No.", "Title", "Description", "Importance", "Status", "Start Date", "Target Date", "Created Date", "Created By"];
+        const rows = [
+          headers.join(","), // header row
+          ...ticketsWithReporter.map((row: any) =>
+            headers.map((field: any) => `"${row[field]}"`).join(",")
+          ),
+        ];
+        const csv = rows.join("\n");
+        const blob = new Blob([csv], { type: "text/csv" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = `${departmentName}-report.csv`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
+      } else {
+        alert(reportApi.message || "Error generating report")
+      }
+    } catch (error: any) {
+      alert(error.message || "Error generating report")
+    }
+  }
   useEffect(() => {
     setLoading(true)
     const deptId:any = params.id
@@ -93,7 +139,7 @@ const ShowDepartment = () => {
         <div className="flex flex-row justify-between items-center">
           <h1 className="font-semibold text-2xl">{departmentName} Department</h1>
           <div className="flex gap-1">
-            <button className="border-green-500 rounded px-2 py-1 bg-green-500 text-white hover:bg-green-600 shadow font-semibold cursor-pointer">
+            <button onClick={generateReport} className="border-green-500 rounded px-2 py-1 bg-green-500 text-white hover:bg-green-600 shadow font-semibold cursor-pointer">
               Generate Report
             </button>
             <Link

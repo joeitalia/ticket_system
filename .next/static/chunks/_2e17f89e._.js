@@ -453,6 +453,61 @@ const ShowDepartment = ()=>{
             alert(error);
         }
     };
+    const generateReport = async ()=>{
+        try {
+            const res = await fetch("/api/tickets/department/".concat(deptId));
+            const reportApi = await res.json();
+            if (reportApi.length) {
+                const ticketsWithReporter = await Promise.all(reportApi.map(async (ticket)=>{
+                    const reportedBy = await getReportedBy(ticket);
+                    return {
+                        issueNo: ticket.issueNo,
+                        title: ticket.title,
+                        description: ticket.description,
+                        importance: ticket.importance,
+                        status: ticket.status,
+                        startDate: (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$util$2f$dateformat$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["formatDate"])(ticket.startDate),
+                        targetDate: (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$util$2f$dateformat$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["formatDate"])(ticket.targetDate),
+                        createdDate: (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$util$2f$dateformat$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["formatDate"])(ticket.createdDate),
+                        createdBy: reportedBy
+                    };
+                }));
+                // 2️⃣ CSV headers
+                const headers = [
+                    "Issue No.",
+                    "Title",
+                    "Description",
+                    "Importance",
+                    "Status",
+                    "Start Date",
+                    "Target Date",
+                    "Created Date",
+                    "Created By"
+                ];
+                const rows = [
+                    headers.join(","),
+                    ...ticketsWithReporter.map((row)=>headers.map((field)=>'"'.concat(row[field], '"')).join(","))
+                ];
+                const csv = rows.join("\n");
+                const blob = new Blob([
+                    csv
+                ], {
+                    type: "text/csv"
+                });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement("a");
+                link.href = url;
+                link.download = "".concat(departmentName, "-report.csv");
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            } else {
+                alert(reportApi.message || "Error generating report");
+            }
+        } catch (error) {
+            alert(error.message || "Error generating report");
+        }
+    };
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
         "ShowDepartment.useEffect": ()=>{
             setLoading(true);
@@ -468,7 +523,7 @@ const ShowDepartment = ()=>{
         children: [
             loading && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$Layout$2f$Loading$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {}, void 0, false, {
                 fileName: "[project]/src/app/departments/[id]/page.tsx",
-                lineNumber: 91,
+                lineNumber: 137,
                 columnNumber: 19
             }, ("TURBOPACK compile-time value", void 0)),
             !loading && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -485,18 +540,19 @@ const ShowDepartment = ()=>{
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/app/departments/[id]/page.tsx",
-                                lineNumber: 94,
+                                lineNumber: 140,
                                 columnNumber: 11
                             }, ("TURBOPACK compile-time value", void 0)),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 className: "flex gap-1",
                                 children: [
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                        onClick: generateReport,
                                         className: "border-green-500 rounded px-2 py-1 bg-green-500 text-white hover:bg-green-600 shadow font-semibold cursor-pointer",
                                         children: "Generate Report"
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/departments/[id]/page.tsx",
-                                        lineNumber: 96,
+                                        lineNumber: 142,
                                         columnNumber: 13
                                     }, ("TURBOPACK compile-time value", void 0)),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -505,19 +561,19 @@ const ShowDepartment = ()=>{
                                         children: "Create Ticket"
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/departments/[id]/page.tsx",
-                                        lineNumber: 99,
+                                        lineNumber: 145,
                                         columnNumber: 13
                                     }, ("TURBOPACK compile-time value", void 0))
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/app/departments/[id]/page.tsx",
-                                lineNumber: 95,
+                                lineNumber: 141,
                                 columnNumber: 11
                             }, ("TURBOPACK compile-time value", void 0))
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/app/departments/[id]/page.tsx",
-                        lineNumber: 93,
+                        lineNumber: 139,
                         columnNumber: 9
                     }, ("TURBOPACK compile-time value", void 0)),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -534,7 +590,7 @@ const ShowDepartment = ()=>{
                                                 children: "Ticket"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/departments/[id]/page.tsx",
-                                                lineNumber: 111,
+                                                lineNumber: 157,
                                                 columnNumber: 17
                                             }, ("TURBOPACK compile-time value", void 0)),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -542,7 +598,7 @@ const ShowDepartment = ()=>{
                                                 children: "Title"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/departments/[id]/page.tsx",
-                                                lineNumber: 112,
+                                                lineNumber: 158,
                                                 columnNumber: 17
                                             }, ("TURBOPACK compile-time value", void 0)),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -550,7 +606,7 @@ const ShowDepartment = ()=>{
                                                 children: "Importance"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/departments/[id]/page.tsx",
-                                                lineNumber: 113,
+                                                lineNumber: 159,
                                                 columnNumber: 17
                                             }, ("TURBOPACK compile-time value", void 0)),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -558,7 +614,7 @@ const ShowDepartment = ()=>{
                                                 children: "Status"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/departments/[id]/page.tsx",
-                                                lineNumber: 114,
+                                                lineNumber: 160,
                                                 columnNumber: 17
                                             }, ("TURBOPACK compile-time value", void 0)),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -566,7 +622,7 @@ const ShowDepartment = ()=>{
                                                 children: "Start Date"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/departments/[id]/page.tsx",
-                                                lineNumber: 115,
+                                                lineNumber: 161,
                                                 columnNumber: 17
                                             }, ("TURBOPACK compile-time value", void 0)),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -574,7 +630,7 @@ const ShowDepartment = ()=>{
                                                 children: "Target Date"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/departments/[id]/page.tsx",
-                                                lineNumber: 116,
+                                                lineNumber: 162,
                                                 columnNumber: 17
                                             }, ("TURBOPACK compile-time value", void 0)),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -582,7 +638,7 @@ const ShowDepartment = ()=>{
                                                 children: "Reported By"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/departments/[id]/page.tsx",
-                                                lineNumber: 117,
+                                                lineNumber: 163,
                                                 columnNumber: 17
                                             }, ("TURBOPACK compile-time value", void 0)),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -590,18 +646,18 @@ const ShowDepartment = ()=>{
                                                 children: "Reported Date"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/departments/[id]/page.tsx",
-                                                lineNumber: 118,
+                                                lineNumber: 164,
                                                 columnNumber: 17
                                             }, ("TURBOPACK compile-time value", void 0))
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/departments/[id]/page.tsx",
-                                        lineNumber: 110,
+                                        lineNumber: 156,
                                         columnNumber: 15
                                     }, ("TURBOPACK compile-time value", void 0))
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/departments/[id]/page.tsx",
-                                    lineNumber: 109,
+                                    lineNumber: 155,
                                     columnNumber: 13
                                 }, ("TURBOPACK compile-time value", void 0)),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("tbody", {
@@ -614,12 +670,12 @@ const ShowDepartment = ()=>{
                                                 children: "No tickets found for this department."
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/departments/[id]/page.tsx",
-                                                lineNumber: 124,
+                                                lineNumber: 170,
                                                 columnNumber: 19
                                             }, ("TURBOPACK compile-time value", void 0))
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/departments/[id]/page.tsx",
-                                            lineNumber: 123,
+                                            lineNumber: 169,
                                             columnNumber: 17
                                         }, ("TURBOPACK compile-time value", void 0)),
                                         tickets.map((ticket)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("tr", {
@@ -637,12 +693,12 @@ const ShowDepartment = ()=>{
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/app/departments/[id]/page.tsx",
-                                                            lineNumber: 132,
+                                                            lineNumber: 178,
                                                             columnNumber: 21
                                                         }, ("TURBOPACK compile-time value", void 0))
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/departments/[id]/page.tsx",
-                                                        lineNumber: 131,
+                                                        lineNumber: 177,
                                                         columnNumber: 19
                                                     }, ("TURBOPACK compile-time value", void 0)),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -650,7 +706,7 @@ const ShowDepartment = ()=>{
                                                         children: ticket.title
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/departments/[id]/page.tsx",
-                                                        lineNumber: 139,
+                                                        lineNumber: 185,
                                                         columnNumber: 19
                                                     }, ("TURBOPACK compile-time value", void 0)),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -658,7 +714,7 @@ const ShowDepartment = ()=>{
                                                         children: ticket.importance
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/departments/[id]/page.tsx",
-                                                        lineNumber: 140,
+                                                        lineNumber: 186,
                                                         columnNumber: 19
                                                     }, ("TURBOPACK compile-time value", void 0)),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -666,7 +722,7 @@ const ShowDepartment = ()=>{
                                                         children: ticket.status
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/departments/[id]/page.tsx",
-                                                        lineNumber: 141,
+                                                        lineNumber: 187,
                                                         columnNumber: 19
                                                     }, ("TURBOPACK compile-time value", void 0)),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -674,7 +730,7 @@ const ShowDepartment = ()=>{
                                                         children: (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$util$2f$dateformat$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["formatDate"])(ticket.startDate)
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/departments/[id]/page.tsx",
-                                                        lineNumber: 142,
+                                                        lineNumber: 188,
                                                         columnNumber: 19
                                                     }, ("TURBOPACK compile-time value", void 0)),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -682,7 +738,7 @@ const ShowDepartment = ()=>{
                                                         children: (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$util$2f$dateformat$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["formatDate"])(ticket.targetDate)
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/departments/[id]/page.tsx",
-                                                        lineNumber: 143,
+                                                        lineNumber: 189,
                                                         columnNumber: 19
                                                     }, ("TURBOPACK compile-time value", void 0)),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -690,7 +746,7 @@ const ShowDepartment = ()=>{
                                                         children: ticket.createdBy
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/departments/[id]/page.tsx",
-                                                        lineNumber: 144,
+                                                        lineNumber: 190,
                                                         columnNumber: 19
                                                     }, ("TURBOPACK compile-time value", void 0)),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -698,42 +754,42 @@ const ShowDepartment = ()=>{
                                                         children: (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$util$2f$dateformat$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["formatDate"])(ticket.createdDate)
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/departments/[id]/page.tsx",
-                                                        lineNumber: 145,
+                                                        lineNumber: 191,
                                                         columnNumber: 19
                                                     }, ("TURBOPACK compile-time value", void 0))
                                                 ]
                                             }, ticket.issueNo, true, {
                                                 fileName: "[project]/src/app/departments/[id]/page.tsx",
-                                                lineNumber: 130,
+                                                lineNumber: 176,
                                                 columnNumber: 17
                                             }, ("TURBOPACK compile-time value", void 0)))
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/app/departments/[id]/page.tsx",
-                                    lineNumber: 121,
+                                    lineNumber: 167,
                                     columnNumber: 13
                                 }, ("TURBOPACK compile-time value", void 0))
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/app/departments/[id]/page.tsx",
-                            lineNumber: 108,
+                            lineNumber: 154,
                             columnNumber: 11
                         }, ("TURBOPACK compile-time value", void 0))
                     }, void 0, false, {
                         fileName: "[project]/src/app/departments/[id]/page.tsx",
-                        lineNumber: 107,
+                        lineNumber: 153,
                         columnNumber: 9
                     }, ("TURBOPACK compile-time value", void 0))
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/app/departments/[id]/page.tsx",
-                lineNumber: 92,
+                lineNumber: 138,
                 columnNumber: 20
             }, ("TURBOPACK compile-time value", void 0))
         ]
     }, void 0, true, {
         fileName: "[project]/src/app/departments/[id]/page.tsx",
-        lineNumber: 90,
+        lineNumber: 136,
         columnNumber: 5
     }, ("TURBOPACK compile-time value", void 0));
 };
