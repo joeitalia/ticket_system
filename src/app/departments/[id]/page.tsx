@@ -2,6 +2,7 @@
 
 import DefaultLayout from "@/components/Layout/DefaultLayout"
 import Loading from "@/components/Layout/Loading"
+import LoadingOverlay from "@/components/Layout/LoadingOverlay"
 import { formatDate } from "@/util/dateformat"
 import Link from "next/link"
 import { useParams } from "next/navigation"
@@ -13,6 +14,7 @@ const ShowDepartment = () => {
   const [tickets, setTickets] = useState([])
   const [departmentName, setDepartmentName] = useState("")
   const [loading, setLoading] = useState(false)
+  const [isOverlayOpen, setIsOverlayOpen] = useState(false)
 
   /**
    * fetch tickets by department id
@@ -78,6 +80,7 @@ const ShowDepartment = () => {
   }
 
   const generateReport = async () => {
+    setIsOverlayOpen(true)
     try {
       const res = await fetch(`/api/tickets/department/${deptId}`)
       const reportApi = await res.json()
@@ -117,10 +120,13 @@ const ShowDepartment = () => {
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
+        setIsOverlayOpen(false)
       } else {
+        setIsOverlayOpen(false)
         alert(reportApi.message || "Error generating report")
       }
     } catch (error: any) {
+      setIsOverlayOpen(false)
       alert(error.message || "Error generating report")
     }
   }
@@ -134,6 +140,7 @@ const ShowDepartment = () => {
 
   return (
     <DefaultLayout>
+      {isOverlayOpen && <LoadingOverlay />}
       {loading && <Loading />}
       {!loading && <div className="flex flex-col">
         <div className="flex flex-row justify-between items-center">
