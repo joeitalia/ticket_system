@@ -104,7 +104,7 @@ const CreateTicket = () => {
             <p>Status: ${ticketStatus}</p>
             <p>Issue Content: ${description}</p>
           `,
-          qrcodeText: window.location.href.replace("new", "edit/"+newTicketNumber)
+          qrcodeText: `${location.origin}/login?callback=${location.href.replace("new", "edit/"+newTicketNumber)}`
         };
         await sendEmail(data);
         alert("New ticket has been created successfully.")

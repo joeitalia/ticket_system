@@ -1,10 +1,10 @@
 "use client"
 
 import Form from "next/form"
-import { useRouter } from "next/navigation";
-import { ChangeEvent, useState } from "react"
+import { useRouter, useSearchParams } from "next/navigation";
+import { ChangeEvent, useEffect, useState } from "react"
 import { isValidEmail } from "../../util/email-validation"
-import { signIn  } from "next-auth/react";
+import { signIn, useSession  } from "next-auth/react";
 import Loading from "@/components/Layout/Loading";
 import Image from "next/image";
 import Link from "next/link";
@@ -15,6 +15,10 @@ const Login = () => {
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false);
+  const { data: session } = useSession();
+  const searchParams = useSearchParams();
+
+  const callback = searchParams.get("callback") || "/";
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,16 +35,16 @@ const Login = () => {
 
     try {
       const res = await signIn("credentials", {
-        redirect: false,
         email,
         password,
+        callbackUrl: searchParams.get("callback") || "/"
       });
 
       if (res?.error) {
         setLoading(false)
         return setError(res.error);
       } else {
-        router.push("/")
+        router.push(callback)
         return setLoading(false)
       }
     } catch {
@@ -48,6 +52,10 @@ const Login = () => {
       return setError("Error found!")
     }
   }
+
+  useEffect(() => {
+    if (session) router.push(callback);
+  }, [searchParams])
 
   if (loading) {
     return (<Loading/>)

@@ -14,6 +14,7 @@ type DefaultLayoutProps = {
 const DefaultLayout = ({children}: DefaultLayoutProps) => {
   const router = useRouter();
   const { data: session, status } = useSession();
+  
   useEffect(() => {
     if (!session) router.push("/login");
   }, [session, router]);

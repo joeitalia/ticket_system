@@ -97,7 +97,7 @@ const Comments = ({ ticketId, managers }: any) => {
           <p>${commentInput}</p>
         </div>
       `,
-      qrcodeText: window.location.href.replace("new", "edit/"+issueNo)
+      qrcodeText: `${location.origin}/login?callback=${location.href.replace("new", "edit/"+issueNo)}`
     };
     await sendEmail(data);
   }
@@ -106,6 +106,7 @@ const Comments = ({ ticketId, managers }: any) => {
   useEffect(() => {
     setLoading(true);
     if (ticketId) getComments();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ticketId]);
 
   if (loading) {

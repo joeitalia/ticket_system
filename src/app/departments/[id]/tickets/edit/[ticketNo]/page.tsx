@@ -144,7 +144,7 @@ const EditTicket = () => {
               <p>Status: ${ticketStatus}</p>
               <p>Issue Content: ${description}</p>
             `,
-            qrcodeText: window.location.href.replace("new", "edit/"+issueNo)
+            qrcodeText: `${location.origin}/login?callback=${window.location.href.replace("new", "edit/"+issueNo)}`
           };
           await sendEmail(data);
           alert("Ticket has been updated successfully.")
