@@ -62,25 +62,13 @@ const Login = () => {
   }
 
   return (
-    <div className="flex">
-      <div id="login-content" className="flex bg-blue-50 h-screen w-3/4 items-center">
-        <div className="w-full p-32">
-          <h1 className="text-6xl text-center flex flex-col gap-y-3">
-            <span>Web-based Ticketing</span>
-            <span className="text-4xl">and</span>
-            <span>QR Code Management</span>
-            <span>System</span>
-            <span className="text-4xl">for</span>
-            <span>Nagase Philippines</span>
-          </h1>
-        </div>
-      </div>
+    <div className="flex flex-col items-center justify-center h-screen">
+      <Image src="/images/4ef5a33b-7039-4f26-932f-48ce9cdf479c.jpeg" alt="Logo" width={300} height={100} className="mx-auto"/>
       <Form
         action="#"
         formMethod="POST"
         id="login-form" 
-        className="flex flex-col bg-white min-w-96 justify-center p-10 gap-y-4 shadow-lg">
-        <Image src="/images/4ef5a33b-7039-4f26-932f-48ce9cdf479c.jpeg" alt="Logo" width={300} height={100} className="mx-auto w-full"/>
+        className="flex flex-col bg-white min-w-96 justify-center p-10 gap-y-4 shadow-lg border border-gray-100 rounded-lg">
         {error && (<span className="text-sm text-red-500">{error}</span>)}
         <div className="flex flex-col w-full">
           <label>Email:</label>

@@ -11,6 +11,9 @@ import Autocompleter from '@/components/Autocompleter'
 import { useSession } from 'next-auth/react'
 import { sendEmail } from '@/util/send-email'
 import Loading from '@/components/Layout/Loading'
+import Image from 'next/image'
+import { convertToBase64 } from '@/util/image-to-base64'
+import Modal from '@/components/Modal'
 
 const CreateTicket = () => {
   const router = useRouter();
@@ -25,7 +28,8 @@ const CreateTicket = () => {
   const [targetDate, setTargetDate] = useState('')
   const [loading, setLoading] = useState(false)
   const [managers, setManagers] = useState<any[]>([])
-  // const [attachment, setAttachment] = useState('')
+  const [attachments, setAttachments] = useState<any[]>([])
+  const [selectedImage, setSelectedImage] = useState<any>('')
 
   const [assigneeOptions, setAssigneeOptions] = useState<any[]>([])
   const [assignee, setAssignee] = useState<any>({
@@ -71,7 +75,7 @@ const CreateTicket = () => {
           description,
           startDate,
           targetDate,
-          // attachment,
+          attachments,
           resolvedDate: null,
           assigneeId: assignee.value,
           createdDate: new Date(),
@@ -118,6 +122,24 @@ const CreateTicket = () => {
       alert(error)
     }
   }
+
+  const handleAttachment = async (e: React.ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+      const base64Image = await convertToBase64(file);
+      setAttachments(prevState => [...prevState, base64Image])
+      e.target.value = ""
+    }
+  
+    const handleRemoveImage = (e: React.MouseEvent<HTMLButtonElement>, i: number) => {
+      setAttachments(prev =>
+        prev.filter((_, index) => index !== i)
+      );
+    }
+  
+    const handleImageViewer = (attachment: string) => {
+      setSelectedImage(attachment)
+    }
 
   useEffect(() => {
     if (!assignee?.label?.trim()) {
@@ -167,163 +189,197 @@ const CreateTicket = () => {
   }, [params.id]);
   
   return (
-    <DefaultLayout>
-      {loading && <Loading />}
-      {!loading && <div className="flex flex-col gap-2">
-        <h1 className="font-semibold text-2xl">Create New Ticket</h1>
-        <Form
-          action="#"
-          formMethod="POST"
-          id="login-form" 
-          className="flex flex-col bg-white min-w-96 justify-center py-5 px-10 shadow-lg rounded-lg text-sm">
-          <div className="flex flex-col gap-y-4">
-            {
-              fieldErrors && (
-                <div className="flex flex-col">
-                { 
-                  fieldErrors.map((err: string) => (
-                    <span key={err} className="text-xs text-red-500">{err}</span>
-                  ))
+    <>
+      <DefaultLayout>
+        {loading && <Loading />}
+        {!loading && <div className="flex flex-col gap-2">
+          <h1 className="font-semibold text-2xl">Create New Ticket</h1>
+          <Form
+            action="#"
+            formMethod="POST"
+            id="login-form" 
+            className="flex flex-col bg-white min-w-96 justify-center py-5 px-10 shadow-lg rounded-lg text-sm">
+            <div className="flex flex-col gap-y-4">
+              {
+                fieldErrors && (
+                  <div className="flex flex-col">
+                  { 
+                    fieldErrors.map((err: string) => (
+                      <span key={err} className="text-xs text-red-500">{err}</span>
+                    ))
+                  }
+                  </div>
+                )
+              }
+              <div className="flex flex-col gap-1">
+                <label className="whitespace-pre mr-3 font-semibold">Title:</label>
+                <div className="flex w-full">
+                  <input 
+                    defaultValue={title}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTitle(e.target.value)}
+                    type="text" 
+                    className="border border-gray-100 py-1.5 px-2 rounded w-full outline-gray-200 bg-white"
+                  />
+                </div>
+              </div>
+              <div className='flex flex-row gap-4 w-full'>
+                <div className="flex flex-col gap-1 w-1/3">
+                  <label className="whitespace-pre mr-3 font-semibold">Status:</label>
+                  <div className="flex w-full">
+                    <select 
+                      defaultValue={ticketStatus}
+                      onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setTicketStatus(e.target.value)}
+                      className='border border-gray-100 p-2 rounded w-full outline-gray-200 bg-white'
+                    >
+                      <option>Select...</option>
+                      {
+                        STATUS.map((stat: string) => (
+                          <option key={stat} value={stat}>{stat}</option>
+                        ))
+                      }
+                    </select>
+                  </div>
+                </div>
+                <div className="flex flex-col gap-1 w-1/3">
+                  <label className="whitespace-pre mr-3 font-semibold">Importance:</label>
+                  <div className="flex w-full">
+                    <select 
+                      defaultValue={ticketImportance}
+                      onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setTicketImportance(e.target.value)}
+                      className='border border-gray-100 p-2 rounded w-full outline-gray-200 bg-white'
+                    >
+                      <option>Select...</option>
+                      {
+                        IMPORTANCE.map((stat: string) => (
+                          <option key={stat} value={stat}>{stat}</option>
+                        ))
+                      }
+                    </select>
+                  </div>
+                </div>
+                <div className="flex flex-col gap-1 w-1/3">
+                  <label className="whitespace-pre mr-3 font-semibold">Type:</label>
+                  <div className="flex w-full">
+                    <select 
+                      defaultValue={ticketType}
+                      onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setTicketType(e.target.value)}
+                      className='border border-gray-100 p-2 rounded w-full outline-gray-200 bg-white'
+                    >
+                      <option>Select...</option>
+                      {
+                        TYPE.map((stat: string) => (
+                          <option key={stat} value={stat}>{stat}</option>
+                        ))
+                      }
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div className='flex flex-row gap-4 w-full'> 
+                <div className="flex flex-col gap-1 w-1/3">
+                  <label className="whitespace-pre mr-3 font-semibold">Assignee:</label>
+                  <div className="flex w-full">
+                    <Autocompleter
+                      options={assigneeOptions}
+                      input={assignee.label}
+                      setInput={setAssignee}
+                    />
+                  </div>
+                </div>
+                <div className="flex flex-col gap-1 w-1/3">
+                  <label className="whitespace-pre mr-3 font-semibold">Start Date:</label>
+                  <div className="flex w-full">
+                    <input 
+                      type="date" 
+                      defaultValue={startDate}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => setStartDate(e.target.value)}
+                      className="border border-gray-100 py-1 px-2 rounded w-full outline-gray-200 bg-white"
+                    />
+                  </div>
+                </div>
+                <div className="flex flex-col gap-1 w-1/3">
+                  <label className="whitespace-pre mr-3 font-semibold">Target Date:</label>
+                  <div className="flex w-full">
+                    <input 
+                      type="date" 
+                      defaultValue={targetDate}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTargetDate(e.target.value)}
+                      className="border border-gray-100 py-1 px-2 rounded w-full outline-gray-200 bg-white"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="flex flex-col w-full gap-1">
+                <label className="w-1/6 font-semibold">Issue Content:</label>
+                <div>
+                  <Editor 
+                    value={description} 
+                    onChange={(e: any) => setDescription(e.target.value)}
+                    className="border border-gray-100 py-1 px-2 rounded w-full outline-gray-200 bg-white p-4 min-h-40"
+                  />
+                </div>
+              </div>
+              <div className="flex flex-col gap-1">
+                <label className="whitespace-pre mr-3 font-semibold">Attachment:</label>
+                <div className="flex flex-col w-full">
+                  <input 
+                    defaultValue={title}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleAttachment(e)}
+                    type="file" 
+                    className="border border-gray-100 py-1.5 px-2 rounded w-full outline-gray-200 bg-white"
+                  />
+                </div>
+                {
+                  attachments.length > 0 && <div className="flex flex-wrap gap-2 pt-2">
+                    {attachments.map((attachment: any, index: number) => {
+                      return (
+                        <div key={attachment} className="p-2 shadow-xl rounded-md border border-gray-100 w-60 flex items-center relative group">
+                          <span onClick={() => handleImageViewer(attachment)} className="group-hover:flex hidden absolute inset-0 bg-gray-100/70 cursor-pointer justify-center items-center text-white">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                              <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                            </svg>
+                          </span>
+                          <button>
+                            <Image id={`attachment-${index}`} src={attachment} alt="Slide 1" width={800} height={400} className="w-full" />
+                          </button>
+                          <button className="rounded-full bg-red-400 p-1 text-white font-medium absolute -top-1 -right-1 border border-white cursor-pointer" onClick={(event: React.MouseEvent<HTMLButtonElement>) => handleRemoveImage(event, index)}>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-4">
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+                            </svg>
+                          </button>
+                        </div>
+                      )
+                    })}
+                  </div>
                 }
-                </div>
-              )
-            }
-            <div className="flex flex-col gap-1">
-              <label className="whitespace-pre mr-3 font-semibold">Title:</label>
-              <div className="flex w-full">
-                <input 
-                  defaultValue={title}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTitle(e.target.value)}
-                  type="text" 
-                  className="border border-gray-100 py-1.5 px-2 rounded w-full outline-gray-200 bg-white"
-                />
+              </div>
+              <div className="flex flex-row gap-3 mt-5">
+                <button
+                  className="bg-green-700 text-white font-semibold px-10 py-1 rounded border border-green-700 cursor-pointer hover:bg-green-600"
+                  onClick={onSaveTicket}
+                >
+                  Save
+                </button>
+                <Link 
+                  href={`/departments/${params.id}`} 
+                  className="bg-white text-gray-500 font-semibold px-10 py-1 rounded border border-gray-300 cursor-pointer hover:bg-gray-100"
+                >
+                  Back
+                </Link>
               </div>
             </div>
-            <div className='flex flex-row gap-4 w-full'>
-              <div className="flex flex-col gap-1 w-1/3">
-                <label className="whitespace-pre mr-3 font-semibold">Status:</label>
-                <div className="flex w-full">
-                  <select 
-                    defaultValue={ticketStatus}
-                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setTicketStatus(e.target.value)}
-                    className='border border-gray-100 p-2 rounded w-full outline-gray-200 bg-white'
-                  >
-                    <option>Select...</option>
-                    {
-                      STATUS.map((stat: string) => (
-                        <option key={stat} value={stat}>{stat}</option>
-                      ))
-                    }
-                  </select>
-                </div>
-              </div>
-              <div className="flex flex-col gap-1 w-1/3">
-                <label className="whitespace-pre mr-3 font-semibold">Importance:</label>
-                <div className="flex w-full">
-                  <select 
-                    defaultValue={ticketImportance}
-                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setTicketImportance(e.target.value)}
-                    className='border border-gray-100 p-2 rounded w-full outline-gray-200 bg-white'
-                  >
-                    <option>Select...</option>
-                    {
-                      IMPORTANCE.map((stat: string) => (
-                        <option key={stat} value={stat}>{stat}</option>
-                      ))
-                    }
-                  </select>
-                </div>
-              </div>
-              <div className="flex flex-col gap-1 w-1/3">
-                <label className="whitespace-pre mr-3 font-semibold">Type:</label>
-                <div className="flex w-full">
-                  <select 
-                    defaultValue={ticketType}
-                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setTicketType(e.target.value)}
-                    className='border border-gray-100 p-2 rounded w-full outline-gray-200 bg-white'
-                  >
-                    <option>Select...</option>
-                    {
-                      TYPE.map((stat: string) => (
-                        <option key={stat} value={stat}>{stat}</option>
-                      ))
-                    }
-                  </select>
-                </div>
-              </div>
+          </Form>
+        </div>}
+      </DefaultLayout>
+      {
+        selectedImage &&
+          <Modal onClose={() => setSelectedImage('')}>
+            <div className="max-h-[600px]">
+              <Image src={selectedImage} alt="Image Attachment Viewer" width="600" height="400" className="max-h-[500px] w-full object-contain" />
             </div>
-            <div className='flex flex-row gap-4 w-full'> 
-              <div className="flex flex-col gap-1 w-1/3">
-                <label className="whitespace-pre mr-3 font-semibold">Assignee:</label>
-                <div className="flex w-full">
-                  <Autocompleter
-                    options={assigneeOptions}
-                    input={assignee.label}
-                    setInput={setAssignee}
-                  />
-                </div>
-              </div>
-              <div className="flex flex-col gap-1 w-1/3">
-                <label className="whitespace-pre mr-3 font-semibold">Start Date:</label>
-                <div className="flex w-full">
-                  <input 
-                    type="date" 
-                    defaultValue={startDate}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setStartDate(e.target.value)}
-                    className="border border-gray-100 py-1 px-2 rounded w-full outline-gray-200 bg-white"
-                  />
-                </div>
-              </div>
-              <div className="flex flex-col gap-1 w-1/3">
-                <label className="whitespace-pre mr-3 font-semibold">Target Date:</label>
-                <div className="flex w-full">
-                  <input 
-                    type="date" 
-                    defaultValue={targetDate}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTargetDate(e.target.value)}
-                    className="border border-gray-100 py-1 px-2 rounded w-full outline-gray-200 bg-white"
-                  />
-                </div>
-              </div>
-            </div>
-            <div className="flex flex-col w-full gap-1">
-              <label className="w-1/6 font-semibold">Issue Content:</label>
-              <div>
-                <Editor 
-                  value={description} 
-                  onChange={(e: any) => setDescription(e.target.value)}
-                  className="border border-gray-100 py-1 px-2 rounded w-full outline-gray-200 bg-white p-4 min-h-40"
-                />
-              </div>
-            </div>
-            {/* <div className="flex flex-col gap-1">
-              <label className="whitespace-pre mr-3 font-semibold">Attachment:</label>
-              <div className="flex w-full">
-                <input
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setAttachment(e.target.value)}
-                  type="file" 
-                  className="border border-gray-100 py-1.5 px-2 rounded w-full outline-gray-200 bg-white"
-                />
-              </div>
-            </div> */}
-            <div className="flex flex-row gap-3 mt-5">
-              <button
-                className="bg-green-700 text-white font-semibold px-10 py-1 rounded border border-green-700 cursor-pointer hover:bg-green-600"
-                onClick={onSaveTicket}
-              >
-                Save
-              </button>
-              <Link 
-                href={`/departments/${params.id}`} 
-                className="bg-white text-gray-500 font-semibold px-10 py-1 rounded border border-gray-300 cursor-pointer hover:bg-gray-100"
-              >
-                Back
-              </Link>
-            </div>
-          </div>
-        </Form>
-      </div>}
-    </DefaultLayout>
+          </Modal>
+      }
+    </>
   )
 }
 
