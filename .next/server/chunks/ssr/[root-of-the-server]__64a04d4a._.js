@@ -250,7 +250,7 @@ const DefaultLayout = ({ children })=>{
     ]);
     if (status === "loading") return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$Layout$2f$Loading$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {}, void 0, false, {
         fileName: "[project]/src/components/Layout/DefaultLayout/index.tsx",
-        lineNumber: 21,
+        lineNumber: 22,
         columnNumber: 36
     }, ("TURBOPACK compile-time value", void 0));
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -260,7 +260,7 @@ const DefaultLayout = ({ children })=>{
             children: [
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$Layout$2f$Menu$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {}, void 0, false, {
                     fileName: "[project]/src/components/Layout/DefaultLayout/index.tsx",
-                    lineNumber: 25,
+                    lineNumber: 26,
                     columnNumber: 9
                 }, ("TURBOPACK compile-time value", void 0)),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("main", {
@@ -268,7 +268,7 @@ const DefaultLayout = ({ children })=>{
                     children: [
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$Layout$2f$Header$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {}, void 0, false, {
                             fileName: "[project]/src/components/Layout/DefaultLayout/index.tsx",
-                            lineNumber: 27,
+                            lineNumber: 28,
                             columnNumber: 11
                         }, ("TURBOPACK compile-time value", void 0)),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -278,7 +278,7 @@ const DefaultLayout = ({ children })=>{
                                     className: "absolute opacity-30 inset-0 bg-cover bg-center bg-[url('/images/06ec5c74-c4f8-4ecd-aa48-f57dce80e4a3.jpeg')]"
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/Layout/DefaultLayout/index.tsx",
-                                    lineNumber: 29,
+                                    lineNumber: 30,
                                     columnNumber: 13
                                 }, ("TURBOPACK compile-time value", void 0)),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -286,30 +286,30 @@ const DefaultLayout = ({ children })=>{
                                     children: children
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/Layout/DefaultLayout/index.tsx",
-                                    lineNumber: 30,
+                                    lineNumber: 31,
                                     columnNumber: 13
                                 }, ("TURBOPACK compile-time value", void 0))
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/Layout/DefaultLayout/index.tsx",
-                            lineNumber: 28,
+                            lineNumber: 29,
                             columnNumber: 11
                         }, ("TURBOPACK compile-time value", void 0))
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/components/Layout/DefaultLayout/index.tsx",
-                    lineNumber: 26,
+                    lineNumber: 27,
                     columnNumber: 9
                 }, ("TURBOPACK compile-time value", void 0))
             ]
         }, void 0, true, {
             fileName: "[project]/src/components/Layout/DefaultLayout/index.tsx",
-            lineNumber: 24,
+            lineNumber: 25,
             columnNumber: 7
         }, ("TURBOPACK compile-time value", void 0))
     }, void 0, false, {
         fileName: "[project]/src/components/Layout/DefaultLayout/index.tsx",
-        lineNumber: 23,
+        lineNumber: 24,
         columnNumber: 5
     }, ("TURBOPACK compile-time value", void 0));
 };
@@ -557,20 +557,21 @@ const Comments = ({ ticketId, managers })=>{
           <p>${commentInput}</p>
         </div>
       `,
-            qrcodeText: window.location.href.replace("new", "edit/" + issueNo)
+            qrcodeText: `${location.origin}/login?callback=${location.href.replace("new", "edit/" + issueNo)}`
         };
         await (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$util$2f$send$2d$email$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["sendEmail"])(data);
     };
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
         setLoading(true);
         if (ticketId) getComments();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [
         ticketId
     ]);
     if (loading) {
         return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$Layout$2f$Loading$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {}, void 0, false, {
             fileName: "[project]/src/components/Comments/index.tsx",
-            lineNumber: 112,
+            lineNumber: 113,
             columnNumber: 12
         }, ("TURBOPACK compile-time value", void 0));
     }
@@ -582,7 +583,7 @@ const Comments = ({ ticketId, managers })=>{
                 children: "Comments"
             }, void 0, false, {
                 fileName: "[project]/src/components/Comments/index.tsx",
-                lineNumber: 117,
+                lineNumber: 118,
                 columnNumber: 7
             }, ("TURBOPACK compile-time value", void 0)),
             comments.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -603,13 +604,13 @@ const Comments = ({ ticketId, managers })=>{
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/components/Comments/index.tsx",
-                                        lineNumber: 123,
+                                        lineNumber: 124,
                                         columnNumber: 63
                                     }, ("TURBOPACK compile-time value", void 0))
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/Comments/index.tsx",
-                                lineNumber: 123,
+                                lineNumber: 124,
                                 columnNumber: 15
                             }, ("TURBOPACK compile-time value", void 0)),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -617,18 +618,18 @@ const Comments = ({ ticketId, managers })=>{
                                 children: comment.content
                             }, void 0, false, {
                                 fileName: "[project]/src/components/Comments/index.tsx",
-                                lineNumber: 124,
+                                lineNumber: 125,
                                 columnNumber: 15
                             }, ("TURBOPACK compile-time value", void 0))
                         ]
                     }, comment.id, true, {
                         fileName: "[project]/src/components/Comments/index.tsx",
-                        lineNumber: 122,
+                        lineNumber: 123,
                         columnNumber: 13
                     }, ("TURBOPACK compile-time value", void 0)))
             }, void 0, false, {
                 fileName: "[project]/src/components/Comments/index.tsx",
-                lineNumber: 119,
+                lineNumber: 120,
                 columnNumber: 9
             }, ("TURBOPACK compile-time value", void 0)),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -641,7 +642,7 @@ const Comments = ({ ticketId, managers })=>{
                         placeholder: "Add a comment..."
                     }, void 0, false, {
                         fileName: "[project]/src/components/Comments/index.tsx",
-                        lineNumber: 130,
+                        lineNumber: 131,
                         columnNumber: 9
                     }, ("TURBOPACK compile-time value", void 0)),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -650,19 +651,19 @@ const Comments = ({ ticketId, managers })=>{
                         children: "Submit"
                     }, void 0, false, {
                         fileName: "[project]/src/components/Comments/index.tsx",
-                        lineNumber: 137,
+                        lineNumber: 138,
                         columnNumber: 9
                     }, ("TURBOPACK compile-time value", void 0))
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/Comments/index.tsx",
-                lineNumber: 129,
+                lineNumber: 130,
                 columnNumber: 7
             }, ("TURBOPACK compile-time value", void 0))
         ]
     }, void 0, true, {
         fileName: "[project]/src/components/Comments/index.tsx",
-        lineNumber: 116,
+        lineNumber: 117,
         columnNumber: 5
     }, ("TURBOPACK compile-time value", void 0));
 };
@@ -687,7 +688,9 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navi
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$util$2f$dateformat$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/util/dateformat.ts [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$Comments$2f$index$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/components/Comments/index.tsx [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$util$2f$send$2d$email$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/util/send-email.ts [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$image$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/image.js [app-ssr] (ecmascript)");
 "use client";
+;
 ;
 ;
 ;
@@ -717,7 +720,7 @@ const EditTicket = ()=>{
     const [reportedBy, setReportedBy] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])('');
     const [resolvedDate, setResolvedDate] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])('');
     const [managers, setManagers] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])([]);
-    // const [attachment, setAttachment] = useState('')
+    const [attachments, setAttachments] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])([]);
     const [assigneeOptions, setAssigneeOptions] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])([]);
     const [assignee, setAssignee] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])({
         label: "",
@@ -823,7 +826,7 @@ const EditTicket = ()=>{
               <p>Status: ${ticketStatus}</p>
               <p>Issue Content: ${description}</p>
             `,
-                        qrcodeText: window.location.href.replace("new", "edit/" + issueNo)
+                        qrcodeText: `${location.origin}/login?callback=${window.location.href.replace("new", "edit/" + issueNo)}`
                     };
                     await (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$util$2f$send$2d$email$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["sendEmail"])(data);
                     alert("Ticket has been updated successfully.");
@@ -861,9 +864,24 @@ const EditTicket = ()=>{
             alert(error);
         }
     };
+    const handleAttachment = (e)=>{
+        const file = e.target.files?.[0];
+        if (!file) return;
+        const imageUrl = URL.createObjectURL(file);
+        setAttachments((prevState)=>[
+                ...prevState,
+                imageUrl
+            ]);
+        e.target.value = "";
+    };
+    const handleRemoveImage = (e, i)=>{
+        setAttachments((prev)=>prev.filter((_, index)=>index !== i));
+    };
+    const handleImageViewer = ()=>{};
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
         getTicket();
         getDepartment(params.id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [
         params.id
     ]);
@@ -898,7 +916,7 @@ const EditTicket = ()=>{
                     children: `${departmentName}-${issueNo}: ${title}`
                 }, void 0, false, {
                     fileName: "[project]/src/app/departments/[id]/tickets/edit/[ticketNo]/page.tsx",
-                    lineNumber: 222,
+                    lineNumber: 242,
                     columnNumber: 9
                 }, ("TURBOPACK compile-time value", void 0)),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$form$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
@@ -916,12 +934,12 @@ const EditTicket = ()=>{
                                         children: err
                                     }, err, false, {
                                         fileName: "[project]/src/app/departments/[id]/tickets/edit/[ticketNo]/page.tsx",
-                                        lineNumber: 234,
+                                        lineNumber: 254,
                                         columnNumber: 21
                                     }, ("TURBOPACK compile-time value", void 0)))
                             }, void 0, false, {
                                 fileName: "[project]/src/app/departments/[id]/tickets/edit/[ticketNo]/page.tsx",
-                                lineNumber: 231,
+                                lineNumber: 251,
                                 columnNumber: 17
                             }, ("TURBOPACK compile-time value", void 0)),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -932,7 +950,7 @@ const EditTicket = ()=>{
                                         children: "Issue No.:"
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/departments/[id]/tickets/edit/[ticketNo]/page.tsx",
-                                        lineNumber: 241,
+                                        lineNumber: 261,
                                         columnNumber: 15
                                     }, ("TURBOPACK compile-time value", void 0)),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -940,13 +958,13 @@ const EditTicket = ()=>{
                                         children: issueNo
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/departments/[id]/tickets/edit/[ticketNo]/page.tsx",
-                                        lineNumber: 242,
+                                        lineNumber: 262,
                                         columnNumber: 15
                                     }, ("TURBOPACK compile-time value", void 0))
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/app/departments/[id]/tickets/edit/[ticketNo]/page.tsx",
-                                lineNumber: 240,
+                                lineNumber: 260,
                                 columnNumber: 13
                             }, ("TURBOPACK compile-time value", void 0)),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -957,7 +975,7 @@ const EditTicket = ()=>{
                                         children: "Title:"
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/departments/[id]/tickets/edit/[ticketNo]/page.tsx",
-                                        lineNumber: 247,
+                                        lineNumber: 267,
                                         columnNumber: 15
                                     }, ("TURBOPACK compile-time value", void 0)),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -969,18 +987,18 @@ const EditTicket = ()=>{
                                             className: "border border-gray-100 py-1.5 px-2 rounded w-full outline-gray-200 bg-white"
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/departments/[id]/tickets/edit/[ticketNo]/page.tsx",
-                                            lineNumber: 249,
+                                            lineNumber: 269,
                                             columnNumber: 17
                                         }, ("TURBOPACK compile-time value", void 0))
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/departments/[id]/tickets/edit/[ticketNo]/page.tsx",
-                                        lineNumber: 248,
+                                        lineNumber: 268,
                                         columnNumber: 15
                                     }, ("TURBOPACK compile-time value", void 0))
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/app/departments/[id]/tickets/edit/[ticketNo]/page.tsx",
-                                lineNumber: 246,
+                                lineNumber: 266,
                                 columnNumber: 13
                             }, ("TURBOPACK compile-time value", void 0)),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -994,7 +1012,7 @@ const EditTicket = ()=>{
                                                 children: "Status:"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/departments/[id]/tickets/edit/[ticketNo]/page.tsx",
-                                                lineNumber: 259,
+                                                lineNumber: 279,
                                                 columnNumber: 17
                                             }, ("TURBOPACK compile-time value", void 0)),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1008,7 +1026,7 @@ const EditTicket = ()=>{
                                                             children: "Select..."
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/departments/[id]/tickets/edit/[ticketNo]/page.tsx",
-                                                            lineNumber: 266,
+                                                            lineNumber: 286,
                                                             columnNumber: 21
                                                         }, ("TURBOPACK compile-time value", void 0)),
                                                         __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$departments$2f5b$id$5d2f$tickets$2f$constant$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["STATUS"].map((stat)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -1016,24 +1034,24 @@ const EditTicket = ()=>{
                                                                 children: stat
                                                             }, stat, false, {
                                                                 fileName: "[project]/src/app/departments/[id]/tickets/edit/[ticketNo]/page.tsx",
-                                                                lineNumber: 269,
+                                                                lineNumber: 289,
                                                                 columnNumber: 25
                                                             }, ("TURBOPACK compile-time value", void 0)))
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/app/departments/[id]/tickets/edit/[ticketNo]/page.tsx",
-                                                    lineNumber: 261,
+                                                    lineNumber: 281,
                                                     columnNumber: 19
                                                 }, ("TURBOPACK compile-time value", void 0))
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/departments/[id]/tickets/edit/[ticketNo]/page.tsx",
-                                                lineNumber: 260,
+                                                lineNumber: 280,
                                                 columnNumber: 17
                                             }, ("TURBOPACK compile-time value", void 0))
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/departments/[id]/tickets/edit/[ticketNo]/page.tsx",
-                                        lineNumber: 258,
+                                        lineNumber: 278,
                                         columnNumber: 15
                                     }, ("TURBOPACK compile-time value", void 0)),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1044,7 +1062,7 @@ const EditTicket = ()=>{
                                                 children: "Importance:"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/departments/[id]/tickets/edit/[ticketNo]/page.tsx",
-                                                lineNumber: 276,
+                                                lineNumber: 296,
                                                 columnNumber: 17
                                             }, ("TURBOPACK compile-time value", void 0)),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1058,7 +1076,7 @@ const EditTicket = ()=>{
                                                             children: "Select..."
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/departments/[id]/tickets/edit/[ticketNo]/page.tsx",
-                                                            lineNumber: 283,
+                                                            lineNumber: 303,
                                                             columnNumber: 21
                                                         }, ("TURBOPACK compile-time value", void 0)),
                                                         __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$departments$2f5b$id$5d2f$tickets$2f$constant$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["IMPORTANCE"].map((stat)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -1066,24 +1084,24 @@ const EditTicket = ()=>{
                                                                 children: stat
                                                             }, stat, false, {
                                                                 fileName: "[project]/src/app/departments/[id]/tickets/edit/[ticketNo]/page.tsx",
-                                                                lineNumber: 286,
+                                                                lineNumber: 306,
                                                                 columnNumber: 25
                                                             }, ("TURBOPACK compile-time value", void 0)))
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/app/departments/[id]/tickets/edit/[ticketNo]/page.tsx",
-                                                    lineNumber: 278,
+                                                    lineNumber: 298,
                                                     columnNumber: 19
                                                 }, ("TURBOPACK compile-time value", void 0))
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/departments/[id]/tickets/edit/[ticketNo]/page.tsx",
-                                                lineNumber: 277,
+                                                lineNumber: 297,
                                                 columnNumber: 17
                                             }, ("TURBOPACK compile-time value", void 0))
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/departments/[id]/tickets/edit/[ticketNo]/page.tsx",
-                                        lineNumber: 275,
+                                        lineNumber: 295,
                                         columnNumber: 15
                                     }, ("TURBOPACK compile-time value", void 0)),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1094,7 +1112,7 @@ const EditTicket = ()=>{
                                                 children: "Type:"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/departments/[id]/tickets/edit/[ticketNo]/page.tsx",
-                                                lineNumber: 293,
+                                                lineNumber: 313,
                                                 columnNumber: 17
                                             }, ("TURBOPACK compile-time value", void 0)),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1108,7 +1126,7 @@ const EditTicket = ()=>{
                                                             children: "Select..."
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/departments/[id]/tickets/edit/[ticketNo]/page.tsx",
-                                                            lineNumber: 300,
+                                                            lineNumber: 320,
                                                             columnNumber: 21
                                                         }, ("TURBOPACK compile-time value", void 0)),
                                                         __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$departments$2f5b$id$5d2f$tickets$2f$constant$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["TYPE"].map((stat)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -1116,30 +1134,30 @@ const EditTicket = ()=>{
                                                                 children: stat
                                                             }, stat, false, {
                                                                 fileName: "[project]/src/app/departments/[id]/tickets/edit/[ticketNo]/page.tsx",
-                                                                lineNumber: 303,
+                                                                lineNumber: 323,
                                                                 columnNumber: 25
                                                             }, ("TURBOPACK compile-time value", void 0)))
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/app/departments/[id]/tickets/edit/[ticketNo]/page.tsx",
-                                                    lineNumber: 295,
+                                                    lineNumber: 315,
                                                     columnNumber: 19
                                                 }, ("TURBOPACK compile-time value", void 0))
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/departments/[id]/tickets/edit/[ticketNo]/page.tsx",
-                                                lineNumber: 294,
+                                                lineNumber: 314,
                                                 columnNumber: 17
                                             }, ("TURBOPACK compile-time value", void 0))
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/departments/[id]/tickets/edit/[ticketNo]/page.tsx",
-                                        lineNumber: 292,
+                                        lineNumber: 312,
                                         columnNumber: 15
                                     }, ("TURBOPACK compile-time value", void 0))
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/app/departments/[id]/tickets/edit/[ticketNo]/page.tsx",
-                                lineNumber: 257,
+                                lineNumber: 277,
                                 columnNumber: 13
                             }, ("TURBOPACK compile-time value", void 0)),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1153,7 +1171,7 @@ const EditTicket = ()=>{
                                                 children: "Assignee:"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/departments/[id]/tickets/edit/[ticketNo]/page.tsx",
-                                                lineNumber: 312,
+                                                lineNumber: 332,
                                                 columnNumber: 17
                                             }, ("TURBOPACK compile-time value", void 0)),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1164,18 +1182,18 @@ const EditTicket = ()=>{
                                                     setInput: setAssignee
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/departments/[id]/tickets/edit/[ticketNo]/page.tsx",
-                                                    lineNumber: 314,
+                                                    lineNumber: 334,
                                                     columnNumber: 19
                                                 }, ("TURBOPACK compile-time value", void 0))
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/departments/[id]/tickets/edit/[ticketNo]/page.tsx",
-                                                lineNumber: 313,
+                                                lineNumber: 333,
                                                 columnNumber: 17
                                             }, ("TURBOPACK compile-time value", void 0))
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/departments/[id]/tickets/edit/[ticketNo]/page.tsx",
-                                        lineNumber: 311,
+                                        lineNumber: 331,
                                         columnNumber: 15
                                     }, ("TURBOPACK compile-time value", void 0)),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1186,7 +1204,7 @@ const EditTicket = ()=>{
                                                 children: "Start Date:"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/departments/[id]/tickets/edit/[ticketNo]/page.tsx",
-                                                lineNumber: 322,
+                                                lineNumber: 342,
                                                 columnNumber: 17
                                             }, ("TURBOPACK compile-time value", void 0)),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1198,18 +1216,18 @@ const EditTicket = ()=>{
                                                     className: "border border-gray-100 py-1 px-2 rounded w-full outline-gray-200 bg-white"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/departments/[id]/tickets/edit/[ticketNo]/page.tsx",
-                                                    lineNumber: 324,
+                                                    lineNumber: 344,
                                                     columnNumber: 19
                                                 }, ("TURBOPACK compile-time value", void 0))
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/departments/[id]/tickets/edit/[ticketNo]/page.tsx",
-                                                lineNumber: 323,
+                                                lineNumber: 343,
                                                 columnNumber: 17
                                             }, ("TURBOPACK compile-time value", void 0))
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/departments/[id]/tickets/edit/[ticketNo]/page.tsx",
-                                        lineNumber: 321,
+                                        lineNumber: 341,
                                         columnNumber: 15
                                     }, ("TURBOPACK compile-time value", void 0)),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1220,7 +1238,7 @@ const EditTicket = ()=>{
                                                 children: "Target Date:"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/departments/[id]/tickets/edit/[ticketNo]/page.tsx",
-                                                lineNumber: 333,
+                                                lineNumber: 353,
                                                 columnNumber: 17
                                             }, ("TURBOPACK compile-time value", void 0)),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1232,24 +1250,24 @@ const EditTicket = ()=>{
                                                     className: "border border-gray-100 py-1 px-2 rounded w-full outline-gray-200 bg-white"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/departments/[id]/tickets/edit/[ticketNo]/page.tsx",
-                                                    lineNumber: 335,
+                                                    lineNumber: 355,
                                                     columnNumber: 19
                                                 }, ("TURBOPACK compile-time value", void 0))
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/departments/[id]/tickets/edit/[ticketNo]/page.tsx",
-                                                lineNumber: 334,
+                                                lineNumber: 354,
                                                 columnNumber: 17
                                             }, ("TURBOPACK compile-time value", void 0))
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/departments/[id]/tickets/edit/[ticketNo]/page.tsx",
-                                        lineNumber: 332,
+                                        lineNumber: 352,
                                         columnNumber: 15
                                     }, ("TURBOPACK compile-time value", void 0))
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/app/departments/[id]/tickets/edit/[ticketNo]/page.tsx",
-                                lineNumber: 310,
+                                lineNumber: 330,
                                 columnNumber: 13
                             }, ("TURBOPACK compile-time value", void 0)),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1263,7 +1281,7 @@ const EditTicket = ()=>{
                                                 children: "Resolved Date:"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/departments/[id]/tickets/edit/[ticketNo]/page.tsx",
-                                                lineNumber: 346,
+                                                lineNumber: 366,
                                                 columnNumber: 17
                                             }, ("TURBOPACK compile-time value", void 0)),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1275,18 +1293,18 @@ const EditTicket = ()=>{
                                                     className: "border border-gray-100 py-1 px-2 rounded w-full outline-gray-200 bg-white"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/departments/[id]/tickets/edit/[ticketNo]/page.tsx",
-                                                    lineNumber: 348,
+                                                    lineNumber: 368,
                                                     columnNumber: 19
                                                 }, ("TURBOPACK compile-time value", void 0))
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/departments/[id]/tickets/edit/[ticketNo]/page.tsx",
-                                                lineNumber: 347,
+                                                lineNumber: 367,
                                                 columnNumber: 17
                                             }, ("TURBOPACK compile-time value", void 0))
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/departments/[id]/tickets/edit/[ticketNo]/page.tsx",
-                                        lineNumber: 345,
+                                        lineNumber: 365,
                                         columnNumber: 15
                                     }, ("TURBOPACK compile-time value", void 0)),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1297,7 +1315,7 @@ const EditTicket = ()=>{
                                                 children: "Reported By:"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/departments/[id]/tickets/edit/[ticketNo]/page.tsx",
-                                                lineNumber: 357,
+                                                lineNumber: 377,
                                                 columnNumber: 17
                                             }, ("TURBOPACK compile-time value", void 0)),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1305,13 +1323,13 @@ const EditTicket = ()=>{
                                                 children: reportedBy
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/departments/[id]/tickets/edit/[ticketNo]/page.tsx",
-                                                lineNumber: 358,
+                                                lineNumber: 378,
                                                 columnNumber: 17
                                             }, ("TURBOPACK compile-time value", void 0))
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/departments/[id]/tickets/edit/[ticketNo]/page.tsx",
-                                        lineNumber: 356,
+                                        lineNumber: 376,
                                         columnNumber: 15
                                     }, ("TURBOPACK compile-time value", void 0)),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1322,7 +1340,7 @@ const EditTicket = ()=>{
                                                 children: "Reported Date:"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/departments/[id]/tickets/edit/[ticketNo]/page.tsx",
-                                                lineNumber: 363,
+                                                lineNumber: 383,
                                                 columnNumber: 17
                                             }, ("TURBOPACK compile-time value", void 0)),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1330,19 +1348,19 @@ const EditTicket = ()=>{
                                                 children: (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$util$2f$dateformat$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["formatDate"])(reportedDate)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/departments/[id]/tickets/edit/[ticketNo]/page.tsx",
-                                                lineNumber: 364,
+                                                lineNumber: 384,
                                                 columnNumber: 17
                                             }, ("TURBOPACK compile-time value", void 0))
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/departments/[id]/tickets/edit/[ticketNo]/page.tsx",
-                                        lineNumber: 362,
+                                        lineNumber: 382,
                                         columnNumber: 15
                                     }, ("TURBOPACK compile-time value", void 0))
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/app/departments/[id]/tickets/edit/[ticketNo]/page.tsx",
-                                lineNumber: 344,
+                                lineNumber: 364,
                                 columnNumber: 13
                             }, ("TURBOPACK compile-time value", void 0)),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1353,7 +1371,7 @@ const EditTicket = ()=>{
                                         children: "Issue Content:"
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/departments/[id]/tickets/edit/[ticketNo]/page.tsx",
-                                        lineNumber: 370,
+                                        lineNumber: 390,
                                         columnNumber: 15
                                     }, ("TURBOPACK compile-time value", void 0)),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1363,18 +1381,146 @@ const EditTicket = ()=>{
                                             className: "border border-gray-100 py-1 px-2 rounded w-full outline-gray-200 bg-white p-4 min-h-40"
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/departments/[id]/tickets/edit/[ticketNo]/page.tsx",
-                                            lineNumber: 372,
+                                            lineNumber: 392,
                                             columnNumber: 17
                                         }, ("TURBOPACK compile-time value", void 0))
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/departments/[id]/tickets/edit/[ticketNo]/page.tsx",
-                                        lineNumber: 371,
+                                        lineNumber: 391,
                                         columnNumber: 15
                                     }, ("TURBOPACK compile-time value", void 0))
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/app/departments/[id]/tickets/edit/[ticketNo]/page.tsx",
-                                lineNumber: 369,
+                                lineNumber: 389,
+                                columnNumber: 13
+                            }, ("TURBOPACK compile-time value", void 0)),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "flex flex-col gap-1",
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                                        className: "whitespace-pre mr-3 font-semibold",
+                                        children: "Attachment:"
+                                    }, void 0, false, {
+                                        fileName: "[project]/src/app/departments/[id]/tickets/edit/[ticketNo]/page.tsx",
+                                        lineNumber: 400,
+                                        columnNumber: 15
+                                    }, ("TURBOPACK compile-time value", void 0)),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: "flex flex-col w-full",
+                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                            defaultValue: title,
+                                            onChange: (e)=>handleAttachment(e),
+                                            type: "file",
+                                            className: "border border-gray-100 py-1.5 px-2 rounded w-full outline-gray-200 bg-white"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/app/departments/[id]/tickets/edit/[ticketNo]/page.tsx",
+                                            lineNumber: 402,
+                                            columnNumber: 17
+                                        }, ("TURBOPACK compile-time value", void 0))
+                                    }, void 0, false, {
+                                        fileName: "[project]/src/app/departments/[id]/tickets/edit/[ticketNo]/page.tsx",
+                                        lineNumber: 401,
+                                        columnNumber: 15
+                                    }, ("TURBOPACK compile-time value", void 0)),
+                                    attachments.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: "flex flex-wrap gap-2 pt-2",
+                                        children: attachments.map((attachment, index)=>{
+                                            return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                className: "p-2 shadow-xl rounded-md border border-gray-100 w-60 flex items-center relative group",
+                                                children: [
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                        onClick: ()=>handleImageViewer(attachment),
+                                                        className: "group-hover:flex hidden absolute inset-0 bg-gray-100/70 cursor-pointer justify-center items-center text-white",
+                                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
+                                                            xmlns: "http://www.w3.org/2000/svg",
+                                                            fill: "none",
+                                                            viewBox: "0 0 24 24",
+                                                            strokeWidth: 1.5,
+                                                            stroke: "currentColor",
+                                                            className: "size-6",
+                                                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                                                                strokeLinecap: "round",
+                                                                strokeLinejoin: "round",
+                                                                d: "m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/src/app/departments/[id]/tickets/edit/[ticketNo]/page.tsx",
+                                                                lineNumber: 416,
+                                                                columnNumber: 29
+                                                            }, ("TURBOPACK compile-time value", void 0))
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/src/app/departments/[id]/tickets/edit/[ticketNo]/page.tsx",
+                                                            lineNumber: 415,
+                                                            columnNumber: 27
+                                                        }, ("TURBOPACK compile-time value", void 0))
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/src/app/departments/[id]/tickets/edit/[ticketNo]/page.tsx",
+                                                        lineNumber: 414,
+                                                        columnNumber: 25
+                                                    }, ("TURBOPACK compile-time value", void 0)),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$image$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
+                                                            id: `attachment-${index}`,
+                                                            src: attachment,
+                                                            alt: "Slide 1",
+                                                            width: 800,
+                                                            height: 400,
+                                                            className: "w-full"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/src/app/departments/[id]/tickets/edit/[ticketNo]/page.tsx",
+                                                            lineNumber: 420,
+                                                            columnNumber: 27
+                                                        }, ("TURBOPACK compile-time value", void 0))
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/src/app/departments/[id]/tickets/edit/[ticketNo]/page.tsx",
+                                                        lineNumber: 419,
+                                                        columnNumber: 25
+                                                    }, ("TURBOPACK compile-time value", void 0)),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                        className: "rounded-full bg-red-400 p-1 text-white font-medium absolute -top-1 -right-1 border border-white cursor-pointer",
+                                                        onClick: (event)=>handleRemoveImage(event, index),
+                                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
+                                                            xmlns: "http://www.w3.org/2000/svg",
+                                                            fill: "none",
+                                                            viewBox: "0 0 24 24",
+                                                            strokeWidth: 1.5,
+                                                            stroke: "currentColor",
+                                                            className: "size-4",
+                                                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                                                                strokeLinecap: "round",
+                                                                strokeLinejoin: "round",
+                                                                d: "M6 18 18 6M6 6l12 12"
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/src/app/departments/[id]/tickets/edit/[ticketNo]/page.tsx",
+                                                                lineNumber: 424,
+                                                                columnNumber: 29
+                                                            }, ("TURBOPACK compile-time value", void 0))
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/src/app/departments/[id]/tickets/edit/[ticketNo]/page.tsx",
+                                                            lineNumber: 423,
+                                                            columnNumber: 27
+                                                        }, ("TURBOPACK compile-time value", void 0))
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/src/app/departments/[id]/tickets/edit/[ticketNo]/page.tsx",
+                                                        lineNumber: 422,
+                                                        columnNumber: 25
+                                                    }, ("TURBOPACK compile-time value", void 0))
+                                                ]
+                                            }, attachment, true, {
+                                                fileName: "[project]/src/app/departments/[id]/tickets/edit/[ticketNo]/page.tsx",
+                                                lineNumber: 413,
+                                                columnNumber: 23
+                                            }, ("TURBOPACK compile-time value", void 0));
+                                        })
+                                    }, void 0, false, {
+                                        fileName: "[project]/src/app/departments/[id]/tickets/edit/[ticketNo]/page.tsx",
+                                        lineNumber: 410,
+                                        columnNumber: 43
+                                    }, ("TURBOPACK compile-time value", void 0))
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/src/app/departments/[id]/tickets/edit/[ticketNo]/page.tsx",
+                                lineNumber: 399,
                                 columnNumber: 13
                             }, ("TURBOPACK compile-time value", void 0)),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1386,7 +1532,7 @@ const EditTicket = ()=>{
                                         children: "Save"
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/departments/[id]/tickets/edit/[ticketNo]/page.tsx",
-                                        lineNumber: 391,
+                                        lineNumber: 434,
                                         columnNumber: 15
                                     }, ("TURBOPACK compile-time value", void 0)),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
@@ -1395,24 +1541,24 @@ const EditTicket = ()=>{
                                         children: "Back"
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/departments/[id]/tickets/edit/[ticketNo]/page.tsx",
-                                        lineNumber: 397,
+                                        lineNumber: 440,
                                         columnNumber: 15
                                     }, ("TURBOPACK compile-time value", void 0))
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/app/departments/[id]/tickets/edit/[ticketNo]/page.tsx",
-                                lineNumber: 390,
+                                lineNumber: 433,
                                 columnNumber: 13
                             }, ("TURBOPACK compile-time value", void 0))
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/app/departments/[id]/tickets/edit/[ticketNo]/page.tsx",
-                        lineNumber: 228,
+                        lineNumber: 248,
                         columnNumber: 11
                     }, ("TURBOPACK compile-time value", void 0))
                 }, void 0, false, {
                     fileName: "[project]/src/app/departments/[id]/tickets/edit/[ticketNo]/page.tsx",
-                    lineNumber: 223,
+                    lineNumber: 243,
                     columnNumber: 9
                 }, ("TURBOPACK compile-time value", void 0)),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$Comments$2f$index$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
@@ -1420,22 +1566,25 @@ const EditTicket = ()=>{
                     managers: managers
                 }, void 0, false, {
                     fileName: "[project]/src/app/departments/[id]/tickets/edit/[ticketNo]/page.tsx",
-                    lineNumber: 407,
+                    lineNumber: 450,
                     columnNumber: 9
                 }, ("TURBOPACK compile-time value", void 0))
             ]
         }, void 0, true, {
             fileName: "[project]/src/app/departments/[id]/tickets/edit/[ticketNo]/page.tsx",
-            lineNumber: 221,
+            lineNumber: 241,
             columnNumber: 7
         }, ("TURBOPACK compile-time value", void 0))
     }, void 0, false, {
         fileName: "[project]/src/app/departments/[id]/tickets/edit/[ticketNo]/page.tsx",
-        lineNumber: 220,
+        lineNumber: 240,
         columnNumber: 5
     }, ("TURBOPACK compile-time value", void 0));
 };
 const __TURBOPACK__default__export__ = EditTicket;
+function index(value, index, array) {
+    throw new Error('Function not implemented.');
+}
 }),
 ];
 

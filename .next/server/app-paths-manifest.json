@@ -1,12 +1,21 @@
 {
   "/_not-found/page": "app/_not-found/page.js",
   "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js",
+  "/api/comments/ticketId/[ticketId]/route": "app/api/comments/ticketId/[ticketId]/route.js",
   "/api/departments/[id]/route": "app/api/departments/[id]/route.js",
   "/api/departments/route": "app/api/departments/route.js",
+  "/api/send-email/route": "app/api/send-email/route.js",
+  "/api/tickets/[id]/route": "app/api/tickets/[id]/route.js",
   "/api/tickets/department/[id]/route": "app/api/tickets/department/[id]/route.js",
+  "/api/tickets/issueNo/[issueNo]/route": "app/api/tickets/issueNo/[issueNo]/route.js",
   "/api/users/[id]/route": "app/api/users/[id]/route.js",
+  "/api/users/search/[search]/route": "app/api/users/search/[search]/route.js",
   "/departments/[id]/page": "app/departments/[id]/page.js",
+  "/departments/[id]/tickets/edit/[ticketNo]/page": "app/departments/[id]/tickets/edit/[ticketNo]/page.js",
+  "/departments/[id]/tickets/new/page": "app/departments/[id]/tickets/new/page.js",
   "/departments/page": "app/departments/page.js",
   "/favicon.ico/route": "app/favicon.ico/route.js",
+  "/forgot-password/page": "app/forgot-password/page.js",
+  "/login/page": "app/login/page.js",
   "/page": "app/page.js"
 }

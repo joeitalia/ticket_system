@@ -96,7 +96,7 @@ const EditTicket = () => {
     if (!ticketStatus) error.push("Please select Status.");
     if (!ticketImportance) error.push("Please select Importance.");
     if (!ticketType) error.push("Please select Type.");
-    if (!assignee.value) error.push("Please select Assignee.");
+    // if (!assignee.value) error.push("Please select Assignee.");
     if (!startDate) error.push("Please select Start Date.");
     if (!targetDate) error.push("Please select Target Date.");
     if (!description) error.push("Please insert Issue Content.");
@@ -146,7 +146,7 @@ const EditTicket = () => {
             message: `
               <p>Project: </p>
               <p>Ticket no: #${issueNo}</p>
-              <p>Users: ${assignee.label}</p>
+              <p>Users: ${assignee.label ?? 'N/A'}</p>
               <p>Status: ${ticketStatus}</p>
               <p>Issue Content: ${description}</p>
             `,
