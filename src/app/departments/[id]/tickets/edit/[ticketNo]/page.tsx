@@ -405,8 +405,7 @@ const EditTicket = () => {
               <div className="flex flex-col gap-1">
                 <label className="whitespace-pre mr-3 font-semibold">Attachment:</label>
                 <div className="flex flex-col w-full">
-                  <input 
-                    defaultValue={title}
+                  <input
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleAttachment(e)}
                     type="file" 
                     className="border border-gray-100 py-1.5 px-2 rounded w-full outline-gray-200 bg-white"

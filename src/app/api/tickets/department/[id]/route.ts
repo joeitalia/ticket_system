@@ -18,6 +18,7 @@ export async function GET(
     const tickets = await db
       .collection(collectionName)
       .find({ departmentId: id })
+      .sort({ issueNo: -1 }) // -1 means descending
       .toArray();
 
     return NextResponse.json(tickets);
