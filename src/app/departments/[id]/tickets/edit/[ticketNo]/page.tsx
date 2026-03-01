@@ -14,10 +14,14 @@ import { sendEmail } from '@/util/send-email'
 import Image from 'next/image'
 import Modal from '@/components/Modal'
 import { convertToBase64 } from '@/util/image-to-base64'
+import { useSession } from 'next-auth/react'
+import { set } from 'mongoose'
 
 const EditTicket = () => {
   const params = useParams()
   const router = useRouter()
+  const { data }: any = useSession()
+
   const [ticketId, setTicketId] = useState('')
   const [departmentName, setDepartmentName] = useState('Ticket')
   const [issueNo, setIssueNo] = useState('0000')
@@ -34,6 +38,8 @@ const EditTicket = () => {
   const [managers, setManagers] = useState<any[]>([])
   const [attachments, setAttachments] = useState<any[]>([])
   const [selectedImage, setSelectedImage] = useState<any>('')
+  const [createdDate, setCreatedDate] = useState<any>(null)
+  const [createdBy, setCreatedBy] = useState<any>(null)
 
   const [assigneeOptions, setAssigneeOptions] = useState<any[]>([])
   const [assignee, setAssignee] = useState<any>({
@@ -59,6 +65,8 @@ const EditTicket = () => {
       setReportedDate(ticket.createdDate)
       setDescription(ticket.description)
       setAttachments(ticket.attachments ?? [])
+      setCreatedBy(ticket.createdBy)
+      setCreatedDate(ticket.createdDate)
 
       const assigneeApi: any = await getUser(ticket.assigneeId)
       setAssignee(assigneeApi)
@@ -120,13 +128,18 @@ const EditTicket = () => {
           targetDate,
           resolvedDate,
           assigneeId: assignee.value,
-          attachments
+          attachments,
+          createdBy,
+          createdDate,
         }),
       });
       const apiData = await res.json();
       
       if (apiData.success) {
-        const emails: any = [];
+        const createdByData = await fetch(`/api/users/${createdBy}`);
+        const createdByDataJson = await createdByData.json();
+
+        const emails: any = [data?.user?.email, createdByDataJson.email];
         // get assignee user details to send email
         const assigneeRes = await fetch(`/api/users/${assignee.value}`);
         const assigneeData = await assigneeRes.json();
@@ -140,7 +153,7 @@ const EditTicket = () => {
         }
 
         if (apiData.success) {
-          const data = {
+          const emailData = {
             emailTo: emails,
             subject: `#${issueNo}: ${title}`,
             message: `
@@ -152,7 +165,7 @@ const EditTicket = () => {
             `,
             qrcodeText: `${location.origin}/login?callback=${window.location.href.replace("new", "edit/"+issueNo)}`
           };
-          await sendEmail(data);
+          await sendEmail(emailData);
           alert("Ticket has been updated successfully.")
           // setLoading(false)
           router.push(`/departments/${params.id}`)

@@ -84,7 +84,7 @@ const CreateTicket = () => {
       });
       const apiData = await res.json();
 
-      const emails: any = [];
+      const emails: any = [data.user.email];
       // get assignee user details to send email
       const assigneeRes = await fetch(`/api/users/${assignee.value}`);
       const assigneeData = await assigneeRes.json();

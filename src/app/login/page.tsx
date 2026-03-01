@@ -55,6 +55,7 @@ const Login = () => {
 
   useEffect(() => {
     if (session) router.push(callback);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams])
 
   if (loading) {
