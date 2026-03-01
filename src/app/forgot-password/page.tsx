@@ -17,6 +17,9 @@ const ForgotPassword = () => {
       });
       if (!res) throw new Error(res);
       const resetLinkData = await res.json();
+      if (!resetLinkData || resetLinkData.error) {
+        throw new Error(resetLinkData.error || "Email not found");
+      }
       await sendResetEmail(email, resetLinkData.resetLink);
       alert("If email exists, reset link has been sent.");
       setEmail("");

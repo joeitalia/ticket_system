@@ -20,7 +20,7 @@ export async function POST(req: Request) {
       .collection(collectionName)
       .findOne({ email });
     if (!result || !result._id) {
-      return NextResponse.json({ message: "Email not found" });
+      return NextResponse.json({ error: "Email not found" });
     }
 
     const resetToken = crypto.randomBytes(32).toString("hex");
