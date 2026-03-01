@@ -29,7 +29,6 @@ export async function POST(req: Request) {
     await saveResetToken(result._id, resetToken, expiry);
     const resetLink = `${origin}/forgot-password/reset-password?token=${resetToken}`;
   
-    // await sendResetEmail(email, resetLink);
     return NextResponse.json({ resetLink });
   } catch (error) {
     console.error("Error in forgot password:", error);
