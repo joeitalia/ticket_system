@@ -20,7 +20,7 @@ export async function POST(req: Request) {
       .collection(collectionName)
       .findOne({ email });
     if (!result || !result._id) {
-      return NextResponse.json({ message: "If email exists, reset link has been sent." });
+      return NextResponse.json({ message: "Email not found" });
     }
 
     const resetToken = crypto.randomBytes(32).toString("hex");
@@ -29,7 +29,7 @@ export async function POST(req: Request) {
     await saveResetToken(result._id, resetToken, expiry);
     const resetLink = `${origin}/forgot-password/reset-password?token=${resetToken}`;
   
-    return NextResponse.json({ resetLink });
+    return NextResponse.json({ resetLink }, { status: 200 });
   } catch (error) {
     console.error("Error in forgot password:", error);
     return NextResponse.json({ message: "Error sending reset email" }, { status: 500 });

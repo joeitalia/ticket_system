@@ -16,9 +16,7 @@ const ForgotPassword = () => {
         body: JSON.stringify({ email }),
       });
       if (!res) throw new Error(res);
-      console.log(res);
       const resetLinkData = await res.json();
-      console.log(resetLinkData);
       await sendResetEmail(email, resetLinkData.resetLink);
       alert("If email exists, reset link has been sent.");
       setEmail("");
