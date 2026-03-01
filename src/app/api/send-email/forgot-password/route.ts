@@ -17,7 +17,7 @@ export async function POST(req: Request) {
     });
 
     await transporter.sendMail({
-      from: `"System Mailer" <${process.env.EMAIL_USER}>`,
+      from: `"Nagase Philippines" <${process.env.EMAIL_USER}>`,
       to,
       subject,
       html: `

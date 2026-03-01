@@ -19,7 +19,7 @@ export async function POST(req: Request) {
     const qrcode: any = await generateQRBuffer({ text: qrCodeText, width: 200 });
 
     await transporter.sendMail({
-      from: `"System Mailer" <${process.env.EMAIL_USER}>`,
+      from: `"Nagase Philippines" <${process.env.EMAIL_USER}>`,
       to,
       subject,
       html: `
