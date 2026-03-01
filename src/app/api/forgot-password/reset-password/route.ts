@@ -14,7 +14,6 @@ export async function POST(req: Request) {
     const user = await db
       .collection(collectionName)
       .findOne({ resetToken: token });
-
     if (!user || user.resetTokenExpiry < Date.now()) {
       return NextResponse.json({ error: "Invalid or expired token" });
     }

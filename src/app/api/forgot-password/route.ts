@@ -19,6 +19,9 @@ export async function POST(req: Request) {
     const result = await db
       .collection(collectionName)
       .findOne({ email });
+    if (!result || !result._id) {
+      return NextResponse.json({ message: "If email exists, reset link has been sent." });
+    }
 
     const resetToken = crypto.randomBytes(32).toString("hex");
     const expiry = Date.now() + 1000 * 60 * 15; // 15 minutes
