@@ -96,6 +96,7 @@ const Comments = ({ ticketId, managers }: any) => {
           <p>New comment added:</p>
           <p>${commentInput}</p>
         </div>
+        <p><a href="${location.origin}/login?callback=${location.href.replace("new", "edit/"+issueNo)}" target="_blank">View Ticket</a></p>
       `,
       qrcodeText: `${location.origin}/login?callback=${location.href.replace("new", "edit/"+issueNo)}`
     };

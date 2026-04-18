@@ -162,6 +162,7 @@ const EditTicket = () => {
               <p>Users: ${assignee.label ?? 'N/A'}</p>
               <p>Status: ${ticketStatus}</p>
               <p>Issue Content: ${description}</p>
+              <p><a href="${location.origin}/login?callback=${window.location.href.replace("new", "edit/"+issueNo)}" target="_blank">View Ticket</a></p>
             `,
             qrcodeText: `${location.origin}/login?callback=${window.location.href.replace("new", "edit/"+issueNo)}`
           };
@@ -228,7 +229,7 @@ const EditTicket = () => {
     getTicket()
     getDepartment(params.id)
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [params.id])
+  }, [])
 
   useEffect(() => {
     if (!assignee?.label?.trim()) {

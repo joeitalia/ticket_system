@@ -130,13 +130,15 @@ const ShowDepartment = () => {
       alert(error.message || "Error generating report")
     }
   }
+  
   useEffect(() => {
     setLoading(true)
     const deptId:any = params.id
     setDeptId(deptId)
     getDepartment(deptId)
-    getTickets(deptId)
-  }, [params.id])
+    if (!tickets.length) getTickets(deptId)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <DefaultLayout>

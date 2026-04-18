@@ -107,6 +107,7 @@ const CreateTicket = () => {
             <p>Users: ${assignee.label ?? 'N/A'}</p>
             <p>Status: ${ticketStatus}</p>
             <p>Issue Content: ${description}</p>
+            <p><a href="${location.origin}/login?callback=${location.href.replace("new", "edit/"+newTicketNumber)}" target="_blank">View Ticket</a></p>
           `,
           qrcodeText: `${location.origin}/login?callback=${location.href.replace("new", "edit/"+newTicketNumber)}`
         };
