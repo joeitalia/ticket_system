@@ -15,7 +15,7 @@ const Autocompleter = ({options, setInput, input}: any) => {
       />
 
       {options.length > 0 && (
-        <ul className="absolute bg-white border-gray-100 border w-full mt-1 rounded shadow">
+        <ul className="absolute bg-white border-gray-100 border w-full mt-1 rounded shadow z-10 max-h-60 overflow-y-auto">
           {options.map((item: any) => (
             <li
               key={item.label}
