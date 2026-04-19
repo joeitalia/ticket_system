@@ -27,10 +27,10 @@ const ShowDepartment = () => {
     try {
       const res = await fetch(`/api/tickets/department/${deptId}?page=${pageNumber}&limit=10`)
       const ticketsApi = await res.json()
+      setLoading(false)
       if (ticketsApi?.data?.length) {
         setTotalPages(ticketsApi?.totalPages)
         setTickets(ticketsApi?.data ?? [])
-        setLoading(false)
         const ticketsWithReporter: any = await Promise.all(
           ticketsApi?.data?.map(async (ticket: any) => {
             const reportedBy = await getReportedBy(ticket)
