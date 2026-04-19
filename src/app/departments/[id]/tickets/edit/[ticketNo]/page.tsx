@@ -443,11 +443,11 @@ const EditTicket = () => {
                 assignees.length > 0 &&
                 <div className="flex flex-col w-full gap-1">
                   <label className="w-1/6 font-semibold">Assignees</label>
-                  <div className="flex w-full">
+                  <div className="flex w-full flex-wrap gap-2">
                     {assignees.map((mgr: any, index: number) => (
                       <div 
                         key={index}
-                        className="bg-blue-100 text-blue-700 px-2 py-1 rounded mr-2 flex items-center gap-2"
+                        className="bg-blue-100 text-blue-700 px-2 py-1 rounded flex items-center gap-2"
                       >
                         <span>{mgr.label}</span>
                         <button
