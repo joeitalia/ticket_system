@@ -531,8 +531,8 @@ const EditTicket = () => {
       {
         selectedImage &&
           <Modal onClose={() => setSelectedImage('')}>
-            <div className="max-h-[600px]">
-              <Image src={selectedImage} alt="Image Attachment Viewer" width="600" height="400" className="max-h-[500px] w-full object-contain" />
+            <div className="max-h-full">
+              <Image src={selectedImage} alt="Image Attachment Viewer" width="600" height="400" className="max-h-[95vh] w-full object-contain" />
             </div>
           </Modal>
       }
