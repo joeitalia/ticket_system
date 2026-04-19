@@ -229,7 +229,10 @@ const ShowDepartment = () => {
           {totalPages > 1 && (
             <div className="flex gap-x-2 items-center">
               <button
-                onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+                onClick={() => {
+                  setTicketCreators([])
+                  setPage((prev) => Math.max(prev - 1, 1))
+                }}
                 type="button"
                 className={`py-1 px-2 shadow rounded border border-gray-300 ${page === 1 ? "bg-gray-100 text-gray-400" : "cursor-pointer bg-white hover:bg-gray-100"}`}
                 disabled={page === 1}
@@ -238,7 +241,10 @@ const ShowDepartment = () => {
               </button>
               <span>Page {page} of {totalPages}</span>
               <button
-                onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
+                onClick={() => {
+                  setTicketCreators([])
+                  setPage((prev) => Math.min(prev + 1, totalPages))
+                }}
                 type="button"
                 className={`py-1 px-2 shadow rounded border border-gray-300 ${page === totalPages ? "bg-gray-100 text-gray-400" : "cursor-pointer bg-white hover:bg-gray-100"}`}
                 disabled={page === totalPages}
