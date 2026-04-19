@@ -16,18 +16,23 @@ const ShowDepartment = () => {
   const [departmentName, setDepartmentName] = useState("")
   const [loading, setLoading] = useState(false)
   const [isOverlayOpen, setIsOverlayOpen] = useState(false)
+  const [page, setPage] = useState(1)
+  const [totalPages, setTotalPages] = useState(1)
 
   /**
    * fetch tickets by department id
    * @param deptId 
    */
-  const getTickets = async (deptId: string) => {
+  const getTickets = async (deptId: string, pageNumber: number) => {
     try {
-      const res = await fetch(`/api/tickets/department/${deptId}`)
+      const res = await fetch(`/api/tickets/department/${deptId}?page=${pageNumber}&limit=10`)
       const ticketsApi = await res.json()
-      if (ticketsApi && ticketsApi.length) {
+      if (ticketsApi?.data?.length) {
+        setTotalPages(ticketsApi?.totalPages)
+        setTickets(ticketsApi?.data ?? [])
+        setLoading(false)
         const ticketsWithReporter: any = await Promise.all(
-          ticketsApi.map(async (ticket: any) => {
+          ticketsApi?.data?.map(async (ticket: any) => {
             const reportedBy = await getReportedBy(ticket)
             return {
               userId: ticket.createdBy,
@@ -36,9 +41,7 @@ const ShowDepartment = () => {
           })
         )
         setTicketCreators(ticketsWithReporter)
-        setTickets(ticketsApi)
       }
-      setLoading(false)
     } catch (error: any) {
       setTickets([])
       setLoading(false)
@@ -82,8 +85,8 @@ const ShowDepartment = () => {
   }
 
   const displayCreator = (creatorId: string) => {
-    const creator: any = ticketCreators.filter((crtr: any) => crtr.userId === creatorId)
-    return creator[0].createdBy;
+    const creator: any = ticketCreators?.filter((crtr: any) => crtr.userId === creatorId)
+    return creator?.[0]?.createdBy ?? ''
   }
 
   const generateReport = async () => {
@@ -139,13 +142,18 @@ const ShowDepartment = () => {
   }
   
   useEffect(() => {
+    const departmentId:any = params.id
     setLoading(true)
-    const deptId:any = params.id
-    setDeptId(deptId)
-    getDepartment(deptId)
-    if (!tickets.length) getTickets(deptId)
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    setDeptId(departmentId)
+    getDepartment(departmentId)
+    if (departmentId && page) getTickets(departmentId, page)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  useEffect(() => {
+    if (deptId && page) getTickets(deptId, page)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page])
 
   return (
     <DefaultLayout>
@@ -209,6 +217,35 @@ const ShowDepartment = () => {
               ))}
             </tbody>
           </table>
+        </div>
+        <div className="flex justify-between text-sm mt-2">
+          <Link 
+            href={`/departments`} 
+            className="bg-white text-gray-500 font-semibold px-10 py-1 rounded border border-gray-300 cursor-pointer hover:bg-gray-100"
+          >
+            Back
+          </Link>
+          {totalPages > 1 && (
+            <div className="flex gap-x-2 items-center">
+              <button
+                onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+                type="button"
+                className={`py-1 px-2 shadow rounded border border-gray-300 ${page === 1 ? "bg-gray-100 text-gray-400" : "cursor-pointer bg-white hover:bg-gray-100"}`}
+                disabled={page === 1}
+              >
+                Prev
+              </button>
+              <span>Page {page} of {totalPages}</span>
+              <button
+                onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
+                type="button"
+                className={`py-1 px-2 shadow rounded border border-gray-300 ${page === totalPages ? "bg-gray-100 text-gray-400" : "cursor-pointer bg-white hover:bg-gray-100"}`}
+                disabled={page === totalPages}
+              >
+                Next
+              </button>
+            </div>
+          )}
         </div>
       </div>}
     </DefaultLayout>

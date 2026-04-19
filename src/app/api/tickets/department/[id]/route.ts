@@ -13,15 +13,30 @@ export async function GET(
   try {
     // Convert to ObjectId if needed
     const { id } = await params;
+    const { searchParams } = new URL(request.url)
+    const page = parseInt(searchParams.get('page') ?? '') ?? 1
+    const limit = parseInt(searchParams.get('limit') ?? '') ?? 10
 
+    const skip = (page - 1) * limit;
+    
     // Query: all tickets with matching departmentId
-    const tickets = await db
-      .collection(collectionName)
-      .find({ departmentId: id })
+    const query = { departmentId: id }
+    const collection = db.collection(collectionName)
+    const tickets = await collection
+      .find(query)
       .sort({ issueNo: -1 }) // -1 means descending
+      .skip(skip)
+      .limit(limit)
       .toArray();
+    
+    const total = await collection.countDocuments(query);
 
-    return NextResponse.json(tickets);
+    return NextResponse.json({
+      data: tickets,
+      total,
+      page,
+      totalPages: Math.ceil(total / limit)
+    });
   } catch (error) {
     console.error("API Error:", error);
     return NextResponse.json(

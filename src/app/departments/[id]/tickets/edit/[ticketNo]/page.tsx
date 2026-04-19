@@ -69,10 +69,10 @@ const EditTicket = () => {
       setCreatedDate(ticket.createdDate)
 
       const assigneesIds = await Promise.all(
-        ticket.assigneeIds.map(async (ids: string) => {
+        ticket.assigneeIds?.map(async (ids: string) => {
           const assigneeApi: any = await getUser(ids)
           return assigneeApi
-        })
+        }) ?? []
       )
       setAssignees(assigneesIds)
 
@@ -278,6 +278,7 @@ const EditTicket = () => {
     }, 0); // delay API until user stops typing
     
     return () => clearTimeout(delay); // cancel previous timers
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [assignee]);
   
   return (
