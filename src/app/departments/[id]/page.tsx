@@ -58,8 +58,8 @@ const ShowDepartment = () => {
     try {
       const res = await fetch(`/api/users/${ticket.createdBy}`)
       const userApi = await res.json()
-      if (userApi) {
-        return `${userApi.lastName}, ${userApi.firstName} ${userApi.middleName}`
+      if (userApi && userApi.firstName && userApi.lastName) {
+        return `${userApi.firstName} ${userApi.middleName} ${userApi.lastName}`
       }
     } catch (error: any) {
       console.error(error)
