@@ -6,7 +6,7 @@ import LoadingOverlay from "@/components/Layout/LoadingOverlay"
 import { formatDate } from "@/util/dateformat"
 import Link from "next/link"
 import { useParams } from "next/navigation"
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 
 const ShowDepartment = () => {
   const params = useParams()
@@ -84,10 +84,11 @@ const ShowDepartment = () => {
     }
   }
 
-  const displayCreator = (creatorId: string) => {
+  const displayCreator = useCallback((creatorId: string) => {
+    if (!ticketCreators.length) return <span className="text-blue-300">Loading...</span>
     const creator: any = ticketCreators?.filter((crtr: any) => crtr.userId === creatorId)
     return creator?.[0]?.createdBy ?? ''
-  }
+  }, [ticketCreators])
 
   const generateReport = async () => {
     setIsOverlayOpen(true)
