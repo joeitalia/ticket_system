@@ -107,7 +107,7 @@ const Users = () => {
                   <tr key={user._id} className="odd:bg-gray-50 hover:bg-gray-100">
                     <td className="px-2 py-1">
                       {/* <Link href={`/users/${user._id}`} className="underline text-blue-500 cursor-pointer">{`${user.lastName}, ${user.firstName} ${user.middleName}`}</Link> */}
-                      {`${user.lastName}, ${user.firstName} ${user.middleName}`}
+                      {`${user.firstName} ${user.middleName} ${user.lastName}`}
                     </td>
                     <td className="px-2 py-1">{user.email}</td>
                     <td className="px-2 py-1">{user.department}</td>

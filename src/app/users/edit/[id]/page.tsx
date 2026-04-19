@@ -94,15 +94,13 @@ const AddUser = () => {
 
   useEffect(() => {
     setIsLoading(true);
+    const userId: any = params.id
     fetch("/api/departments")
       .then((res) => res.json())
       .then(setDepartmentList);
-  }, [])
-
-  useEffect(() => {
-    const userId: any = params.id
     fetchUserAccount(userId);
-  }, [params.id])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <DefaultLayout>

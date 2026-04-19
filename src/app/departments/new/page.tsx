@@ -77,7 +77,8 @@ const AddDepartment = () => {
 
   const addManager = () => {
     if (manager && manager.label?.length > 0) {
-      setManagers([...managers, manager])
+      const existingManagers = managers.filter((ass: any) => ass.value === manager.value)
+      if (!existingManagers.length) setManagers([...managers, manager])
       setManager({
         label: "",
         value: ""
@@ -95,7 +96,7 @@ const AddDepartment = () => {
         const data = await res.json();
         const options = data.map((user: any) => (
           {
-            label: `${user.lastName}, ${user.firstName} ${user.middleName}`,
+            label: `${user.firstName} ${user.middleName} ${user.lastName}`,
             value: user._id
           }
         ));
@@ -165,6 +166,7 @@ const AddDepartment = () => {
                 <button
                   className="bg-green-700 text-white font-semibold px-10 py-1 rounded border border-green-700 cursor-pointer hover:bg-green-600"
                   onClick={addManager}
+                  type="button"
                 >
                   Add
                 </button>
@@ -183,6 +185,7 @@ const AddDepartment = () => {
                       <span>{mgr.label}</span>
                       <button
                         className="text-red-500 font-bold"
+                        type="button"
                         onClick={() => {
                           const updatedManagers = managers.filter((_, i) => i !== index);
                           setManagers(updatedManagers);

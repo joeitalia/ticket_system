@@ -25,7 +25,7 @@ const Comments = ({ ticketId, managers }: any) => {
         return {
           id: comment._id,
           content: comment.content,
-          userName: `${comment.user.lastName}, ${comment.user.firstName} ${comment.user.middleName}`,
+          userName: `${comment.user.firstName} ${comment.user.middleName} ${comment.user.lastName}`,
           createdAt: formatDate(comment.createdDate, true)
         } 
       }));
@@ -71,13 +71,22 @@ const Comments = ({ ticketId, managers }: any) => {
   const emailSending = async () => {
     const ticketResponse = await fetch(`/api/tickets/${ticketId}`);
     const ticketData = await ticketResponse.json();
-    const { title, description, assigneeId, status: ticketStatus, issueNo } = ticketData;
+    const { title, description, assigneeIds, status: ticketStatus, issueNo } = ticketData;
     const emails = []
+    
     // get assignee user details to send email
-    const fetchAssignee = await fetch(`/api/users/${assigneeId}`);
-    const assignee = await fetchAssignee.json();
-
-    emails.push(assignee.email);
+    const assignees = await Promise.all(
+      assigneeIds.map(async (assId: string) => {
+        const assigneeRes = await fetch(`/api/users/${assId}`);
+        const assigneeData = await assigneeRes.json();
+        return {
+          email: assigneeData.email,
+          name: `${assigneeData.firstName} ${assigneeData.middleName} ${assigneeData.lastName}`,
+        }
+      })
+    )
+    if (assignees.length) emails.push(...assignees.map((ass: any) => ass.email));
+  
     // get managers user details to send email
     if (managers.length > 0) {
       emails.push(...managers);
@@ -89,7 +98,7 @@ const Comments = ({ ticketId, managers }: any) => {
       message: `
         <p>Project: </p>
         <p>Ticket no: #${issueNo}</p>
-        <p>Users: ${assignee.lastName}, ${assignee.firstName} ${assignee.middleName}</p>
+        <p>Users: ${assignees.map((ass: any) => ass.name).join(', ') ?? 'N/A'}</p>
         <p>Status: ${ticketStatus}</p>
         <p>Issue Content: ${description}</p>
         <div>
@@ -103,11 +112,10 @@ const Comments = ({ ticketId, managers }: any) => {
     await sendEmail(data);
   }
   
-
   useEffect(() => {
     setLoading(true);
     if (ticketId) getComments();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ticketId]);
 
   if (loading) {

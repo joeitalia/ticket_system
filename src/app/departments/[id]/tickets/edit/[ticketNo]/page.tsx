@@ -15,7 +15,6 @@ import Image from 'next/image'
 import Modal from '@/components/Modal'
 import { convertToBase64 } from '@/util/image-to-base64'
 import { useSession } from 'next-auth/react'
-import { set } from 'mongoose'
 
 const EditTicket = () => {
   const params = useParams()
@@ -42,6 +41,7 @@ const EditTicket = () => {
   const [createdBy, setCreatedBy] = useState<any>(null)
 
   const [assigneeOptions, setAssigneeOptions] = useState<any[]>([])
+  const [assignees, setAssignees] = useState<string[]>([])
   const [assignee, setAssignee] = useState<any>({
     label: "",
     value: ""
@@ -68,8 +68,13 @@ const EditTicket = () => {
       setCreatedBy(ticket.createdBy)
       setCreatedDate(ticket.createdDate)
 
-      const assigneeApi: any = await getUser(ticket.assigneeId)
-      setAssignee(assigneeApi)
+      const assigneesIds = await Promise.all(
+        ticket.assigneeIds.map(async (ids: string) => {
+          const assigneeApi: any = await getUser(ids)
+          return assigneeApi
+        })
+      )
+      setAssignees(assigneesIds)
 
       const reportedByApi: any = await getUser(ticket.createdBy)
       setReportedBy(reportedByApi.label)
@@ -87,7 +92,7 @@ const EditTicket = () => {
       const userApi = await res.json()
       if (userApi) {
         return {
-          label: `${userApi.lastName}, ${userApi.firstName} ${userApi.middleName}`,
+          label: `${userApi.firstName} ${userApi.middleName} ${userApi.lastName}`,
           value: userApi._id
         }
       }
@@ -114,6 +119,7 @@ const EditTicket = () => {
     }
     
     try {
+      const assigneeIds = assignees.map((ass: any) => ass.value);
       const res = await fetch(`/api/tickets/${ticketId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -127,7 +133,7 @@ const EditTicket = () => {
           startDate,
           targetDate,
           resolvedDate,
-          assigneeId: assignee.value,
+          assigneeIds,
           attachments,
           createdBy,
           createdDate,
@@ -140,12 +146,16 @@ const EditTicket = () => {
         const createdByDataJson = await createdByData.json();
 
         const emails: any = [data?.user?.email, createdByDataJson.email];
+
         // get assignee user details to send email
-        const assigneeRes = await fetch(`/api/users/${assignee.value}`);
-        const assigneeData = await assigneeRes.json();
-        if (assigneeData.email) {
-          emails.push(assigneeData.email);
-        }
+        const assigneeEmails = await Promise.all(
+          assigneeIds.map(async (assId: string) => {
+            const assigneeRes = await fetch(`/api/users/${assId}`);
+            const assigneeData = await assigneeRes.json();
+            return assigneeData.email
+          })
+        )
+        if (assigneeEmails.length) emails.push(...assigneeEmails);
 
         // get managers user details to send email
         if (managers.length > 0) {
@@ -159,7 +169,7 @@ const EditTicket = () => {
             message: `
               <p>Project: </p>
               <p>Ticket no: #${issueNo}</p>
-              <p>Users: ${assignee.label ?? 'N/A'}</p>
+              <p>Users: ${assignees.map((ass: any) => ass.label).join(', ') ?? 'N/A'}</p>
               <p>Status: ${ticketStatus}</p>
               <p>Issue Content: ${description}</p>
               <p><a href="${location.origin}/login?callback=${window.location.href.replace("new", "edit/"+issueNo)}" target="_blank">View Ticket</a></p>
@@ -225,6 +235,17 @@ const EditTicket = () => {
     setSelectedImage(attachment)
   }
 
+  const addAssignee = () => {
+    if (assignee && assignee.label?.length > 0) {
+      const existingAssignee = assignees.filter((ass: any) => ass.value === assignee.value)
+      if (!existingAssignee.length) setAssignees([...assignees, assignee])
+      setAssignee({
+        label: "",
+        value: ""
+      })
+    }
+  }
+
   useEffect(() => {
     getTicket()
     getDepartment(params.id)
@@ -241,12 +262,16 @@ const EditTicket = () => {
       const data = await res.json();
       const options = data.map((user: any) => (
         {
-          label: `${user.lastName}, ${user.firstName} ${user.middleName}`,
+          label: `${user.firstName} ${user.middleName} ${user.lastName}`,
           value: user._id
         }
       ));
-      if (options.length) {
-        setAssigneeOptions(options);
+
+      const filteredOptions = options.filter((option: any) => 
+        !assignees.some((mgrId: any) => mgrId.value === option.value)
+      );
+      if (filteredOptions.length) {
+        setAssigneeOptions(filteredOptions);
       } else {
         setAssigneeOptions([]);
       }
@@ -349,12 +374,13 @@ const EditTicket = () => {
               </div>
               <div className='flex flex-row gap-4 w-full'> 
                 <div className="flex flex-col gap-1 w-1/3">
-                  <label className="whitespace-pre mr-3 font-semibold">Assignee:</label>
+                  <label className="whitespace-pre mr-3 font-semibold">Resolved Date:</label>
                   <div className="flex w-full">
-                    <Autocompleter
-                      options={assigneeOptions}
-                      input={assignee.label}
-                      setInput={setAssignee}
+                    <input 
+                      type="date"
+                      defaultValue={resolvedDate}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => setResolvedDate(e.target.value)}
+                      className="border border-gray-100 py-1 px-2 rounded w-full outline-gray-200 bg-white"
                     />
                   </div>
                 </div>
@@ -383,29 +409,61 @@ const EditTicket = () => {
               </div>
               <div className='flex flex-row gap-4 w-full'> 
                 <div className="flex flex-col gap-1 w-1/3">
-                  <label className="whitespace-pre mr-3 font-semibold">Resolved Date:</label>
-                  <div className="flex w-full">
-                    <input 
-                      type="date"
-                      defaultValue={resolvedDate}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => setResolvedDate(e.target.value)}
-                      className="border border-gray-100 py-1 px-2 rounded w-full outline-gray-200 bg-white"
+                  <label className="whitespace-pre mr-3 font-semibold">Add Assignee:</label>
+                  <div className="flex gap-x-1 w-full">
+                    <Autocompleter
+                      options={assigneeOptions}
+                      input={assignee.label}
+                      setInput={setAssignee}
                     />
+                    <button
+                      className="bg-blue-700 text-white font-semibold p-1 rounded border border-blue-700 cursor-pointer hover:bg-blue-600"
+                      type="button"
+                      onClick={addAssignee}
+                    >
+                      Add
+                    </button>
                   </div>
                 </div>
                 <div className="flex flex-col gap-1 w-1/3">
                   <label className="whitespace-pre mr-3 font-semibold">Reported By:</label>
-                  <div className="flex w-full">
+                  <div className="flex w-full flex-1 items-center">
                     {reportedBy}
                   </div>
                 </div>
                 <div className="flex flex-col gap-1 w-1/3">
                   <label className="whitespace-pre mr-3 font-semibold">Reported Date:</label>
-                  <div className="flex w-full">
+                  <div className="flex w-full flex-1 items-center">
                     {formatDate(reportedDate)}
                   </div>
                 </div>
               </div>
+              {
+                assignees.length > 0 &&
+                <div className="flex flex-col w-full gap-1">
+                  <label className="w-1/6 font-semibold">Assignees</label>
+                  <div className="flex w-full">
+                    {assignees.map((mgr: any, index: number) => (
+                      <div 
+                        key={index}
+                        className="bg-blue-100 text-blue-700 px-2 py-1 rounded mr-2 flex items-center gap-2"
+                      >
+                        <span>{mgr.label}</span>
+                        <button
+                          className="text-red-500 font-bold"
+                          onClick={() => {
+                            const updateAssigness = assignees.filter((_, i) => i !== index);
+                            setAssignees(updateAssigness);
+                          }}
+                        >
+                          &times;
+                        </button>
+                      </div>
+                    )) 
+                    }
+                  </div>
+                </div>
+              }
               <div className="flex flex-col w-full gap-1">
                 <label className="w-1/6 font-semibold">Issue Content:</label>
                 <div>
@@ -426,18 +484,18 @@ const EditTicket = () => {
                   />
                 </div>
                 {
-                  attachments.length > 0 && <div className="flex flex-wrap gap-2 pt-2">
+                  attachments.length > 0 && <div className="grid 2xl:grid-cols-7 xl:grid-cols-6 lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-3 grid-cols-1 gap-2 pt-2">
                     {attachments.map((attachment: any, index: number) => {
                       return (
-                        <div key={attachment} className="p-2 shadow-xl rounded-md border border-gray-100 w-60 flex items-center relative group">
+                        <div key={attachment} className="p-2 shadow-xl rounded-md border border-gray-100 w-full max-h-60 flex items-center relative group">
                           <span onClick={() => handleImageViewer(attachment)} className="group-hover:flex hidden absolute inset-0 bg-gray-100/70 cursor-pointer justify-center items-center text-white">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                               <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
                             </svg>
                           </span>
-                          <button>
+                          <div className="h-full w-full overflow-hidden flex items-center">
                             <Image id={`attachment-${index}`} src={attachment} alt="Slide 1" width={800} height={400} className="w-full" />
-                          </button>
+                          </div>
                           <button className="rounded-full bg-red-400 p-1 text-white font-medium absolute -top-1 -right-1 border border-white cursor-pointer" onClick={(event: React.MouseEvent<HTMLButtonElement>) => handleRemoveImage(event, index)}>
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-4">
                               <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />

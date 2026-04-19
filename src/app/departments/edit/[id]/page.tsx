@@ -45,7 +45,7 @@ const AddDepartment = () => {
             const userApi = await res.json()
             if (userApi) {
               return {
-                label: `${userApi.lastName}, ${userApi.firstName} ${userApi.middleName}`,
+                label: `${userApi.firstName} ${userApi.middleName} ${userApi.lastName}`,
                 value: userApi._id
               }
             }
@@ -62,13 +62,15 @@ const AddDepartment = () => {
   
   const addManager = () => {
     if (manager && manager.label?.length > 0) {
-      setManagers([...managers, manager])
+      const existingManagers = managers.filter((ass: any) => ass.value === manager.value)
+      if (!existingManagers.length) setManagers([...managers, manager])
       setManager({
         label: "",
         value: ""
       })
     }
   }
+
   // fetch department details on load
   useEffect(() => {
     const deptId: any = params.id
@@ -85,7 +87,7 @@ const AddDepartment = () => {
       const data = await res.json();
       const options = data?.map((user: any) => (
         {
-          label: `${user.lastName}, ${user.firstName} ${user.middleName}`,
+          label: `${user.firstName} ${user.middleName} ${user.lastName}`,
           value: user._id
         }
       )) || [];

@@ -11,6 +11,7 @@ import { useEffect, useState } from "react"
 const ShowDepartment = () => {
   const params = useParams()
   const [deptId, setDeptId] = useState("")
+  const [ticketCreators, setTicketCreators] = useState([]);
   const [tickets, setTickets] = useState([])
   const [departmentName, setDepartmentName] = useState("")
   const [loading, setLoading] = useState(false)
@@ -29,12 +30,13 @@ const ShowDepartment = () => {
           ticketsApi.map(async (ticket: any) => {
             const reportedBy = await getReportedBy(ticket)
             return {
-              ...ticket,
+              userId: ticket.createdBy,
               createdBy: reportedBy
             }
           })
         )
-        setTickets(ticketsWithReporter)
+        setTicketCreators(ticketsWithReporter)
+        setTickets(ticketsApi)
       }
       setLoading(false)
     } catch (error: any) {
@@ -77,6 +79,11 @@ const ShowDepartment = () => {
     } catch (error: any) {
       alert(error)
     }
+  }
+
+  const displayCreator = (creatorId: string) => {
+    const creator: any = ticketCreators.filter((crtr: any) => crtr.userId === creatorId)
+    return creator[0].createdBy;
   }
 
   const generateReport = async () => {
@@ -196,7 +203,7 @@ const ShowDepartment = () => {
                   <td className="px-2 py-1">{ticket.status}</td>
                   <td className="px-2 py-1">{formatDate(ticket.startDate)}</td>
                   <td className="px-2 py-1">{formatDate(ticket.targetDate)}</td>
-                  <td className="px-2 py-1">{ticket.createdBy}</td>
+                  <td className="px-2 py-1">{displayCreator(ticket.createdBy)}</td>
                   <td className="px-2 py-1">{formatDate(ticket.createdDate)}</td>
                 </tr>
               ))}

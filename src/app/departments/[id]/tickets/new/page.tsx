@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client"
 
 import Editor from 'react-simple-wysiwyg'
@@ -32,6 +33,7 @@ const CreateTicket = () => {
   const [selectedImage, setSelectedImage] = useState<any>('')
 
   const [assigneeOptions, setAssigneeOptions] = useState<any[]>([])
+  const [assignees, setAssignees] = useState<string[]>([])
   const [assignee, setAssignee] = useState<any>({
     label: "",
     value: ""
@@ -49,7 +51,6 @@ const CreateTicket = () => {
     if (!ticketStatus) error.push("Please select Status.");
     if (!ticketImportance) error.push("Please select Importance.");
     if (!ticketType) error.push("Please select Type.");
-    // if (!assignee.value) error.push("Please select Assignee.");
     if (!startDate) error.push("Please select Start Date.");
     if (!targetDate) error.push("Please select Target Date.");
     if (!description) error.push("Please insert Issue Content.");
@@ -61,6 +62,7 @@ const CreateTicket = () => {
       const getTotalTicket = await fetch(`/api/tickets/totalCount`);
       const totalTicketData = await getTotalTicket.json();
       const newTicketNumber = totalTicketData.returnValue + 1;  
+      const assigneeIds = assignees.map((ass: any) => ass.value);
 
       const res = await fetch(`/api/tickets`, {
         method: "POST",
@@ -77,20 +79,24 @@ const CreateTicket = () => {
           targetDate,
           attachments,
           resolvedDate: null,
-          assigneeId: assignee.value,
+          assigneeIds,
           createdDate: new Date(),
           createdBy: data.user.id,
         }),
       });
       const apiData = await res.json();
 
-      const emails: any = [data.user.email];
+      const emails: string[] = [data.user.email];
+
       // get assignee user details to send email
-      const assigneeRes = await fetch(`/api/users/${assignee.value}`);
-      const assigneeData = await assigneeRes.json();
-      if (assigneeData.email) {
-        emails.push(assigneeData.email);
-      }
+      const assigneeEmails = await Promise.all(
+        assigneeIds.map(async (assId: string) => {
+          const assigneeRes = await fetch(`/api/users/${assId}`);
+          const assigneeData = await assigneeRes.json();
+          return assigneeData.email
+        })
+      )
+      if (assigneeEmails.length) emails.push(...assigneeEmails);
 
       // get managers user details to send email
       if (managers.length > 0) {
@@ -104,7 +110,7 @@ const CreateTicket = () => {
           message: `
             <p>Project: </p>
             <p>Ticket no: #${newTicketNumber}</p>
-            <p>Users: ${assignee.label ?? 'N/A'}</p>
+            <p>Users: ${assignees.map((ass: any) => ass.label).join(', ') ?? 'N/A'}</p>
             <p>Status: ${ticketStatus}</p>
             <p>Issue Content: ${description}</p>
             <p><a href="${location.origin}/login?callback=${location.href.replace("new", "edit/"+newTicketNumber)}" target="_blank">View Ticket</a></p>
@@ -125,22 +131,33 @@ const CreateTicket = () => {
   }
 
   const handleAttachment = async (e: React.ChangeEvent<HTMLInputElement>) => {
-      const file = e.target.files?.[0];
-      if (!file) return;
-      const base64Image = await convertToBase64(file);
-      setAttachments(prevState => [...prevState, base64Image])
-      e.target.value = ""
-    }
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const base64Image = await convertToBase64(file);
+    setAttachments(prevState => [...prevState, base64Image])
+    e.target.value = ""
+  }
   
-    const handleRemoveImage = (e: React.MouseEvent<HTMLButtonElement>, i: number) => {
-      setAttachments(prev =>
-        prev.filter((_, index) => index !== i)
-      );
-    }
+  const handleRemoveImage = (e: React.MouseEvent<HTMLButtonElement>, i: number) => {
+    setAttachments(prev =>
+      prev.filter((_, index) => index !== i)
+    );
+  }
   
-    const handleImageViewer = (attachment: string) => {
-      setSelectedImage(attachment)
+  const handleImageViewer = (attachment: string) => {
+    setSelectedImage(attachment)
+  }
+  
+  const addAssignee = () => {
+    if (assignee && assignee.label?.length > 0) {
+      const existingAssignee = assignees.filter((ass: any) => ass.value === assignee.value)
+      if (!existingAssignee.length) setAssignees([...assignees, assignee])
+      setAssignee({
+        label: "",
+        value: ""
+      })
     }
+  }
 
   useEffect(() => {
     if (!assignee?.label?.trim()) {
@@ -152,12 +169,15 @@ const CreateTicket = () => {
       const data = await res.json();
       const options = data.map((user: any) => (
         {
-          label: `${user.lastName}, ${user.firstName} ${user.middleName}`,
+          label: `${user.firstName} ${user.middleName} ${user.lastName}`,
           value: user._id
         }
       ));
-      if (options.length) {
-        setAssigneeOptions(options);
+      const filteredOptions = options.filter((option: any) => 
+        !assignees.some((mgrId: any) => mgrId.value === option.value)
+      );
+      if (filteredOptions.length) {
+        setAssigneeOptions(filteredOptions);
       } else {
         setAssigneeOptions([]);
       }
@@ -187,7 +207,7 @@ const CreateTicket = () => {
       }
     };
     fetchManagers();
-  }, [params.id]);
+  }, []);
   
   return (
     <>
@@ -278,13 +298,20 @@ const CreateTicket = () => {
               </div>
               <div className='flex flex-row gap-4 w-full'> 
                 <div className="flex flex-col gap-1 w-1/3">
-                  <label className="whitespace-pre mr-3 font-semibold">Assignee:</label>
-                  <div className="flex w-full">
+                  <label className="whitespace-pre mr-3 font-semibold">Add Assignee:</label>
+                  <div className="flex gap-x-1 w-full">
                     <Autocompleter
                       options={assigneeOptions}
                       input={assignee.label}
                       setInput={setAssignee}
                     />
+                    <button
+                      className="bg-blue-700 text-white font-semibold p-1 rounded border border-blue-700 cursor-pointer hover:bg-blue-600"
+                      type="button"
+                      onClick={addAssignee}
+                    >
+                      Add
+                    </button>
                   </div>
                 </div>
                 <div className="flex flex-col gap-1 w-1/3">
@@ -310,6 +337,32 @@ const CreateTicket = () => {
                   </div>
                 </div>
               </div>
+              {
+                assignees.length > 0 &&
+                <div className="flex flex-col w-full gap-1">
+                  <label className="w-1/6 font-semibold">Assignees</label>
+                  <div className="flex w-full">
+                    {assignees.map((mgr: any, index: number) => (
+                      <div 
+                        key={index}
+                        className="bg-blue-100 text-blue-700 px-2 py-1 rounded mr-2 flex items-center gap-2"
+                      >
+                        <span>{mgr.label}</span>
+                        <button
+                          className="text-red-500 font-bold"
+                          onClick={() => {
+                            const updateAssigness = assignees.filter((_, i) => i !== index);
+                            setAssignees(updateAssigness);
+                          }}
+                        >
+                          &times;
+                        </button>
+                      </div>
+                    )) 
+                    }
+                  </div>
+                </div>
+              }
               <div className="flex flex-col w-full gap-1">
                 <label className="w-1/6 font-semibold">Issue Content:</label>
                 <div>
@@ -330,18 +383,18 @@ const CreateTicket = () => {
                   />
                 </div>
                 {
-                  attachments.length > 0 && <div className="flex flex-wrap gap-2 pt-2">
+                  attachments.length > 0 && <div className="grid 2xl:grid-cols-7 xl:grid-cols-6 lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-3 grid-cols-1 gap-2 pt-2">
                     {attachments.map((attachment: any, index: number) => {
                       return (
-                        <div key={attachment} className="p-2 shadow-xl rounded-md border border-gray-100 w-60 flex items-center relative group">
+                        <div key={attachment} className="p-2 shadow-xl rounded-md border border-gray-100 w-full max-h-60 flex items-center relative group">
                           <span onClick={() => handleImageViewer(attachment)} className="group-hover:flex hidden absolute inset-0 bg-gray-100/70 cursor-pointer justify-center items-center text-white">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                               <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
                             </svg>
                           </span>
-                          <button>
+                          <div className="h-full w-full overflow-hidden flex items-center">
                             <Image id={`attachment-${index}`} src={attachment} alt="Slide 1" width={800} height={400} className="w-full" />
-                          </button>
+                          </div>
                           <button className="rounded-full bg-red-400 p-1 text-white font-medium absolute -top-1 -right-1 border border-white cursor-pointer" onClick={(event: React.MouseEvent<HTMLButtonElement>) => handleRemoveImage(event, index)}>
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-4">
                               <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
