@@ -95,9 +95,9 @@ const ShowDepartment = () => {
     try {
       const res = await fetch(`/api/tickets/department/${deptId}`)
       const reportApi = await res.json()
-      if (reportApi.length) {
+      if (reportApi?.data?.length) {
         const ticketsWithReporter: any = await Promise.all(
-          reportApi.map(async (ticket: any) => {
+          reportApi?.data?.map(async (ticket: any) => {
             const reportedBy = await getReportedBy(ticket)
             return {
               issueNo: ticket.issueNo,

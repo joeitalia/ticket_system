@@ -28,7 +28,7 @@ export const sendResetEmail = async (email: string, resetLink: string) => {
       body: JSON.stringify({
         to: email,
         subject: "Password Reset Request",
-        message: `Click the link to reset your password: ${resetLink}`,
+        message: `Click the link to reset your password: <a href="${resetLink}">Reset Password</a>`,
       }),
     });
 
