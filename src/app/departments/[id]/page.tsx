@@ -3,6 +3,7 @@
 import DefaultLayout from "@/components/Layout/DefaultLayout"
 import Loading from "@/components/Layout/Loading"
 import LoadingOverlay from "@/components/Layout/LoadingOverlay"
+import Modal from "@/components/Modal"
 import { formatDate } from "@/util/dateformat"
 import Link from "next/link"
 import { useParams } from "next/navigation"
@@ -17,6 +18,11 @@ const ShowDepartment = () => {
   const [loading, setLoading] = useState(false)
   const [isOverlayOpen, setIsOverlayOpen] = useState(false)
   const [page, setPage] = useState(1)
+  const [reportModalOpen, setReportModalOpen] = useState(false);
+  const [dateFrom, setDateFrom] = useState("")
+  const [dateTo, setDateTo] = useState("")
+  const [searchBy, setSearchBy] = useState("Created By");
+  const [searchTerm, setSearchTerm] = useState("")
   const [totalPages, setTotalPages] = useState(1)
 
   /**
@@ -91,9 +97,26 @@ const ShowDepartment = () => {
   }, [ticketCreators])
 
   const generateReport = async () => {
+    if (!dateFrom || !dateTo) {
+      alert("Please select date range for the report.")
+      return
+    }
+    if (dateFrom && dateTo && new Date(dateFrom) > new Date(dateTo)) {
+      alert("Invalid date range: 'From' date cannot be later than 'To' date.")
+      return
+    }
     setIsOverlayOpen(true)
+    setReportModalOpen(false)
     try {
-      const res = await fetch(`/api/tickets/department/${deptId}`)
+      const params = new URLSearchParams({
+        search: searchTerm,
+        searchBy: searchBy,
+        startDate: dateFrom,
+        endDate: dateTo,
+        report: "true",
+      });
+
+      const res = await fetch(`/api/tickets/department/${deptId}?${params}`)
       const reportApi = await res.json()
       if (reportApi?.data?.length) {
         const ticketsWithReporter: any = await Promise.all(
@@ -164,7 +187,7 @@ const ShowDepartment = () => {
         <div className="flex flex-row justify-between items-center">
           <h1 className="font-semibold text-2xl">{departmentName} Department</h1>
           <div className="flex gap-1">
-            <button onClick={generateReport} className="border-green-500 rounded px-2 py-1 bg-green-500 text-white hover:bg-green-600 shadow font-semibold cursor-pointer">
+            <button onClick={() => setReportModalOpen(true)} className="border-green-500 rounded px-2 py-1 bg-green-500 text-white hover:bg-green-600 shadow font-semibold cursor-pointer">
               Generate Report
             </button>
             <Link
@@ -255,6 +278,66 @@ const ShowDepartment = () => {
           )}
         </div>
       </div>}
+      {reportModalOpen &&
+        <Modal onClose={() => setReportModalOpen(false)}>
+          <div className="max-h-[600px]">
+            <div className="border-b border-gray-200 py-2 px-4">
+              <h2 className="text-lg font-semibold">Generate Report</h2>
+            </div>
+            <div className="p-4 flex flex-col gap-4">
+              <div className="flex flex-col">
+                <label>Search date created:</label>
+                <div className="flex gap-2 items-center">
+                  <input
+                    type="date"
+                    value={dateFrom}
+                    onChange={(e) => setDateFrom(e.target.value)}
+                    className="border border-gray-300 rounded py-1 px-2"
+                  />
+                  <span> to </span>
+                  <input
+                    type="date"
+                    value={dateTo}
+                    onChange={(e) => setDateTo(e.target.value)}
+                    className="border border-gray-300 rounded py-1 px-2"
+                  />
+                </div>
+              </div>
+              <div className="flex flex-col">
+                <label>Search by:</label>
+                <div className="flex flex-col gap-2">
+                  <select
+                    value={searchBy}
+                    onChange={(e) => setSearchBy(e.target.value)}
+                    className="border border-gray-300 rounded py-1 px-2"
+                  >
+                    <option value="title">Title</option>
+                    <option value="createdBy">Reported By</option>
+                    <option value="assignee">Assignee</option>
+                    <option value="status">Status</option>
+                    <option value="type">Type</option>
+                  </select>
+                  <input
+                    type="text"
+                    placeholder={`Search by ${searchBy}`}
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="border border-gray-300 rounded py-1 px-2"
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="border-t border-gray-200 py-2 px-4 flex justify-end">
+              <button 
+                onClick={generateReport}
+                className="bg-green-500 text-white font-semibold px-4 py-2 rounded hover:bg-green-600 cursor-pointer"
+              >
+                Generate
+              </button>
+            </div>
+          </div>
+        </Modal>
+      }
     </DefaultLayout>
   )
 }

@@ -427,7 +427,7 @@ const CreateTicket = () => {
       {
         selectedImage &&
           <Modal onClose={() => setSelectedImage('')}>
-            <div className="max-h-[600px]">
+            <div className="max-h-[600px] p-4">
               <Image src={selectedImage} alt="Image Attachment Viewer" width="600" height="400" className="max-h-[500px] w-full object-contain" />
             </div>
           </Modal>
