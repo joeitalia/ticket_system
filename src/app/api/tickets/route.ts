@@ -8,7 +8,6 @@ const collectionName = "Tickets"
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const { searchParams } = new URL(request.url);
