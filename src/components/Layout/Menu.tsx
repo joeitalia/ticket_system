@@ -39,16 +39,21 @@ const Menu = () => {
       </div>
       <ul className="pt-3">
         <li>
-          <Link href={"/"} className="p-2 block hover:bg-gray-200 hover:rounded hover:text-black">Home</Link>
+          <Link href={"/"} className="p-2 block hover:bg-gray-200 hover:rounded hover:text-black">Dashboard</Link>
         </li>
         <li>
-          <Link href={"/departments"} className="p-2 block hover:bg-gray-200 hover:rounded hover:text-black">Departments</Link>
+          <Link href={"/tickets"} className="p-2 block hover:bg-gray-200 hover:rounded hover:text-black">Tickets</Link>
         </li>
         {
           user?.isAdmin && (
-            <li>
-              <Link href={"/users"} className="p-2 block hover:bg-gray-200 hover:rounded hover:text-black">Users</Link>
-            </li>
+            <>
+              <li>
+                <Link href={"/departments"} className="p-2 block hover:bg-gray-200 hover:rounded hover:text-black">Departments</Link>
+              </li>
+              <li>
+                <Link href={"/users"} className="p-2 block hover:bg-gray-200 hover:rounded hover:text-black">Users</Link>
+              </li>
+            </>
           )
         }
         {/* <li>

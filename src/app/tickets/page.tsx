@@ -6,15 +6,11 @@ import LoadingOverlay from "@/components/Layout/LoadingOverlay"
 import Modal from "@/components/Modal"
 import { formatDate } from "@/util/dateformat"
 import Link from "next/link"
-import { useParams } from "next/navigation"
 import { useCallback, useEffect, useState } from "react"
 
-const ShowDepartment = () => {
-  const params = useParams()
-  const [deptId, setDeptId] = useState("")
+const ShowTickets = () => {
   const [ticketCreators, setTicketCreators] = useState([]);
   const [tickets, setTickets] = useState([])
-  const [departmentName, setDepartmentName] = useState("")
   const [loading, setLoading] = useState(false)
   const [isOverlayOpen, setIsOverlayOpen] = useState(false)
   const [page, setPage] = useState(1)
@@ -29,9 +25,9 @@ const ShowDepartment = () => {
    * fetch tickets by department id
    * @param deptId 
    */
-  const getTickets = async (deptId: string, pageNumber: number) => {
+  const getTickets = async (pageNumber: number) => {
     try {
-      const res = await fetch(`/api/tickets/department/${deptId}?page=${pageNumber}&limit=10`)
+      const res = await fetch(`/api/tickets?page=${pageNumber}&limit=10`)
       const ticketsApi = await res.json()
       setLoading(false)
       if (ticketsApi?.data?.length) {
@@ -74,22 +70,6 @@ const ShowDepartment = () => {
     return ''
   }
 
-  /**
-   * fetch department info
-   * @param deptId 
-   */
-  const getDepartment = async (deptId: string) => {
-    try {
-      const res: any = await fetch(`/api/departments/${deptId}`)
-      const deptApi = await res.json()
-      if (deptApi.success) {
-        setDepartmentName(deptApi.data?.name ?? "")
-      }
-    } catch (error: any) {
-      alert(error)
-    }
-  }
-
   const displayCreator = useCallback((creatorId: string) => {
     if (!ticketCreators.length) return <span className="text-blue-300">Loading...</span>
     const creator: any = ticketCreators?.filter((crtr: any) => crtr.userId === creatorId)
@@ -116,7 +96,7 @@ const ShowDepartment = () => {
         report: "true",
       });
 
-      const res = await fetch(`/api/tickets/department/${deptId}?${params}`)
+      const res = await fetch(`/api/tickets?${params}`)
       const reportApi = await res.json()
       if (reportApi?.data?.length) {
         const ticketsWithReporter: any = await Promise.all(
@@ -150,7 +130,7 @@ const ShowDepartment = () => {
         const url = URL.createObjectURL(blob);
         const link = document.createElement("a");
         link.href = url;
-        link.download = `${departmentName}-report.csv`;
+        link.download = `report.csv`;
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
@@ -166,16 +146,8 @@ const ShowDepartment = () => {
   }
   
   useEffect(() => {
-    const departmentId:any = params.id
     setLoading(true)
-    setDeptId(departmentId)
-    getDepartment(departmentId)
-    if (departmentId && page) getTickets(departmentId, page)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  useEffect(() => {
-    if (deptId && page) getTickets(deptId, page)
+    if (page) getTickets(page)
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page])
 
@@ -185,13 +157,13 @@ const ShowDepartment = () => {
       {loading && <Loading />}
       {!loading && <div className="flex flex-col">
         <div className="flex flex-row justify-between items-center">
-          <h1 className="font-semibold text-2xl">{departmentName} Department</h1>
+          <h1 className="font-semibold text-2xl">Tickets</h1>
           <div className="flex gap-1">
             <button onClick={() => setReportModalOpen(true)} className="border-green-500 rounded px-2 py-1 bg-green-500 text-white hover:bg-green-600 shadow font-semibold cursor-pointer">
               Generate Report
             </button>
             <Link
-              href={`${deptId}/tickets/new`}
+              href={`/tickets/new`}
               className="border-blue-500 rounded px-2 py-1 bg-blue-500 text-white hover:bg-blue-600 shadow font-semibold"
             >
               Create Ticket
@@ -206,17 +178,16 @@ const ShowDepartment = () => {
                 <th className="p-2 text-left">Title</th>
                 <th className="p-2 text-left">Importance</th>
                 <th className="p-2 text-left">Status</th>
-                <th className="p-2 text-left">Start Date</th>
+                <th className="p-2 text-left">Reported Date</th>
                 <th className="p-2 text-left">Target Date</th>
                 <th className="p-2 text-left">Reported By</th>
-                <th className="p-2 text-left">Reported Date</th>
               </tr>
             </thead>
             <tbody className="divide-y">
               {tickets.length === 0 && (
                 <tr>
                   <td colSpan={8} className="p-2 text-center">
-                    No tickets found for this department.
+                    No tickets found.
                   </td>
                 </tr>
               )}
@@ -224,10 +195,10 @@ const ShowDepartment = () => {
                 <tr key={ticket.issueNo} className="odd:bg-gray-50 hover:bg-gray-100">
                   <td className="px-2 py-1">
                     <Link 
-                      href={`../departments/${deptId}/tickets/edit/${ticket.issueNo}`}
+                      href={`../tickets/edit/${ticket.issueNo}`}
                       className="underline text-blue-500 cursor-pointer"
                     >
-                      {departmentName}-{ticket.issueNo}
+                      TN-{ticket.issueNo}
                     </Link>
                   </td>
                   <td className="px-2 py-1">{ticket.title}</td>
@@ -342,4 +313,4 @@ const ShowDepartment = () => {
   )
 }
 
-export default ShowDepartment
+export default ShowTickets
