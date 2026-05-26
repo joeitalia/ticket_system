@@ -36,10 +36,11 @@ export const authOptions: any = {
         return {
           id: user._id.toString(),
           email: user.email,
-          isAdmin: user.isAdmin ?? false,
+          userType: user.userType ?? "User",
           firstName: user.firstName,
           lastName: user.lastName,
-          middleName: user.middleName
+          middleName: user.middleName,
+          department: department ? { id: department._id.toString(), name: department.name } : null
         };
       },
     }),
@@ -59,10 +60,11 @@ export const authOptions: any = {
       if (user) {
         token.id = user.id;
         token.email = user.email;
-        token.isAdmin = user.isAdmin;
+        token.userType = user.userType;
         token.firstName = user.firstName;
         token.lastName = user.lastName;
         token.middleName = user.middleName;
+        token.department = user.department;
       }
       return token;
     },
@@ -70,11 +72,12 @@ export const authOptions: any = {
       if (token) {
         session.user = {
           id: token.id,
-          isAdmin: token.isAdmin,
+          userType: token.userType,
           email: token.email,
           firstName: token.firstName,
           lastName: token.lastName,
-          middleName: token.middleName
+          middleName: token.middleName,
+          department: token.department,
         };
       }
       return session;

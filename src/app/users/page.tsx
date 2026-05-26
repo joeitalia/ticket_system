@@ -96,7 +96,7 @@ const Users = () => {
                 <th className="p-2 text-left">Full Name</th>
                 <th className="p-2 text-left">Email</th>
                 <th className="p-2 text-left">Department</th>
-                <th className="p-2 text-left">Position</th>
+                <th className="p-2 text-left">User Type</th>
                 <th className="p-2 text-left">Date Added</th>
                 <th className="p-2 w-32 text-right">Action</th>
               </tr>
@@ -111,7 +111,7 @@ const Users = () => {
                     </td>
                     <td className="px-2 py-1">{user.email}</td>
                     <td className="px-2 py-1">{user.department}</td>
-                    <td className="px-2 py-1">{user.position}</td>
+                    <td className="px-2 py-1">{user.userType}</td>
                     <td className="px-2 py-1">{formatDate(user.createdDate)}</td>
                     <td className="text-right px-2 py-1">
                       <div className="flex gap-x-1 justify-end w-full">

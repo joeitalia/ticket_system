@@ -6,9 +6,9 @@ import Form from "next/form"
 import Link from "next/link"
 import { useEffect, useState } from "react"
 import DefaultLayout from "@/components/Layout/DefaultLayout"
-import { IMPORTANCE, STATUS, TYPE } from '../constant'
+import { IMPORTANCE } from '../constant'
 import { useParams, useRouter } from 'next/navigation'
-import Autocompleter from '@/components/Autocompleter'
+// import Autocompleter from '@/components/Autocompleter'
 import { useSession } from 'next-auth/react'
 import { sendEmail } from '@/util/send-email'
 import Loading from '@/components/Layout/Loading'
@@ -21,23 +21,16 @@ const CreateTicket = () => {
   const { data }: any = useSession()
   const params = useParams();
   const [title, setTitle] = useState('')
-  const [ticketStatus, setTicketStatus] = useState('')
   const [ticketImportance, setTicketImportance] = useState('')
   const [description, setDescription] = useState('')
-  const [ticketType, setTicketType] = useState('')
   const [startDate, setStartDate] = useState('')
   const [targetDate, setTargetDate] = useState('')
   const [loading, setLoading] = useState(false)
+  const [departments, setDepartments] = useState<any[]>([])
+  const [department, setDepartment] = useState('')
   const [managers, setManagers] = useState<any[]>([])
   const [attachments, setAttachments] = useState<any[]>([])
   const [selectedImage, setSelectedImage] = useState<any>('')
-
-  const [assigneeOptions, setAssigneeOptions] = useState<any[]>([])
-  const [assignees, setAssignees] = useState<string[]>([])
-  const [assignee, setAssignee] = useState<any>({
-    label: "",
-    value: ""
-  })
 
   const [fieldErrors, setFieldErrors] = useState<string[]>([])
 
@@ -48,13 +41,13 @@ const CreateTicket = () => {
     setLoading(true)
     const error = [];
     if (!title) error.push("Please insert Title.");
-    if (!ticketStatus) error.push("Please select Status.");
     if (!ticketImportance) error.push("Please select Importance.");
-    if (!ticketType) error.push("Please select Type.");
+    if (!department) error.push("Please select Department.");
     if (!startDate) error.push("Please select Start Date.");
     if (!targetDate) error.push("Please select Target Date.");
     if (!description) error.push("Please insert Issue Content.");
     if (error.length > 0) {
+      setLoading(false);
       setFieldErrors(error);
       return
     }
@@ -62,41 +55,33 @@ const CreateTicket = () => {
       const getTotalTicket = await fetch(`/api/tickets/totalCount`);
       const totalTicketData = await getTotalTicket.json();
       const newTicketNumber = totalTicketData.returnValue + 1;  
-      const assigneeIds = assignees.map((ass: any) => ass.value);
 
       const res = await fetch(`/api/tickets`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ 
           issueNo: newTicketNumber,
-          departmentId: params.id,
+          departmentId: department,
+          status: "Open",
           title, 
-          status: ticketStatus, 
           importance: ticketImportance,
-          type: ticketType,
           description,
           startDate,
           targetDate,
           attachments,
-          resolvedDate: null,
-          assigneeIds,
           createdDate: new Date(),
           createdBy: data.user.id,
         }),
       });
       const apiData = await res.json();
 
+      await saveNotification({
+        message: `#${newTicketNumber}: ${title} created`,
+        ticketId: newTicketNumber,
+        managers: departments.find(dept => dept._id === department)?.managers || []
+      });
+      
       const emails: string[] = [data.user.email];
-
-      // get assignee user details to send email
-      const assigneeEmails = await Promise.all(
-        assigneeIds.map(async (assId: string) => {
-          const assigneeRes = await fetch(`/api/users/${assId}`);
-          const assigneeData = await assigneeRes.json();
-          return assigneeData.email
-        })
-      )
-      if (assigneeEmails.length) emails.push(...assigneeEmails);
 
       // get managers user details to send email
       if (managers.length > 0) {
@@ -110,8 +95,7 @@ const CreateTicket = () => {
           message: `
             <p>Project: </p>
             <p>Ticket no: #${newTicketNumber}</p>
-            <p>Users: ${assignees.map((ass: any) => ass.label).join(', ') ?? 'N/A'}</p>
-            <p>Status: ${ticketStatus}</p>
+            <p>Importance: ${ticketImportance}</p>
             <p>Issue Content: ${description}</p>
             <p><a href="${location.origin}/login?callback=${location.href.replace("new", "edit/"+newTicketNumber)}" target="_blank">View Ticket</a></p>
           `,
@@ -120,7 +104,7 @@ const CreateTicket = () => {
         await sendEmail(data);
         alert("New ticket has been created successfully.")
         setLoading(false)
-        router.push(`/departments/${params.id}`)
+        router.push(`/tickets`)
       } else {
         throw "Failed to create new Ticket."
       }
@@ -128,6 +112,25 @@ const CreateTicket = () => {
       setLoading(false)
       alert(error)
     }
+  }
+
+  const saveNotification = async (notification: any) => {
+    notification.managers.forEach(async (mg: string) => {
+      try {
+        await fetch(`/api/notifications`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            ticketId: notification.ticketId,
+            message: notification.message,
+            notifiedUser: mg,
+            read: false,
+          }),
+        });
+      } catch (error) {
+        console.error("Failed to save notification:", error);
+      }
+    });
   }
 
   const handleAttachment = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -147,68 +150,45 @@ const CreateTicket = () => {
   const handleImageViewer = (attachment: string) => {
     setSelectedImage(attachment)
   }
-  
-  const addAssignee = () => {
-    if (assignee && assignee.label?.length > 0) {
-      const existingAssignee = assignees.filter((ass: any) => ass.value === assignee.value)
-      if (!existingAssignee.length) setAssignees([...assignees, assignee])
-      setAssignee({
-        label: "",
-        value: ""
-      })
+
+  const handleImportanceSelect = (value: string) => {
+    setTicketImportance(value);
+    const tDate = new Date();
+    
+    if (value === "Critical") tDate.setDate(tDate.getDate() + 1); // 1 day
+    else if (value === "High") tDate.setDate(tDate.getDate() + 2); // 2 days
+    else if (value === "Medium") tDate.setDate(tDate.getDate() + 5); // 3 days
+    else if (value === "Low") tDate.setDate(tDate.getDate() + 7); // 4 days
+
+    let formattedTargetDate = tDate.toLocaleDateString('en-GB');
+    if (!value) formattedTargetDate = ''; 
+    setTargetDate(formattedTargetDate);
+  }
+
+  const handleDepartmentSelect = (value: string) => {
+    setDepartment(value);
+    const selectedDept = departments.find(dept => dept._id === value);
+    if (selectedDept) {
+      selectedDept.managers.forEach(mg => {
+        fetch(`/api/users/${mg}`).then(res => res.json()).then((data: any) => {
+          setManagers(prev => [...prev, data.email])
+        });
+      });
+    } else {
+      setManagers([]);
     }
   }
 
   useEffect(() => {
-    if (!assignee?.label?.trim()) {
-      setAssigneeOptions([]);
-      return;
-    }
-    const delay = setTimeout(async () => {
-      const res = await fetch(`/api/users/search/${assignee.label}`);
-      const data = await res.json();
-      const options = data.map((user: any) => (
-        {
-          label: `${user.firstName} ${user.middleName} ${user.lastName}`,
-          value: user._id
-        }
-      ));
-      const filteredOptions = options.filter((option: any) => 
-        !assignees.some((mgrId: any) => mgrId.value === option.value)
-      );
-      if (filteredOptions.length) {
-        setAssigneeOptions(filteredOptions);
-      } else {
-        setAssigneeOptions([]);
-      }
-    }, 0); // delay API until user stops typing
-    
-    return () => clearTimeout(delay); // cancel previous timers
-  }, [assignee]);
+    // set start date to current date
+    const stDate = new Date();
+    const formattedStartDate = stDate.toLocaleDateString('en-GB')
+    setStartDate(formattedStartDate);
 
-  useEffect(() => {
-    const fetchManagers = async () => {
-      try {
-        const res = await fetch(`/api/departments/${params.id}`);
-        const data = await res.json();
-        const managerIds = data.data.managers || [];
-        
-        if (managerIds.length > 0) {
-          const managerDetails = await Promise.all(
-            managerIds.map(async (id: string) => {
-              const userRes = await fetch(`/api/users/${id}`);
-              return await userRes.json();
-            })
-          );
-          setManagers(managerDetails.map((mgr: any) => mgr.email));
-        }
-      } catch (error) {
-        console.error("Failed to fetch managers:", error);
-      }
-    };
-    fetchManagers();
+    fetch("/api/departments")
+      .then((res) => res.json())
+      .then(setDepartments);
   }, []);
-  
   return (
     <>
       <DefaultLayout>
@@ -244,32 +224,15 @@ const CreateTicket = () => {
                 </div>
               </div>
               <div className='flex flex-row gap-4 w-full'>
-                <div className="flex flex-col gap-1 w-1/3">
-                  <label className="whitespace-pre mr-3 font-semibold">Status:</label>
-                  <div className="flex w-full">
-                    <select 
-                      defaultValue={ticketStatus}
-                      onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setTicketStatus(e.target.value)}
-                      className='border border-gray-100 p-2 rounded w-full outline-gray-200 bg-white'
-                    >
-                      <option>Select...</option>
-                      {
-                        STATUS.map((stat: string) => (
-                          <option key={stat} value={stat}>{stat}</option>
-                        ))
-                      }
-                    </select>
-                  </div>
-                </div>
-                <div className="flex flex-col gap-1 w-1/3">
+                <div className="flex flex-col gap-1 flex-1">
                   <label className="whitespace-pre mr-3 font-semibold">Importance:</label>
                   <div className="flex w-full">
                     <select 
                       defaultValue={ticketImportance}
-                      onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setTicketImportance(e.target.value)}
+                      onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleImportanceSelect(e.target.value)}
                       className='border border-gray-100 p-2 rounded w-full outline-gray-200 bg-white'
                     >
-                      <option>Select...</option>
+                      <option value=''>Select...</option>
                       {
                         IMPORTANCE.map((stat: string) => (
                           <option key={stat} value={stat}>{stat}</option>
@@ -278,91 +241,46 @@ const CreateTicket = () => {
                     </select>
                   </div>
                 </div>
-                <div className="flex flex-col gap-1 w-1/3">
-                  <label className="whitespace-pre mr-3 font-semibold">Type:</label>
+                <div className="flex flex-col gap-1 flex-1">
+                  <label className="whitespace-pre mr-3 font-semibold">Department:</label>
                   <div className="flex w-full">
                     <select 
-                      defaultValue={ticketType}
-                      onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setTicketType(e.target.value)}
+                      defaultValue={department}
+                      onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleDepartmentSelect(e.target.value)}
                       className='border border-gray-100 p-2 rounded w-full outline-gray-200 bg-white'
                     >
-                      <option>Select...</option>
+                      <option value=''>Select...</option>
                       {
-                        TYPE.map((stat: string) => (
-                          <option key={stat} value={stat}>{stat}</option>
+                        departments.map((dept: any) => (
+                          <option key={dept._id} value={dept._id}>{dept.name}</option>
                         ))
                       }
                     </select>
                   </div>
                 </div>
               </div>
-              <div className='flex flex-row gap-4 w-full'> 
-                <div className="flex flex-col gap-1 w-1/3">
-                  <label className="whitespace-pre mr-3 font-semibold">Add Assignee:</label>
-                  <div className="flex gap-x-1 w-full">
-                    <Autocompleter
-                      options={assigneeOptions}
-                      input={assignee.label}
-                      setInput={setAssignee}
-                    />
-                    <button
-                      className="bg-blue-700 text-white font-semibold p-1 rounded border border-blue-700 cursor-pointer hover:bg-blue-600"
-                      type="button"
-                      onClick={addAssignee}
-                    >
-                      Add
-                    </button>
-                  </div>
-                </div>
-                <div className="flex flex-col gap-1 w-1/3">
+              <div className="flex flex-row gap-4 w-full">
+                <div className="flex flex-col gap-1 flex-1">
                   <label className="whitespace-pre mr-3 font-semibold">Start Date:</label>
                   <div className="flex w-full">
-                    <input 
-                      type="date" 
+                    <input
+                      disabled={true} 
                       defaultValue={startDate}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => setStartDate(e.target.value)}
-                      className="border border-gray-100 py-1 px-2 rounded w-full outline-gray-200 bg-white"
+                      className="border border-gray-100 py-1 px-2 rounded w-full outline-gray-200 bg-white disabled:bg-gray-100 h-9"
                     />
                   </div>
                 </div>
-                <div className="flex flex-col gap-1 w-1/3">
+                <div className="flex flex-col gap-1 flex-1">
                   <label className="whitespace-pre mr-3 font-semibold">Target Date:</label>
                   <div className="flex w-full">
-                    <input 
-                      type="date" 
+                    <input
                       defaultValue={targetDate}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTargetDate(e.target.value)}
-                      className="border border-gray-100 py-1 px-2 rounded w-full outline-gray-200 bg-white"
+                      disabled={true}
+                      className="border border-gray-100 py-1 px-2 rounded w-full outline-gray-200 bg-white disabled:bg-gray-100 h-9"
                     />
                   </div>
                 </div>
               </div>
-              {
-                assignees.length > 0 &&
-                <div className="flex flex-col w-full gap-1">
-                  <label className="w-1/6 font-semibold">Assignees</label>
-                  <div className="flex w-full flex-wrap gap-2">
-                    {assignees.map((mgr: any, index: number) => (
-                      <div 
-                        key={index}
-                        className="bg-blue-100 text-blue-700 px-2 py-1 rounded flex items-center gap-2"
-                      >
-                        <span>{mgr.label}</span>
-                        <button
-                          className="text-red-500 font-bold"
-                          onClick={() => {
-                            const updateAssigness = assignees.filter((_, i) => i !== index);
-                            setAssignees(updateAssigness);
-                          }}
-                        >
-                          &times;
-                        </button>
-                      </div>
-                    )) 
-                    }
-                  </div>
-                </div>
-              }
               <div className="flex flex-col w-full gap-1">
                 <label className="w-1/6 font-semibold">Issue Content:</label>
                 <div>
@@ -408,6 +326,7 @@ const CreateTicket = () => {
               </div>
               <div className="flex flex-row gap-3 mt-5">
                 <button
+                  type="button"
                   className="bg-green-700 text-white font-semibold px-10 py-1 rounded border border-green-700 cursor-pointer hover:bg-green-600"
                   onClick={onSaveTicket}
                 >

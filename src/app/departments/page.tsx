@@ -47,7 +47,7 @@ const Departments = () => {
           <div className="flex flex-row justify-between">
             <h1 className="font-semibold text-2xl">Departments</h1>
             {
-              data?.user?.isAdmin && <Link 
+              data?.user?.userType === "Admin" && <Link 
                 href={'/departments/new'}
                 className="border-blue-500 rounded px-2 py-1 bg-blue-500 text-white hover:bg-blue-600 shadow font-semibold"
               >
@@ -71,10 +71,7 @@ const Departments = () => {
                     (
                       <tr key={`project-${i}`} className="odd:bg-gray-50 hover:bg-gray-100">
                         <td className="px-2 py-1">
-                          <Link 
-                            href={`/departments/${dept._id}`} 
-                            className="underline text-blue-500 cursor-pointer"
-                          >{dept.name}</Link>
+                          {dept.name}
                         </td>
                         <td className="px-2 py-1">{formatDate(dept.createdDate)}</td>
                         <td className="px-2 py-1">{dept.createdBy}</td>
@@ -86,7 +83,7 @@ const Departments = () => {
                               className="text-[11px] border-yellow-500 rounded px-2 py-1 bg-yellow-500 text-white hover:bg-yellow-600 shadow items-center flex">
                                 Edit
                             </Link>
-                            { data?.user?.isAdmin && 
+                            { data?.user?.userType === "Admin" && 
                               <button
                                 onClick={() => onDeleteDepartment(dept._id)}
                                 className="text-[11px] border-red-500 rounded px-2 py-1 bg-red-500 text-white hover:bg-red-600 shadow cursor-pointer">

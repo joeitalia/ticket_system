@@ -8,6 +8,7 @@ import { useParams, useRouter } from "next/navigation";
 import { generatePassword } from "@/util/generate-password"
 import { hashText } from "@/util/hash"
 import Loading from "@/components/Layout/Loading"
+import { userTypeList } from "@/app/constant"
 
 const AddUser = () => {
   const params = useParams()
@@ -17,12 +18,11 @@ const AddUser = () => {
   const [firstName, setFirstName] = useState("")
   const [middleName, setMiddleName] = useState("")
   const [department, setDepartment] = useState("")
-  const [position, setPosition] = useState("")
+  const [userType, setUserType] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [departmentList, setDepartmentList] = useState([])
   const [editPassword, setEditPassword] = useState(false)
-  const [isAdmin, setIsAdmin] = useState(false)
   const [fieldErrors, setFieldErrors] = useState<string[]>([])
   const [isLoading, setIsLoading] = useState(false)
 
@@ -35,7 +35,7 @@ const AddUser = () => {
       if (!lastName) errors.push("Please insert Last Name.")
       if (!firstName) errors.push("Please insert First Name.")
       if (!department) errors.push("Please select Department.")
-      if (!position) errors.push("Please insert Position.")
+      if (!userType) errors.push("Please select User Type.")
       if (!password && editPassword) errors.push("Please insert password.")
         
       if (errors.length == 0) {
@@ -48,8 +48,7 @@ const AddUser = () => {
             lastName,
             middleName,
             departmentId: department,
-            isAdmin,
-            position,
+            userType,
             ...(password && editPassword ? { password: await hashText(password) } : {})
           }),
         })
@@ -82,9 +81,8 @@ const AddUser = () => {
         setFirstName(userApi.firstName)
         setMiddleName(userApi.middleName)
         setDepartment(userApi.departmentId)
-        setPosition(userApi.position)
+        setUserType(userApi.userType)
         setEmail(userApi.email)
-        setIsAdmin(userApi.isAdmin ?? false)
       }
     } catch (error: any) {
       alert(error)
@@ -178,14 +176,20 @@ const AddUser = () => {
                 </div>
               </div>
               <div className="flex flex-col w-full gap-1">
-                <label className="font-semibold">Position:</label>
+                <label className="font-semibold">User Type:</label>
                 <div className="flex w-full">
-                  <input
-                    defaultValue={position}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPosition(e.target.value)}
-                    type="text" 
-                    className="border border-gray-100 px-2 py-1.5 rounded w-full outline-gray-200 bg-white"
-                  />
+                  <select
+                    defaultValue={userType}
+                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setUserType(e.target.value)}
+                    className='border border-gray-100 p-2 rounded w-full outline-gray-200 bg-white'
+                  >
+                    <option>Select...</option>
+                    {
+                      userTypeList.map((type: string, i: number) => (
+                        <option key={`userType-${i}`} value={type}>{type}</option>
+                      ))
+                    }
+                  </select>
                 </div>
               </div>
             </div>
@@ -200,16 +204,6 @@ const AddUser = () => {
                     type="text" 
                     className="border border-gray-100 px-2 py-1.5 rounded w-full outline-gray-200 bg-gray-100"
                   />
-                  <label className="flex items-center">
-                    <input
-                      type="checkbox"
-                      defaultChecked={isAdmin}
-                      onChange={() => {
-                        setIsAdmin(!isAdmin);
-                      }}
-                    />
-                    &nbsp; Administrator
-                  </label>
                 </div>
               </div>
               <div className="flex flex-col w-full gap-1">
