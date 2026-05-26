@@ -169,7 +169,7 @@ const CreateTicket = () => {
     setDepartment(value);
     const selectedDept = departments.find(dept => dept._id === value);
     if (selectedDept) {
-      selectedDept.managers.forEach(mg => {
+      selectedDept.managers.forEach((mg: string) => {
         fetch(`/api/users/${mg}`).then(res => res.json()).then((data: any) => {
           setManagers(prev => [...prev, data.email])
         });
