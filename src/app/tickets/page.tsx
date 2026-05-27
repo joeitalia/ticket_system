@@ -5,34 +5,38 @@ import Loading from "@/components/Layout/Loading"
 import LoadingOverlay from "@/components/Layout/LoadingOverlay"
 import Modal from "@/components/Modal"
 import { formatDate } from "@/util/dateformat"
+import { useSession } from "next-auth/react"
 import Link from "next/link"
 import { useCallback, useEffect, useState } from "react"
 
 const ShowTickets = () => {
+  const { data }: any = useSession();
   const [ticketCreators, setTicketCreators] = useState([]);
   const [tickets, setTickets] = useState([])
+  const [ticketsAssigned, setTicketsAssigned] = useState([])
   const [loading, setLoading] = useState(false)
   const [isOverlayOpen, setIsOverlayOpen] = useState(false)
   const [page, setPage] = useState(1)
+  const [pageAssigned, setPageAssigned] = useState(1)
   const [reportModalOpen, setReportModalOpen] = useState(false);
   const [dateFrom, setDateFrom] = useState("")
   const [dateTo, setDateTo] = useState("")
   const [searchBy, setSearchBy] = useState("Created By");
   const [searchTerm, setSearchTerm] = useState("")
   const [totalPages, setTotalPages] = useState(1)
-
+  const [totalPagesAssigned, setTotalPagesAssigned] = useState(1)
+  
   /**
-   * fetch tickets by department id
-   * @param deptId 
+   * fetch tickets 
    */
-  const getTickets = async (pageNumber: number) => {
+  const getTickets = async (pageNumber: number, filter: any, setTotalPagesFn: any, setTicketsFn: any) => {
     try {
-      const res = await fetch(`/api/tickets?page=${pageNumber}&limit=10`)
+      const res = await fetch(`/api/tickets?page=${pageNumber}&limit=10&${new URLSearchParams(filter).toString()}`);
       const ticketsApi = await res.json()
       setLoading(false)
       if (ticketsApi?.data?.length) {
-        setTotalPages(ticketsApi?.totalPages)
-        setTickets(ticketsApi?.data ?? [])
+        setTotalPagesFn(ticketsApi?.totalPages)
+        setTicketsFn(ticketsApi?.data ?? [])
         const ticketsWithReporter: any = await Promise.all(
           ticketsApi?.data?.map(async (ticket: any) => {
             const reportedBy = await getReportedBy(ticket)
@@ -146,29 +150,127 @@ const ShowTickets = () => {
   }
   
   useEffect(() => {
-    setLoading(true)
-    if (page) getTickets(page)
+    if (page) getTickets(page, { departmentId: data?.user?.department.id }, setTotalPages, setTickets)
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page])
+  }, [page, data])
+
+  useEffect(() => {
+    if (pageAssigned) getTickets(pageAssigned, { assigneeId: data?.user?.id }, setTotalPagesAssigned, setTicketsAssigned)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pageAssigned, data])
 
   return (
     <DefaultLayout>
       {isOverlayOpen && <LoadingOverlay />}
       {loading && <Loading />}
       {!loading && <div className="flex flex-col">
-        <div className="flex flex-row justify-between items-center">
-          <h1 className="font-semibold text-2xl">Tickets</h1>
-          <div className="flex gap-1">
-            <button onClick={() => setReportModalOpen(true)} className="border-green-500 rounded px-2 py-1 bg-green-500 text-white hover:bg-green-600 shadow font-semibold cursor-pointer">
-              Generate Report
-            </button>
-            <Link
-              href={`/tickets/new`}
-              className="border-blue-500 rounded px-2 py-1 bg-blue-500 text-white hover:bg-blue-600 shadow font-semibold"
-            >
-              Create Ticket
-            </Link>
-          </div>
+        {data?.user?.userType !== "User" && (
+          <>
+            <div className="flex flex-row justify-between items-center">
+              <h1 className="font-semibold text-2xl">Department Tickets</h1>
+              <div className="flex gap-1">
+                <button onClick={() => setReportModalOpen(true)} className="border-green-500 rounded px-2 py-1 bg-green-500 text-white hover:bg-green-600 shadow font-semibold cursor-pointer">
+                  Generate Report
+                </button>
+                <Link
+                  href={`/tickets/new`}
+                  className="border-blue-500 rounded px-2 py-1 bg-blue-500 text-white hover:bg-blue-600 shadow font-semibold"
+                >
+                  Create Ticket
+                </Link>
+              </div>
+            </div>
+            <div className="bg-white px-2 py-3 mt-2 rounded-lg shadow-lg text-sm">
+              <table className="w-full table-auto">
+                <thead className="border-b">
+                  <tr>
+                    <th className="p-2 text-left">Ticket</th>
+                    <th className="p-2 text-left">Title</th>
+                    <th className="p-2 text-left">Importance</th>
+                    <th className="p-2 text-left">Status</th>
+                    <th className="p-2 text-left">Reported Date</th>
+                    <th className="p-2 text-left">Target Date</th>
+                    <th className="p-2 text-left">Reported By</th>
+                    <th className="p-2 text-left">Reported Date</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y">
+                  {tickets.length === 0 && (
+                    <tr>
+                      <td colSpan={8} className="p-2 text-center">
+                        No tickets found.
+                      </td>
+                    </tr>
+                  )}
+                  {tickets.map((ticket: any) => (
+                    <tr key={ticket.issueNo} className="odd:bg-gray-50 hover:bg-gray-100">
+                      <td className="px-2 py-1">
+                        <Link 
+                          href={`../tickets/edit/${ticket.issueNo}`}
+                          className="underline text-blue-500 cursor-pointer"
+                        >
+                          TN-{ticket.issueNo}
+                        </Link>
+                      </td>
+                      <td className="px-2 py-1">{ticket.title}</td>
+                      <td className="px-2 py-1">{ticket.importance}</td>
+                      <td className="px-2 py-1">{ticket.status}</td>
+                      <td className="px-2 py-1">{formatDate(ticket.startDate)}</td>
+                      <td className="px-2 py-1">{formatDate(ticket.targetDate)}</td>
+                      <td className="px-2 py-1">{displayCreator(ticket.createdBy)}</td>
+                      <td className="px-2 py-1">{formatDate(ticket.createdDate)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <div className="flex justify-between text-sm mt-2">
+              <div></div>
+              {totalPages > 1 && (
+                <div className="flex gap-x-2 items-center">
+                  <button
+                    onClick={() => {
+                      setTicketCreators([])
+                      setPage((prev) => Math.max(prev - 1, 1))
+                    }}
+                    type="button"
+                    className={`py-1 px-2 shadow rounded border border-gray-300 ${page === 1 ? "bg-gray-100 text-gray-400" : "cursor-pointer bg-white hover:bg-gray-100"}`}
+                    disabled={page === 1}
+                  >
+                    Prev
+                  </button>
+                  <span>Page {page} of {totalPages}</span>
+                  <button
+                    onClick={() => {
+                      setTicketCreators([])
+                      setPage((prev) => Math.min(prev + 1, totalPages))
+                    }}
+                    type="button"
+                    className={`py-1 px-2 shadow rounded border border-gray-300 ${page === totalPages ? "bg-gray-100 text-gray-400" : "cursor-pointer bg-white hover:bg-gray-100"}`}
+                    disabled={page === totalPages}
+                  >
+                    Next
+                  </button>
+                </div>
+              )}
+            </div>
+          </>
+        )}
+        <div className="flex flex-row justify-between items-center mt-6">
+          <h1 className="font-semibold text-2xl">Tickets assigned to you</h1>
+          {data?.user?.userType === "User" && (
+            <div className="flex gap-1">
+              <button onClick={() => setReportModalOpen(true)} className="border-green-500 rounded px-2 py-1 bg-green-500 text-white hover:bg-green-600 shadow font-semibold cursor-pointer">
+                Generate Report
+              </button>
+              <Link
+                href={`/tickets/new`}
+                className="border-blue-500 rounded px-2 py-1 bg-blue-500 text-white hover:bg-blue-600 shadow font-semibold"
+              >
+                Create Ticket
+              </Link>
+            </div>
+          )}
         </div>
         <div className="bg-white px-2 py-3 mt-2 rounded-lg shadow-lg text-sm">
           <table className="w-full table-auto">
@@ -181,17 +283,18 @@ const ShowTickets = () => {
                 <th className="p-2 text-left">Reported Date</th>
                 <th className="p-2 text-left">Target Date</th>
                 <th className="p-2 text-left">Reported By</th>
+                <th className="p-2 text-left">Reported Date</th>
               </tr>
             </thead>
             <tbody className="divide-y">
-              {tickets.length === 0 && (
+              {ticketsAssigned.length === 0 && (
                 <tr>
                   <td colSpan={8} className="p-2 text-center">
                     No tickets found.
                   </td>
                 </tr>
               )}
-              {tickets.map((ticket: any) => (
+              {ticketsAssigned.map((ticket: any) => (
                 <tr key={ticket.issueNo} className="odd:bg-gray-50 hover:bg-gray-100">
                   <td className="px-2 py-1">
                     <Link 
@@ -214,34 +317,29 @@ const ShowTickets = () => {
           </table>
         </div>
         <div className="flex justify-between text-sm mt-2">
-          <Link 
-            href={`/departments`} 
-            className="bg-white text-gray-500 font-semibold px-10 py-1 rounded border border-gray-300 cursor-pointer hover:bg-gray-100"
-          >
-            Back
-          </Link>
-          {totalPages > 1 && (
+          <div></div>
+          {totalPagesAssigned > 1 && (
             <div className="flex gap-x-2 items-center">
               <button
                 onClick={() => {
                   setTicketCreators([])
-                  setPage((prev) => Math.max(prev - 1, 1))
+                  setPageAssigned((prev) => Math.max(prev - 1, 1))
                 }}
                 type="button"
-                className={`py-1 px-2 shadow rounded border border-gray-300 ${page === 1 ? "bg-gray-100 text-gray-400" : "cursor-pointer bg-white hover:bg-gray-100"}`}
-                disabled={page === 1}
+                className={`py-1 px-2 shadow rounded border border-gray-300 ${pageAssigned === 1 ? "bg-gray-100 text-gray-400" : "cursor-pointer bg-white hover:bg-gray-100"}`}
+                disabled={pageAssigned === 1}
               >
                 Prev
               </button>
-              <span>Page {page} of {totalPages}</span>
+              <span>Page {pageAssigned} of {totalPagesAssigned}</span>
               <button
                 onClick={() => {
                   setTicketCreators([])
-                  setPage((prev) => Math.min(prev + 1, totalPages))
+                  setPageAssigned((prev) => Math.min(prev + 1, totalPagesAssigned))
                 }}
                 type="button"
-                className={`py-1 px-2 shadow rounded border border-gray-300 ${page === totalPages ? "bg-gray-100 text-gray-400" : "cursor-pointer bg-white hover:bg-gray-100"}`}
-                disabled={page === totalPages}
+                className={`py-1 px-2 shadow rounded border border-gray-300 ${pageAssigned === totalPagesAssigned ? "bg-gray-100 text-gray-400" : "cursor-pointer bg-white hover:bg-gray-100"}`}
+                disabled={pageAssigned === totalPagesAssigned}
               >
                 Next
               </button>

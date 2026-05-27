@@ -14,6 +14,9 @@ export async function GET(
 
     const isReport = searchParams.get("report") === "true";
 
+    const departmentId = searchParams.get("departmentId");
+    const assigneeId = searchParams.get("assigneeId");
+
     const search = searchParams.get("search")?.trim();
     const searchBy = searchParams.get("searchBy")?.trim();
 
@@ -26,6 +29,22 @@ export async function GET(
     const skip = (page - 1) * limit;
 
     const pipeline: any[] = [];
+
+    if (departmentId) {
+      pipeline.push({
+        $match: {
+          departmentId,
+        },
+      });
+    }
+    
+    if (assigneeId) {
+      pipeline.push({
+        $match: {
+          assigneeId,
+        },
+      });
+    }
 
     // Date filter
     if (start && end) {
@@ -49,12 +68,8 @@ export async function GET(
       if (searchBy === "assignees") {
         pipeline.push({
           $addFields: {
-            assigneeObjectIds: {
-              $map: {
-                input: "$assigneeIds",
-                as: "id",
-                in: { $toObjectId: "$$id" }
-              }
+            assigneeIdObj: {
+              $toObjectId: "$assigneeId"
             }
           }
         });
@@ -62,13 +77,11 @@ export async function GET(
         pipeline.push({
           $lookup: {
             from: "Users",
-            localField: "assigneeObjectIds",
+            localField: "assigneeIdObj",
             foreignField: "_id",
             as: "assigneeDetails",
           },
         });
-
-        pipeline.push({ $unwind: "$assigneeDetails" });
 
         pipeline.push({
           $match: {

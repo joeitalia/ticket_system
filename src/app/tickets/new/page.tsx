@@ -62,7 +62,7 @@ const CreateTicket = () => {
         body: JSON.stringify({ 
           issueNo: newTicketNumber,
           departmentId: department,
-          status: "Open",
+          status: "New",
           title, 
           importance: ticketImportance,
           description,
