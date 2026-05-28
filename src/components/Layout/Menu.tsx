@@ -45,7 +45,7 @@ const Menu = () => {
           <Link href={"/tickets"} className="p-2 block hover:bg-gray-200 hover:rounded hover:text-black">Tickets</Link>
         </li>
         {
-          user?.userType === "Admin" && (
+          user?.userType && (
             <>
               <li>
                 <Link href={"/departments"} className="p-2 block hover:bg-gray-200 hover:rounded hover:text-black">Departments</Link>
