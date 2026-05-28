@@ -29,7 +29,7 @@ export default function MyPieChart() {
             labelLine={false}
             outerRadius={120}
             dataKey="value"
-            label={({ name, percent }) =>
+            label={({ name, percent = 0 }) =>
               `${name} ${(percent * 100).toFixed(0)}%`
             }
           >
