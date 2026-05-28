@@ -14,3 +14,20 @@ export const formatDate = (dateStr: string, hasTime: boolean=false) => {
     return date.toLocaleDateString('en-US')
   }
 }
+
+export const formatDateInput = (dateStr: string) => {
+  const [month, day, year] = dateStr.split('/');
+  const formattedDate = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+  return formattedDate;
+}
+
+export const formatDateDisplay = (dateStr: string) => {
+  const today = new Date(dateStr);
+
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, '0');
+  const day = String(today.getDate()).padStart(2, '0');
+
+  const formattedDate = `${year}-${month}-${day}`;
+  return formattedDate;
+}

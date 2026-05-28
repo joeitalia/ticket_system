@@ -1,7 +1,5 @@
 "use client"
 
-import "react-date-picker/dist/DatePicker.css"; // import CSS
-import "react-calendar/dist/Calendar.css";
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 
@@ -17,12 +15,12 @@ const AddDepartment = () => {
 
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')
-  const [manager, setManager] = useState<any>({
-    label: "",
-    value: ""
-  })
-  const [managers, setManagers] = useState<string[]>([])
-  const [managerOptions, setManagerOptions] = useState<any[]>([])
+  // const [manager, setManager] = useState<any>({
+  //   label: "",
+  //   value: ""
+  // })
+  // const [managers, setManagers] = useState<string[]>([])
+  // const [managerOptions, setManagerOptions] = useState<any[]>([])
   const [fieldErrors, setFieldErrors] = useState<any>([])
   
   /**
@@ -39,37 +37,37 @@ const AddDepartment = () => {
         setDescription(dept.description)
         
         // fetch and set managers
-        const managerApi = await Promise.all(
-          dept.managers?.map(async (mgrId: string) => {
-            const res: any = await fetch(`/api/users/${mgrId}`)
-            const userApi = await res.json()
-            if (userApi) {
-              return {
-                label: `${userApi.firstName} ${userApi.middleName} ${userApi.lastName}`,
-                value: userApi._id
-              }
-            }
-            return null
-          }) || []
-        )
-        const filteredManagers = managerApi.filter((mgr: any) => mgr !== null)
-        setManagers(filteredManagers)
+        // const managerApi = await Promise.all(
+        //   dept.managers?.map(async (mgrId: string) => {
+        //     const res: any = await fetch(`/api/users/${mgrId}`)
+        //     const userApi = await res.json()
+        //     if (userApi) {
+        //       return {
+        //         label: `${userApi.firstName} ${userApi.middleName} ${userApi.lastName}`,
+        //         value: userApi._id
+        //       }
+        //     }
+        //     return null
+        //   }) || []
+        // )
+        // const filteredManagers = managerApi.filter((mgr: any) => mgr !== null)
+        // setManagers(filteredManagers)
       }
     } catch (error: any) {
       alert(error)
     } 
   }
   
-  const addManager = () => {
-    if (manager && manager.label?.length > 0) {
-      const existingManagers = managers.filter((ass: any) => ass.value === manager.value)
-      if (!existingManagers.length) setManagers([...managers, manager])
-      setManager({
-        label: "",
-        value: ""
-      })
-    }
-  }
+  // const addManager = () => {
+  //   if (manager && manager.label?.length > 0) {
+  //     const existingManagers = managers.filter((ass: any) => ass.value === manager.value)
+  //     if (!existingManagers.length) setManagers([...managers, manager])
+  //     setManager({
+  //       label: "",
+  //       value: ""
+  //     })
+  //   }
+  // }
 
   // fetch department details on load
   useEffect(() => {
@@ -77,32 +75,32 @@ const AddDepartment = () => {
     getDepartmentDetails(deptId);
   }, [params.id])
 
-  useEffect(() => {
-    if (!manager?.label?.trim()) {
-      setManagerOptions([]);
-      return;
-    }
-    const delay = setTimeout(async () => {
-      const res = await fetch(`/api/users/search/${manager.label}`);
-      const data = await res.json();
-      const options = data?.map((user: any) => (
-        {
-          label: `${user.firstName} ${user.middleName} ${user.lastName}`,
-          value: user._id
-        }
-      )) || [];
-      const filteredOptions = options.filter((option: any) => 
-        !managers.some((mgrId: any) => mgrId.value === option.value)
-      );
-      if (filteredOptions.length) {
-        setManagerOptions(filteredOptions);
-      } else {
-        setManagerOptions([]);
-      }
-    }, 300); // delay API until user stops typing
+  // useEffect(() => {
+  //   if (!manager?.label?.trim()) {
+  //     setManagerOptions([]);
+  //     return;
+  //   }
+  //   const delay = setTimeout(async () => {
+  //     const res = await fetch(`/api/users/search/${manager.label}`);
+  //     const data = await res.json();
+  //     const options = data?.map((user: any) => (
+  //       {
+  //         label: `${user.firstName} ${user.middleName} ${user.lastName}`,
+  //         value: user._id
+  //       }
+  //     )) || [];
+  //     const filteredOptions = options.filter((option: any) => 
+  //       !managers.some((mgrId: any) => mgrId.value === option.value)
+  //     );
+  //     if (filteredOptions.length) {
+  //       setManagerOptions(filteredOptions);
+  //     } else {
+  //       setManagerOptions([]);
+  //     }
+  //   }, 300); // delay API until user stops typing
     
-    return () => clearTimeout(delay); // cancel previous timers
-  }, [manager, managers]);
+  //   return () => clearTimeout(delay); // cancel previous timers
+  // }, [manager, managers]);
   
   /**
    * validate and save new department
@@ -112,9 +110,9 @@ const AddDepartment = () => {
     if (!name || name.trim().length === 0) {
       error.push("Please insert Department Name.")
     }
-    if (managers.length === 0) {
-      error.push("Please add at least one Department Manager/POC.")
-    }
+    // if (managers.length === 0) {
+    //   error.push("Please add at least one Department Manager/POC.")
+    // }
     if (error.length > 0) {
       setFieldErrors(error)
       return
@@ -128,7 +126,7 @@ const AddDepartment = () => {
         body: JSON.stringify({ 
           name, 
           description,
-          managers: managers?.map((mgr: any) => mgr.value) || []
+          // managers: managers?.map((mgr: any) => mgr.value) || []
         }),
       });
       const apiData = await res.json();
@@ -186,7 +184,7 @@ const AddDepartment = () => {
                 />
               </div>
             </div>
-            <div className="flex flex-col w-full gap-1">
+            {/* <div className="flex flex-col w-full gap-1">
               <label className="w-1/6 font-semibold">Add Manager(s):</label>
               <div className="flex w-full gap-2">
                 <Autocompleter 
@@ -227,7 +225,7 @@ const AddDepartment = () => {
                   }
                 </div>
               </div>
-            }
+            } */}
             <div className="flex flex-row gap-3 mt-5">
               <button 
                 className="bg-green-700 text-white font-semibold px-10 py-1 rounded border border-green-700 cursor-pointer hover:bg-green-600"

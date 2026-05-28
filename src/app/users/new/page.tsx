@@ -22,6 +22,7 @@ const AddUser = () => {
   const [email, setEmail] = useState("")
   const [userType, setUserType] = useState("")
   const [password, setPassword] = useState("")
+  const [isAdmin, setIsAdmin] = useState(false)
   const [departmentList, setDepartmentList] = useState([])
   const [fieldErrors, setFieldErrors] = useState<string[]>([])
 
@@ -58,6 +59,7 @@ const AddUser = () => {
               userType,
               email,
               password: await hashText(password),
+              isAdmin,
               createdBy: data?.user?.email,
               createdDate: new Date()
             }),
@@ -189,6 +191,15 @@ const AddUser = () => {
                     className="border border-gray-100 px-2 py-1.5 rounded w-full outline-gray-200 bg-white"
                   />
                 </div>
+                <label className="flex items-center">
+                  <input
+                    type="checkbox"
+                    onChange={() => {
+                      setIsAdmin(!isAdmin);
+                    }}
+                  />
+                  &nbsp; Administrator
+                </label>
               </div>
               <div className="flex flex-col w-full gap-1">
                 <label className="font-semibold">Password:</label>

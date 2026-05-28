@@ -3,11 +3,12 @@
 import DefaultLayout from "@/components/Layout/DefaultLayout"
 import Loading from "@/components/Layout/Loading"
 import { formatDate } from "@/util/dateformat"
+import { useSession } from "next-auth/react"
 import Link from "next/link"
 import { useEffect, useState } from "react"
 
 const Users = () => {
-
+  const { data: session }: any = useSession();
   const [users, setUsers] = useState([])
 
   const getDepartment = async (deptId: string) => {
@@ -75,7 +76,8 @@ const Users = () => {
     getUsers()
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-
+  
+  if (!session?.user?.isAdmin) return <></>
   return (
     <DefaultLayout>
       {!users?.length && <Loading />}

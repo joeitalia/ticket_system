@@ -5,10 +5,10 @@ import Form from "next/form"
 import Link from "next/link"
 import { useEffect, useState } from "react"
 import DefaultLayout from "@/components/Layout/DefaultLayout"
-import { IMPORTANCE, STATUS, TYPE } from "../../constant"
+import { IMPORTANCE, STATUS } from "../../constant"
 import Autocompleter from '@/components/Autocompleter'
 import { useParams, useRouter } from 'next/navigation'
-import { formatDate } from '@/util/dateformat'
+import { formatDateDisplay } from '@/util/dateformat'
 import Comments from '@/components/Comments'
 import { sendEmail } from '@/util/send-email'
 import Image from 'next/image'
@@ -22,29 +22,30 @@ const EditTicket = () => {
   const { data }: any = useSession()
 
   const [ticketId, setTicketId] = useState('')
-  const [departmentName, setDepartmentName] = useState('Ticket')
   const [issueNo, setIssueNo] = useState('0000')
   const [title, setTitle] = useState('')
   const [ticketStatus, setTicketStatus] = useState('')
   const [ticketImportance, setTicketImportance] = useState('')
   const [description, setDescription] = useState('')
-  const [ticketType, setTicketType] = useState('')
   const [startDate, setStartDate] = useState('')
   const [targetDate, setTargetDate] = useState('')
-  const [reportedDate, setReportedDate] = useState('')
-  const [reportedBy, setReportedBy] = useState('')
   const [resolvedDate, setResolvedDate] = useState('')
   const [managers, setManagers] = useState<any[]>([])
+  const [departments, setDepartments] = useState<any[]>([])
+  const [department, setDepartment] = useState<any>('')
   const [attachments, setAttachments] = useState<any[]>([])
   const [selectedImage, setSelectedImage] = useState<any>('')
-  const [createdDate, setCreatedDate] = useState<any>(null)
-  const [createdBy, setCreatedBy] = useState<any>(null)
+  const [createdBy, setCreatedBy] = useState<any>({
+    label: "",
+    value: "",
+    email: "",
+  })
 
   const [assigneeOptions, setAssigneeOptions] = useState<any[]>([])
-  const [assignees, setAssignees] = useState<string[]>([])
   const [assignee, setAssignee] = useState<any>({
     label: "",
-    value: ""
+    value: "",
+    email: "",
   })
 
   const [fieldErrors, setFieldErrors] = useState<string[]>([])
@@ -56,33 +57,54 @@ const EditTicket = () => {
       setTicketId(ticket._id)
       setIssueNo(ticket.issueNo)
       setTitle(ticket.title)
-      setTicketStatus(ticket.status)
+      setTicketStatus(ticket.status ?? 'New')
       setTicketImportance(ticket.importance)
-      setTicketType(ticket.type)
       setStartDate(ticket.startDate)
       setTargetDate(ticket.targetDate)
-      setResolvedDate(ticket.resolvedDate)
-      setReportedDate(ticket.createdDate)
       setDescription(ticket.description)
+      setDepartment(ticket.departmentId)
       setAttachments(ticket.attachments ?? [])
-      setCreatedBy(ticket.createdBy)
-      setCreatedDate(ticket.createdDate)
 
-      const assigneesIds = await Promise.all(
-        ticket.assigneeIds?.map(async (ids: string) => {
-          const assigneeApi: any = await getUser(ids)
-          return assigneeApi
-        }) ?? []
-      )
-      setAssignees(assigneesIds)
-
-      const reportedByApi: any = await getUser(ticket.createdBy)
-      setReportedBy(reportedByApi.label)
+      if (ticket.assigneeId) {
+        const assigneeApi: any = await getUser(ticket.assigneeId);
+        setAssignee(assigneeApi);
+      }
+      
+      const createdByApi: any = await getUser(ticket.createdBy)
+      setCreatedBy(createdByApi)
+      
+      const userManagers = await getUserByDepartment(ticket.departmentId)
+      setManagers(userManagers)
     }
   }
   
   /**
-   * fetch reported by user info
+   * fetch created by user info
+   * @param ticket 
+   * @returns 
+   */
+  const getUserByDepartment = async (departmentId: string) => {
+    try {
+      const res = await fetch(`/api/users/department/${departmentId}`)
+      const userApi = await res.json()
+      if (userApi) {
+        return userApi.map((user: any) => {
+          return {
+            label: `${user.firstName} ${user.middleName} ${user.lastName}`,
+            value: user._id,
+            email: user.email
+          }
+        })
+      }
+    } catch (error: any) {
+      console.error(error)
+      return []
+    }
+    return []
+  }
+
+  /**
+   * fetch created by user info
    * @param ticket 
    * @returns 
    */
@@ -93,7 +115,8 @@ const EditTicket = () => {
       if (userApi) {
         return {
           label: `${userApi.firstName} ${userApi.middleName} ${userApi.lastName}`,
-          value: userApi._id
+          value: userApi._id,
+          email: userApi.email
         }
       }
     } catch (error: any) {
@@ -108,8 +131,7 @@ const EditTicket = () => {
     if (!title) error.push("Please insert Title.");
     if (!ticketStatus) error.push("Please select Status.");
     if (!ticketImportance) error.push("Please select Importance.");
-    if (!ticketType) error.push("Please select Type.");
-    // if (!assignee.value) error.push("Please select Assignee.");
+    if (!assignee.value) error.push("Please select Assignee.");
     if (!startDate) error.push("Please select Start Date.");
     if (!targetDate) error.push("Please select Target Date.");
     if (!description) error.push("Please insert Issue Content.");
@@ -119,47 +141,40 @@ const EditTicket = () => {
     }
     
     try {
-      const assigneeIds = assignees.map((ass: any) => ass.value);
       const res = await fetch(`/api/tickets/${ticketId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           departmentId: params.id,
-          title, 
+          title,
           status: ticketStatus, 
           importance: ticketImportance,
-          type: ticketType,
           description,
-          startDate,
-          targetDate,
-          resolvedDate,
-          assigneeIds,
+          startDate: startDate,
+          targetDate: targetDate,
+          resolvedDate: resolvedDate,
+          assigneeId: assignee.value,
           attachments,
-          createdBy,
-          createdDate,
         }),
       });
       const apiData = await res.json();
       
-      if (apiData.success) {
-        const createdByData = await fetch(`/api/users/${createdBy}`);
-        const createdByDataJson = await createdByData.json();
+      await saveNotification({
+        message: `#${ticketId}: ${title} created`,
+        ticketId,
+        status: ticketStatus,
+        managers,
+      });
 
-        const emails: any = [data?.user?.email, createdByDataJson.email];
+      if (apiData.success) {
+        const emails: any = [data?.user?.email, createdBy?.email];
 
         // get assignee user details to send email
-        const assigneeEmails = await Promise.all(
-          assigneeIds.map(async (assId: string) => {
-            const assigneeRes = await fetch(`/api/users/${assId}`);
-            const assigneeData = await assigneeRes.json();
-            return assigneeData.email
-          })
-        )
-        if (assigneeEmails.length) emails.push(...assigneeEmails);
+        if (assignee.email) emails.push(assignee.email);
 
         // get managers user details to send email
         if (managers.length > 0) {
-          emails.push(...managers);
+          emails.push(...managers.map((m) => m.email));
         }
 
         if (apiData.success) {
@@ -169,7 +184,7 @@ const EditTicket = () => {
             message: `
               <p>Project: </p>
               <p>Ticket no: #${issueNo}</p>
-              <p>Users: ${assignees.map((ass: any) => ass.label).join(', ') ?? 'N/A'}</p>
+              <p>Users: ${assignee?.label ?? 'N/A'}</p>
               <p>Status: ${ticketStatus}</p>
               <p>Issue Content: ${description}</p>
               <p><a href="${location.origin}/login?callback=${window.location.href.replace("new", "edit/"+issueNo)}" target="_blank">View Ticket</a></p>
@@ -179,7 +194,7 @@ const EditTicket = () => {
           await sendEmail(emailData);
           alert("Ticket has been updated successfully.")
           // setLoading(false)
-          router.push(`/departments/${params.id}`)
+          router.push(`/tickets`)
         } else {
           throw "Failed to update Ticket."
         }
@@ -191,30 +206,24 @@ const EditTicket = () => {
     }
   }
 
-  /**
-   * fetch department info
-   * @param deptId 
-   */
-  const getDepartment = async (deptId: any) => {
-    try {
-      const res: any = await fetch(`/api/departments/${deptId}`)
-      const deptApi = await res.json()
-      if (deptApi.success) {
-        const managerIds = deptApi.data?.managers ?? []
-        if (managerIds.length > 0) {
-          const managerDetails = await Promise.all(
-            managerIds.map(async (id: string) => {
-              const userRes = await fetch(`/api/users/${id}`);
-              return await userRes.json();
-            })
-          );
-          setManagers(managerDetails.map((mgr: any) => mgr.email));
-        }
-        setDepartmentName(deptApi.data?.name ?? "")
+  const saveNotification = async (notification: any) => {
+    notification.managers.forEach(async (mg: any) => {
+      try {
+        await fetch(`/api/notifications`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            ticketId: notification.ticketId,
+            message: notification.message,
+            notifiedUser: mg.email,
+            status: notification.status,
+            read: false,
+          }),
+        });
+      } catch (error) {
+        console.error("Failed to save notification:", error);
       }
-    } catch (error: any) {
-      alert(error)
-    }
+    });
   }
 
   const handleAttachment = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -235,20 +244,11 @@ const EditTicket = () => {
     setSelectedImage(attachment)
   }
 
-  const addAssignee = () => {
-    if (assignee && assignee.label?.length > 0) {
-      const existingAssignee = assignees.filter((ass: any) => ass.value === assignee.value)
-      if (!existingAssignee.length) setAssignees([...assignees, assignee])
-      setAssignee({
-        label: "",
-        value: ""
-      })
-    }
-  }
-
   useEffect(() => {
     getTicket()
-    getDepartment(params.id)
+    fetch("/api/departments")
+      .then((res) => res.json())
+      .then(setDepartments);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -267,9 +267,7 @@ const EditTicket = () => {
         }
       ));
 
-      const filteredOptions = options.filter((option: any) => 
-        !assignees.some((mgrId: any) => mgrId.value === option.value)
-      );
+      const filteredOptions = options.filter((option: any) =>  assignee.value !== option.value);
       if (filteredOptions.length) {
         setAssigneeOptions(filteredOptions);
       } else {
@@ -285,7 +283,7 @@ const EditTicket = () => {
     <>
       <DefaultLayout>
         <div className="flex flex-col gap-2">
-          <h1 className="font-semibold text-2xl">{`${departmentName}-${issueNo}: ${title}`}</h1>
+          <h1 className="font-semibold text-2xl">{`TN-${issueNo}: ${title}`}</h1>
           <Form
             action="#"
             formMethod="POST"
@@ -303,8 +301,8 @@ const EditTicket = () => {
                   </div>
                 )
               }
-              <div className="flex flex-row gap-4 items-center w-20">
-                <label className="whitespace-pre mr-3 font-semibold">Issue No.:</label>
+              <div className="flex flex-row gap-1 items-center w-20">
+                <label className="whitespace-pre mr-2 font-semibold">Issue No.:</label>
                 <div className="flex w-full font-semibold">
                   {issueNo}
                 </div>
@@ -326,7 +324,17 @@ const EditTicket = () => {
                   <div className="flex w-full">
                     <select 
                       value={ticketStatus}
-                      onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setTicketStatus(e.target.value)}
+                      disabled={!data?.user?.isAdmin || data?.user?._id !== createdBy.value || !managers?.map((m) => m.email).includes(data?.user?.email)}
+                      onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                        if (e.target.value === "Resolved") {
+                          const today = new Date();
+                          const formattedDate = formatDateDisplay(today.toISOString());
+                          setResolvedDate(formattedDate);
+                        } else {
+                          setResolvedDate('');
+                        }
+                        setTicketStatus(e.target.value)
+                      }}
                       className='border border-gray-100 p-2 rounded w-full outline-gray-200 bg-white'
                     >
                       <option>Select...</option>
@@ -343,8 +351,8 @@ const EditTicket = () => {
                   <div className="flex w-full">
                     <select 
                       value={ticketImportance}
-                      onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setTicketImportance(e.target.value)}
-                      className='border border-gray-100 p-2 rounded w-full outline-gray-200 bg-white'
+                      disabled
+                      className='border border-gray-100 p-2 rounded w-full outline-gray-200 bg-white disabled:bg-gray-200 disabled:cursor-not-allowed'
                     >
                       <option>Select...</option>
                       {
@@ -355,18 +363,18 @@ const EditTicket = () => {
                     </select>
                   </div>
                 </div>
-                <div className="flex flex-col gap-1 w-1/3">
-                  <label className="whitespace-pre mr-3 font-semibold">Type:</label>
+                <div className="flex flex-col gap-1 flex-1">
+                  <label className="whitespace-pre mr-3 font-semibold">Department:</label>
                   <div className="flex w-full">
                     <select 
-                      value={ticketType}
-                      onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setTicketType(e.target.value)}
-                      className='border border-gray-100 p-2 rounded w-full outline-gray-200 bg-white'
+                      disabled
+                      value={department}
+                      className='border border-gray-100 p-2 rounded w-full outline-gray-200 bg-white disabled:bg-gray-200 disabled:cursor-not-allowed'
                     >
-                      <option>Select...</option>
+                      <option value=''>Select...</option>
                       {
-                        TYPE.map((stat: string) => (
-                          <option key={stat} value={stat}>{stat}</option>
+                        departments.map((dept: any) => (
+                          <option key={dept._id} value={dept._id}>{dept.name}</option>
                         ))
                       }
                     </select>
@@ -379,9 +387,10 @@ const EditTicket = () => {
                   <div className="flex w-full">
                     <input 
                       type="date"
+                      disabled
                       defaultValue={resolvedDate}
                       onChange={(e: React.ChangeEvent<HTMLInputElement>) => setResolvedDate(e.target.value)}
-                      className="border border-gray-100 py-1 px-2 rounded w-full outline-gray-200 bg-white"
+                      className="border border-gray-100 py-1 px-2 rounded w-full outline-gray-200 bg-white disabled:bg-gray-200 disabled:cursor-not-allowed"
                     />
                   </div>
                 </div>
@@ -390,9 +399,10 @@ const EditTicket = () => {
                   <div className="flex w-full">
                     <input 
                       type="date" 
+                      disabled
                       defaultValue={startDate}
                       onChange={(e: React.ChangeEvent<HTMLInputElement>) => setStartDate(e.target.value)}
-                      className="border border-gray-100 py-1 px-2 rounded w-full outline-gray-200 bg-white"
+                      className="border border-gray-100 py-1 px-2 rounded w-full outline-gray-200 bg-white disabled:bg-gray-200 disabled:cursor-not-allowed"
                     />
                   </div>
                 </div>
@@ -401,70 +411,33 @@ const EditTicket = () => {
                   <div className="flex w-full">
                     <input 
                       type="date" 
+                      disabled
                       defaultValue={targetDate}
                       onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTargetDate(e.target.value)}
-                      className="border border-gray-100 py-1 px-2 rounded w-full outline-gray-200 bg-white"
+                      className="border border-gray-100 py-1 px-2 rounded w-full outline-gray-200 bg-white disabled:bg-gray-200 disabled:cursor-not-allowed"
                     />
                   </div>
                 </div>
               </div>
               <div className='flex flex-row gap-4 w-full'> 
                 <div className="flex flex-col gap-1 w-1/3">
-                  <label className="whitespace-pre mr-3 font-semibold">Add Assignee:</label>
+                  <label className="whitespace-pre mr-3 font-semibold">Assignee:</label>
                   <div className="flex gap-x-1 w-full">
                     <Autocompleter
+                      disabled={!data?.user?.isAdmin || data?.user?._id !== createdBy.value || !managers?.map((m) => m.email).includes(data?.user?.email)}
                       options={assigneeOptions}
                       input={assignee.label}
                       setInput={setAssignee}
                     />
-                    <button
-                      className="bg-blue-700 text-white font-semibold p-1 rounded border border-blue-700 cursor-pointer hover:bg-blue-600"
-                      type="button"
-                      onClick={addAssignee}
-                    >
-                      Add
-                    </button>
                   </div>
                 </div>
                 <div className="flex flex-col gap-1 w-1/3">
                   <label className="whitespace-pre mr-3 font-semibold">Reported By:</label>
                   <div className="flex w-full flex-1 items-center">
-                    {reportedBy}
-                  </div>
-                </div>
-                <div className="flex flex-col gap-1 w-1/3">
-                  <label className="whitespace-pre mr-3 font-semibold">Reported Date:</label>
-                  <div className="flex w-full flex-1 items-center">
-                    {formatDate(reportedDate)}
+                    {createdBy.label}
                   </div>
                 </div>
               </div>
-              {
-                assignees.length > 0 &&
-                <div className="flex flex-col w-full gap-1">
-                  <label className="w-1/6 font-semibold">Assignees</label>
-                  <div className="flex w-full flex-wrap gap-2">
-                    {assignees.map((mgr: any, index: number) => (
-                      <div 
-                        key={index}
-                        className="bg-blue-100 text-blue-700 px-2 py-1 rounded flex items-center gap-2"
-                      >
-                        <span>{mgr.label}</span>
-                        <button
-                          className="text-red-500 font-bold"
-                          onClick={() => {
-                            const updateAssigness = assignees.filter((_, i) => i !== index);
-                            setAssignees(updateAssigness);
-                          }}
-                        >
-                          &times;
-                        </button>
-                      </div>
-                    )) 
-                    }
-                  </div>
-                </div>
-              }
               <div className="flex flex-col w-full gap-1">
                 <label className="w-1/6 font-semibold">Issue Content:</label>
                 <div>

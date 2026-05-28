@@ -5,7 +5,7 @@ if (process.env.NODE_ENV === "development") {
   const HOST = process.env.MONGO_HOST
   const PORT = process.env.MONGO_PORT
   const DATABASE = process.env.DATABASE_NAME
-  uri = `mongodb://${HOST}:${PORT}/${DATABASE}`
+  uri = process.env.MONGODB_URI || `mongodb://${HOST}:${PORT}/${DATABASE}`
 } else {
   uri = process.env.MONGODB_URI || ""
 }

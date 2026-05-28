@@ -1,10 +1,9 @@
 export const STATUS = [
+  "New",
   "Open",
-  "Under Investigation",
-  "Hold",
-  "Answered",
-  "Finished",
-  "Disapproved"
+  "In Progress",
+  "Resolved",
+  "Closed",
 ]
 
 export const TYPE = [

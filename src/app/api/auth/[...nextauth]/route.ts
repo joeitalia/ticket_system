@@ -37,6 +37,7 @@ export const authOptions: any = {
           id: user._id.toString(),
           email: user.email,
           userType: user.userType ?? "User",
+          isAdmin: user.isAdmin ?? false,
           firstName: user.firstName,
           lastName: user.lastName,
           middleName: user.middleName,
@@ -61,6 +62,7 @@ export const authOptions: any = {
         token.id = user.id;
         token.email = user.email;
         token.userType = user.userType;
+        token.isAdmin = user.isAdmin;
         token.firstName = user.firstName;
         token.lastName = user.lastName;
         token.middleName = user.middleName;
@@ -73,6 +75,7 @@ export const authOptions: any = {
         session.user = {
           id: token.id,
           userType: token.userType,
+          isAdmin: token.isAdmin,
           email: token.email,
           firstName: token.firstName,
           lastName: token.lastName,

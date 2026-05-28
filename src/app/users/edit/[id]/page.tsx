@@ -9,10 +9,12 @@ import { generatePassword } from "@/util/generate-password"
 import { hashText } from "@/util/hash"
 import Loading from "@/components/Layout/Loading"
 import { userTypeList } from "@/app/constant"
+import { useSession } from "next-auth/react"
 
 const AddUser = () => {
   const params = useParams()
   const router = useRouter()
+  const { data: session }: any = useSession();
 
   const [lastName, setLastName] = useState("")
   const [firstName, setFirstName] = useState("")
@@ -23,6 +25,7 @@ const AddUser = () => {
   const [password, setPassword] = useState("")
   const [departmentList, setDepartmentList] = useState([])
   const [editPassword, setEditPassword] = useState(false)
+  const [isAdmin, setIsAdmin] = useState(session.user?.isAdmin ?? false)
   const [fieldErrors, setFieldErrors] = useState<string[]>([])
   const [isLoading, setIsLoading] = useState(false)
 
@@ -47,6 +50,7 @@ const AddUser = () => {
             firstName, 
             lastName,
             middleName,
+            isAdmin,
             departmentId: department,
             userType,
             ...(password && editPassword ? { password: await hashText(password) } : {})
@@ -204,6 +208,18 @@ const AddUser = () => {
                     type="text" 
                     className="border border-gray-100 px-2 py-1.5 rounded w-full outline-gray-200 bg-gray-100"
                   />
+                  {session.user?.isAdmin && (
+                    <label className="flex items-center">
+                      <input
+                        type="checkbox"
+                        checked={isAdmin}
+                        onChange={() => {
+                          setIsAdmin(!isAdmin);
+                        }}
+                      />
+                      &nbsp; Administrator
+                    </label>
+                  )}
                 </div>
               </div>
               <div className="flex flex-col w-full gap-1">
@@ -235,12 +251,14 @@ const AddUser = () => {
               >
                 Save
               </button>
-              <Link
-                href={'/users'} 
-                className="bg-white text-gray-500 font-semibold px-10 py-1 rounded border border-gray-300 cursor-pointer hover:bg-gray-100"
-              >
-                Back
-              </Link>
+              {session.user?.isAdmin && (
+                <Link
+                  href={'/users'} 
+                  className="bg-white text-gray-500 font-semibold px-10 py-1 rounded border border-gray-300 cursor-pointer hover:bg-gray-100"
+                >
+                  Back
+                </Link>
+              )}
               {editPassword && <button
                 className="bg-green-700 text-white font-semibold px-10 py-1 rounded border border-green-700 cursor-pointer hover:bg-green-600"
                 onClick={onGeneratePassword}

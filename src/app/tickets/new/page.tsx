@@ -15,6 +15,7 @@ import Loading from '@/components/Layout/Loading'
 import Image from 'next/image'
 import { convertToBase64 } from '@/util/image-to-base64'
 import Modal from '@/components/Modal'
+import { formatDateDisplay, formatDateInput } from '@/util/dateformat'
 
 const CreateTicket = () => {
   const router = useRouter();
@@ -78,14 +79,15 @@ const CreateTicket = () => {
       await saveNotification({
         message: `#${newTicketNumber}: ${title} created`,
         ticketId: newTicketNumber,
-        managers: departments.find(dept => dept._id === department)?.managers || []
+        status: "New",
+        managers,
       });
       
       const emails: string[] = [data.user.email];
 
-      // get managers user details to send email
+      // / get managers user details to send email
       if (managers.length > 0) {
-        emails.push(...managers);
+        emails.push(...managers.map((m) => m.email));
       }
       
       if (apiData.success) {
@@ -114,8 +116,33 @@ const CreateTicket = () => {
     }
   }
 
+  /**
+   * fetch created by user info
+   * @param ticket 
+   * @returns 
+   */
+  const getUserByDepartment = async (departmentId: string) => {
+    try {
+      const res = await fetch(`/api/users/department/${departmentId}`)
+      const userApi = await res.json()
+      if (userApi) {
+        return userApi.map((user: any) => {
+          return {
+            label: `${user.firstName} ${user.middleName} ${user.lastName}`,
+            value: user._id,
+            email: user.email
+          }
+        })
+      }
+    } catch (error: any) {
+      console.error(error)
+      return []
+    }
+    return []
+  }
+
   const saveNotification = async (notification: any) => {
-    notification.managers.forEach(async (mg: string) => {
+    notification.managers.forEach(async (mg: any) => {
       try {
         await fetch(`/api/notifications`, {
           method: "POST",
@@ -123,7 +150,8 @@ const CreateTicket = () => {
           body: JSON.stringify({
             ticketId: notification.ticketId,
             message: notification.message,
-            notifiedUser: mg,
+            status: notification.status,
+            notifiedUser: mg.email,
             read: false,
           }),
         });
@@ -156,39 +184,32 @@ const CreateTicket = () => {
     const tDate = new Date();
     
     if (value === "Critical") tDate.setDate(tDate.getDate() + 1); // 1 day
-    else if (value === "High") tDate.setDate(tDate.getDate() + 2); // 2 days
-    else if (value === "Medium") tDate.setDate(tDate.getDate() + 5); // 3 days
-    else if (value === "Low") tDate.setDate(tDate.getDate() + 7); // 4 days
-
-    let formattedTargetDate = tDate.toLocaleDateString('en-GB');
+    else if (value === "High") tDate.setDate(tDate.getDate() + 1); // 1 days
+    else if (value === "Medium") tDate.setDate(tDate.getDate() + 2); // 2 days
+    else if (value === "Low") tDate.setDate(tDate.getDate() + 3); // 3 days
+    
+    let formattedTargetDate = formatDateInput(tDate.toLocaleDateString('en-GB'));
     if (!value) formattedTargetDate = ''; 
     setTargetDate(formattedTargetDate);
   }
 
-  const handleDepartmentSelect = (value: string) => {
+  const handleDepartmentSelect = async (value: string) => {
     setDepartment(value);
-    const selectedDept = departments.find(dept => dept._id === value);
-    if (selectedDept) {
-      selectedDept.managers.forEach((mg: string) => {
-        fetch(`/api/users/${mg}`).then(res => res.json()).then((data: any) => {
-          setManagers(prev => [...prev, data.email])
-        });
-      });
-    } else {
-      setManagers([]);
-    }
+    const userManagers = await getUserByDepartment(value)
+    setManagers(userManagers)
   }
 
   useEffect(() => {
     // set start date to current date
     const stDate = new Date();
-    const formattedStartDate = stDate.toLocaleDateString('en-GB')
+    const formattedStartDate = formatDateDisplay(stDate.toString());
     setStartDate(formattedStartDate);
 
     fetch("/api/departments")
       .then((res) => res.json())
       .then(setDepartments);
   }, []);
+  
   return (
     <>
       <DefaultLayout>
@@ -264,6 +285,7 @@ const CreateTicket = () => {
                   <label className="whitespace-pre mr-3 font-semibold">Start Date:</label>
                   <div className="flex w-full">
                     <input
+                      type="date"
                       disabled={true} 
                       defaultValue={startDate}
                       className="border border-gray-100 py-1 px-2 rounded w-full outline-gray-200 bg-white disabled:bg-gray-100 h-9"
@@ -274,6 +296,7 @@ const CreateTicket = () => {
                   <label className="whitespace-pre mr-3 font-semibold">Target Date:</label>
                   <div className="flex w-full">
                     <input
+                      type="date"
                       defaultValue={targetDate}
                       disabled={true}
                       className="border border-gray-100 py-1 px-2 rounded w-full outline-gray-200 bg-white disabled:bg-gray-100 h-9"

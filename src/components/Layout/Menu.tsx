@@ -39,23 +39,26 @@ const Menu = () => {
       </div>
       <ul className="pt-3">
         <li>
-          <Link href={"/"} className="p-2 block hover:bg-gray-200 hover:rounded hover:text-black">Dashboard</Link>
+          <Link href={"/"} prefetch={false} className="p-2 block hover:bg-gray-200 hover:rounded hover:text-black">Dashboard</Link>
         </li>
         <li>
-          <Link href={"/tickets"} className="p-2 block hover:bg-gray-200 hover:rounded hover:text-black">Tickets</Link>
+          <Link href={"/tickets"} prefetch={false} className="p-2 block hover:bg-gray-200 hover:rounded hover:text-black">Tickets</Link>
         </li>
         {
-          user?.userType && (
+          user?.isAdmin && (
             <>
               <li>
-                <Link href={"/departments"} className="p-2 block hover:bg-gray-200 hover:rounded hover:text-black">Departments</Link>
+                <Link href={"/departments"} prefetch={false} className="p-2 block hover:bg-gray-200 hover:rounded hover:text-black">Departments</Link>
               </li>
               <li>
-                <Link href={"/users"} className="p-2 block hover:bg-gray-200 hover:rounded hover:text-black">Users</Link>
+                <Link href={"/users"} prefetch={false} className="p-2 block hover:bg-gray-200 hover:rounded hover:text-black">Users</Link>
               </li>
             </>
           )
         }
+        <li>
+          <Link href={`/users/edit/${user.id}`} prefetch={false} className="p-2 block hover:bg-gray-200 hover:rounded hover:text-black">Profile</Link>
+        </li>
         {/* <li>
           <span 
             onClick={(e: React.MouseEvent<HTMLButtonElement>) => showSubMenu('ticket', e.target as HTMLElement)}
@@ -86,7 +89,7 @@ const Menu = () => {
           </ul>
         </li> */}
         <li>
-          <Link href={"/login"} onClick={handleLogout} className="p-2 block hover:bg-gray-200 hover:rounded hover:text-black">Logout</Link>
+          <Link href={"/login"} onClick={handleLogout} prefetch={false} className="p-2 block hover:bg-gray-200 hover:rounded hover:text-black">Logout</Link>
         </li>
       </ul>
     </div>
