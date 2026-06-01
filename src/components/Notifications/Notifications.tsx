@@ -2,10 +2,34 @@
 
 import { useEffect, useState } from 'react';
 import { Bell } from 'lucide-react';
+import Link from 'next/link';
 
 export default function NotificationBell() {
   const [open, setOpen] = useState(false);
   const [notifications, setNotifications] = useState<any[]>([]);
+
+  const updateNotifications = (id: string) => {
+      fetch(`/api/notifications/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          read: true,
+        }),
+      })
+      .then(res => res.json())
+      .then(() => {
+        setNotifications(prev =>
+          prev.map(notif =>
+            notif._id === id
+              ? { ...notif, read: true }
+              : notif
+          )
+        );
+      })
+      .catch(err => console.error('Failed to update notification:', err));
+  };
 
   useEffect(() => {
     fetch('/api/notifications')
@@ -24,26 +48,28 @@ export default function NotificationBell() {
         <Bell size={22} />
 
         {/* Notification Badge */}
-        <span className="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full px-1">
-          {notifications.length}
-        </span>
+        { notifications.length > 0 && (
+          <span className="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full px-1">
+            {notifications.length}
+          </span>
+        )}
       </button>
 
       {/* Dropdown */}
       {open && (
-        <div className="absolute right-0 mt-2 w-80 bg-white border rounded-md shadow-lg z-50">
+        <div className="absolute right-0 mt-2 w-80 bg-white rounded-md shadow-lg z-50 border border-gray-200 overflow-hidden">
           <div className="p-3 border-b border-gray-200 font-semibold">
             Notifications
           </div>
 
           <div className="max-h-80 overflow-y-auto">
             {notifications.length > 0 ? (
-              notifications.map((notif) => (
-                <div className="p-3 border-b border-gray-200 hover:bg-gray-50 cursor-pointer" key={notif.id}>
+              notifications.map((notif, index) => (
+                <div className={`p-3 last:border-0 border-b border-gray-300 hover:bg-gray-50 cursor-pointer ${notif.read ? '' : 'bg-blue-100'}`} key={notif.id + '-' + index}>
                   <div>{ notif.status }</div>
-                  <div className="">
+                  <Link href={`/tickets/edit/${notif.ticketId}`} className="text-blue-500 hover:underline" onClick={() => updateNotifications(notif._id)}>
                     {notif.message}
-                  </div>
+                  </Link>
                 </div>
               ))
             ) : (
