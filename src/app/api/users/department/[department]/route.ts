@@ -14,7 +14,11 @@ export async function GET(
     const { department } = await params;
     const user: any = await db
       .collection(collectionName)
-      .findOne({ departmentId: department });
+      .find(
+        { departmentId: department },
+        { projection: { password: 0 } }
+      )
+      .toArray();
     
     return NextResponse.json({success: true, data: user});
   } catch (error) {

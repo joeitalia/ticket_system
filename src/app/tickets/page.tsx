@@ -25,6 +25,7 @@ const ShowTickets = () => {
   const [searchTerm, setSearchTerm] = useState("")
   const [totalPages, setTotalPages] = useState(1)
   const [totalPagesAssigned, setTotalPagesAssigned] = useState(1)
+  const [assignee, setAssignee] = useState([])
   
   /**
    * fetch tickets 
@@ -39,10 +40,13 @@ const ShowTickets = () => {
         setTicketsFn(ticketsApi?.data ?? [])
         const ticketsWithReporter: any = await Promise.all(
           ticketsApi?.data?.map(async (ticket: any) => {
-            const reportedBy = await getReportedBy(ticket)
+            const reportedBy = await getUser(ticket.createdBy)
+            const assigneeName = await getUser(ticket.assigneeId)
             return {
               userId: ticket.createdBy,
-              createdBy: reportedBy
+              createdBy: reportedBy,
+              assigneeId: ticket.assigneeId,
+              assignee: assigneeName
             }
           })
         )
@@ -60,9 +64,9 @@ const ShowTickets = () => {
    * @param ticket 
    * @returns 
    */
-  const getReportedBy = async (ticket: any) => {
+  const getUser = async (userId: any) => {
     try {
-      const res = await fetch(`/api/users/${ticket.createdBy}`)
+      const res = await fetch(`/api/users/${userId}`)
       const userApi = await res.json()
       if (userApi && userApi.firstName && userApi.lastName) {
         return `${userApi.firstName} ${userApi.middleName} ${userApi.lastName}`
@@ -78,6 +82,12 @@ const ShowTickets = () => {
     if (!ticketCreators.length) return <span className="text-blue-300">Loading...</span>
     const creator: any = ticketCreators?.filter((crtr: any) => crtr.userId === creatorId)
     return creator?.[0]?.createdBy ?? ''
+  }, [ticketCreators])
+
+  const displayAssignee = useCallback((assigneeId: string) => {
+    if (!ticketCreators.length) return <span className="text-blue-300">Loading...</span>
+    const assigneTo: any = ticketCreators?.find((crtr: any) => crtr.assigneeId === assigneeId)
+    return assigneTo?.assignee ?? '';
   }, [ticketCreators])
 
   const generateReport = async () => {
@@ -105,7 +115,7 @@ const ShowTickets = () => {
       if (reportApi?.data?.length) {
         const ticketsWithReporter: any = await Promise.all(
           reportApi?.data?.map(async (ticket: any) => {
-            const reportedBy = await getReportedBy(ticket)
+            const reportedBy = await getUser(ticket)
             return {
               issueNo: ticket.issueNo,
               title: ticket.title,
@@ -188,6 +198,7 @@ const ShowTickets = () => {
                     <th className="p-2 text-left">Title</th>
                     <th className="p-2 text-left">Importance</th>
                     <th className="p-2 text-left">Status</th>
+                    <th className="p-2 text-left">Assignee</th>
                     <th className="p-2 text-left">Reported Date</th>
                     <th className="p-2 text-left">Target Date</th>
                     <th className="p-2 text-left">Reported By</th>
@@ -215,6 +226,7 @@ const ShowTickets = () => {
                       <td className="px-2 py-1">{ticket.title}</td>
                       <td className="px-2 py-1">{ticket.importance}</td>
                       <td className="px-2 py-1">{ticket.status}</td>
+                      <td className="px-2 py-1">{displayAssignee(ticket.assigneeId)}</td>
                       <td className="px-2 py-1">{formatDate(ticket.startDate)}</td>
                       <td className="px-2 py-1">{formatDate(ticket.targetDate)}</td>
                       <td className="px-2 py-1">{displayCreator(ticket.createdBy)}</td>
@@ -280,6 +292,7 @@ const ShowTickets = () => {
                 <th className="p-2 text-left">Title</th>
                 <th className="p-2 text-left">Importance</th>
                 <th className="p-2 text-left">Status</th>
+                <th className="p-2 text-left">Assignee</th>
                 <th className="p-2 text-left">Reported Date</th>
                 <th className="p-2 text-left">Target Date</th>
                 <th className="p-2 text-left">Reported By</th>
@@ -307,6 +320,7 @@ const ShowTickets = () => {
                   <td className="px-2 py-1">{ticket.title}</td>
                   <td className="px-2 py-1">{ticket.importance}</td>
                   <td className="px-2 py-1">{ticket.status}</td>
+                  <td className="px-2 py-1">{displayAssignee(ticket.assigneeId)}</td>
                   <td className="px-2 py-1">{formatDate(ticket.startDate)}</td>
                   <td className="px-2 py-1">{formatDate(ticket.targetDate)}</td>
                   <td className="px-2 py-1">{displayCreator(ticket.createdBy)}</td>

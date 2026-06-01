@@ -70,11 +70,15 @@ const EditTicket = () => {
         setAssignee(assigneeApi);
       }
       
-      const createdByApi: any = await getUser(ticket.createdBy)
-      setCreatedBy(createdByApi)
-      
-      const userManagers = await getUserByDepartment(ticket.departmentId)
-      setManagers(userManagers)
+      if (ticket.createdBy) {
+        const createdByApi: any = await getUser(ticket.createdBy)
+        setCreatedBy(createdByApi)
+      }
+
+      if (ticket.departmentId) {
+        const userManagers = await getUserByDepartment(ticket.departmentId)
+        setManagers(userManagers)
+      }
     }
   }
   
@@ -87,14 +91,14 @@ const EditTicket = () => {
     try {
       const res = await fetch(`/api/users/department/${departmentId}`)
       const userApi = await res.json()
-      if (userApi) {
-        return userApi.map((user: any) => {
+      if (userApi.data) {
+        return userApi?.data?.map((user: any) => {
           return {
             label: `${user.firstName} ${user.middleName} ${user.lastName}`,
             value: user._id,
             email: user.email
           }
-        })
+        }) ?? [];
       }
     } catch (error: any) {
       console.error(error)
@@ -324,7 +328,7 @@ const EditTicket = () => {
                   <div className="flex w-full">
                     <select 
                       value={ticketStatus}
-                      disabled={!data?.user?.isAdmin || data?.user?._id !== createdBy.value || !managers?.map((m) => m.email).includes(data?.user?.email)}
+                      disabled={!(data?.user?.isAdmin || [createdBy.value, assignee.value].includes(data?.user?._id) || managers?.map((m) => m.email).includes(data?.user?.email))}
                       onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
                         if (e.target.value === "Resolved") {
                           const today = new Date();
