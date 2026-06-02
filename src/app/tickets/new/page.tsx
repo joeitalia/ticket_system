@@ -153,6 +153,7 @@ const CreateTicket = () => {
             status: notification.status,
             notifiedUser: mg.email,
             read: false,
+            dateAdded: new Date().toISOString(),
           }),
         });
       } catch (error) {

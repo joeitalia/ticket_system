@@ -222,6 +222,7 @@ const EditTicket = () => {
             notifiedUser: mg.email,
             status: notification.status,
             read: false,
+            dateAdded: new Date().toISOString(),
           }),
         });
       } catch (error) {

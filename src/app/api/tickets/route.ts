@@ -13,6 +13,7 @@ export async function GET(
     const { searchParams } = new URL(request.url);
 
     const isReport = searchParams.get("report") === "true";
+    const isAging = searchParams.get("aging") === "true";
 
     const departmentId = searchParams.get("departmentId");
     const assigneeId = searchParams.get("assigneeId");
@@ -42,6 +43,18 @@ export async function GET(
       pipeline.push({
         $match: {
           assigneeId,
+        },
+      });
+    }
+
+    if (isAging) {
+      const now = new Date();
+      pipeline.push({
+        $match: {
+          targetDate: { $lt: now.toISOString() },
+          status: {
+            $nin: ["Closed", "Resolved"]
+          }
         },
       });
     }

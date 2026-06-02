@@ -3,78 +3,49 @@
 import DefaultLayout from "@/components/Layout/DefaultLayout"
 import MyPieChart from "@/components/PieChart/PieChart";
 import { formatDate } from "@/util/dateformat";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 export default function Home() {
+  const { data }: any = useSession();
+  const [recentlyAdded, setRecentlyAdded] = useState([]);
+  const [agingTickets, setAgingTickets] = useState([]);
 
-  const ticketsAssigned = [
-    {
-      issueNo: 123,
-      title: "Fix login bug",
-      importance: "High",
-      status: "In Progress",
-      startDate: "2024-06-01T10:00:00Z",
-      targetDate: "2024-06-05T17:00:00Z",
-      createdBy: { name: "Alice" },
-      createdDate: "2024-05-30T09:00:00Z"
-    },
-    {
-      issueNo: 124,
-      title: "Update user profile page",
-      importance: "Medium",
-      status: "New",
-      startDate: "2024-06-02T11:00:00Z",
-      targetDate: "2024-06-10T17:00:00Z",
-      createdBy: { name: "Bob" },
-      createdDate: "2024-05-31T14:30:00Z"
-    }
-  ];
+  const getRecentlyAdded = async () => {
+    const params = new URLSearchParams({
+      page: "1",
+      limit: "5",
+      departmentId: data?.user?.department.id,
+    });
 
-  const agingTickets = [
-    {
-      issueNo: 125,
-      title: "Implement search feature",
-      importance: "High",
-      status: "In Progress",
-      startDate: "2024-05-20T09:00:00Z",
-      targetDate: "2024-06-01T17:00:00Z",
-      createdBy: { name: "Charlie" },
-      createdDate: "2024-05-15T08:00:00Z"
-    },
-    {
-      issueNo: 126,
-      title: "Optimize database queries",
-      importance: "Low",
-      status: "New",
-      startDate: "2024-05-25T10:30:00Z",
-      targetDate: "2024-06-05T17:00:00Z",
-      createdBy: { name: "Dave" },
-      createdDate: "2024-05-20T12:45:00Z"
-    },
-    {
-      issueNo: 127,
-      title: "Update documentation",
-      importance: "Medium",
-      status: "In Progress",
-      startDate: "2024-05-28T11:00:00Z",
-      targetDate: "2024-06-10T17:00:00Z",
-      createdBy: { name: "Eve" },
-      createdDate: "2024-05-25T14:30:00Z"
-    }
-  ];
+    const res = await fetch(`/api/tickets?${params}`)
+    const recentAdded = await res.json();
+    setRecentlyAdded(recentAdded.data);
+  }
+
+  const getAgingTickets = async () => {
+    const params = new URLSearchParams({
+      page: "1",
+      limit: "5",
+      departmentId: data?.user?.department.id,
+      aging: "true",
+    });
+
+    const res = await fetch(`/api/tickets?${params}`)
+    const agingTickets = await res.json();
+    setAgingTickets(agingTickets.data);
+  }
+
+  useEffect(() => {
+    getRecentlyAdded();
+    getAgingTickets();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <DefaultLayout>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-        <div className="flex flex-col flex-1 min-w-1/2">
-          <div className="flex flex-row justify-between">
-            <h1 className="font-semibold text-xl">Status</h1>
-          </div>
-          <div className="bg-white px-2 py-3 mt-2 rounded-lg shadow-lg text-sm">
-            <p className="text-gray-500">Status overview will be here.</p>
-            <MyPieChart />
-          </div>
-        </div>
         <div className="flex flex-col flex-1 min-w-1/2 gap-5">
           <div className="flex flex-col">
             <div className="flex flex-row justify-between">
@@ -88,17 +59,18 @@ export default function Home() {
                     <th className="p-2 text-left">Title</th>
                     <th className="p-2 text-left">Importance</th>
                     <th className="p-2 text-left">Status</th>
+                    <th className="p-2 text-left">Created Date</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y">
-                  {ticketsAssigned.length === 0 && (
+                  {recentlyAdded.length === 0 && (
                     <tr>
                       <td colSpan={8} className="p-2 text-center">
                         No tickets found.
                       </td>
                     </tr>
                   )}
-                  {ticketsAssigned.map((ticket: any) => (
+                  {recentlyAdded.map((ticket: any) => (
                     <tr key={ticket.issueNo} className="odd:bg-gray-50 hover:bg-gray-100">
                       <td className="px-2 py-1">
                         <Link 
@@ -111,6 +83,7 @@ export default function Home() {
                       <td className="px-2 py-1">{ticket.title}</td>
                       <td className="px-2 py-1">{ticket.importance}</td>
                       <td className="px-2 py-1">{ticket.status}</td>
+                      <td className="px-2 py-1">{formatDate(ticket.createdDate)}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -159,6 +132,15 @@ export default function Home() {
                 </tbody>
               </table>
             </div>
+          </div>
+        </div>
+        <div className="flex flex-col flex-1 min-w-1/2">
+          <div className="flex flex-row justify-between">
+            <h1 className="font-semibold text-xl">Status</h1>
+          </div>
+          <div className="bg-white px-2 py-3 mt-2 rounded-lg shadow-lg text-sm">
+            <p className="text-gray-500">Status overview will be here.</p>
+            <MyPieChart />
           </div>
         </div>
       </div>

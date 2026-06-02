@@ -6,9 +6,24 @@ const client = await clientPromise;
 const db = client.db(DBNAME);
 const collectionName = "Notifications"
 
-export async function GET() {
+export async function GET(
+  request: NextRequest,
+) {
   try {
-    const notifications = await db.collection(collectionName).find({}).toArray();
+    const { searchParams } = new URL(request.url);
+    const notifiedUser = searchParams.get("notifiedUser");
+
+    const query: any = {};
+    if (notifiedUser) {
+      query.notifiedUser = notifiedUser;
+    }
+
+    const notifications = await db.collection(collectionName)
+      .find(query)
+      .sort({
+        targetDate: -1
+      })
+      .toArray();
     return NextResponse.json(notifications);
   } catch (error) {
     console.error("MongoDB error:", error);

@@ -3,10 +3,13 @@
 import { useEffect, useState } from 'react';
 import { Bell } from 'lucide-react';
 import Link from 'next/link';
+import { useSession } from 'next-auth/react';
 
 export default function NotificationBell() {
+  const { data }: any = useSession();
   const [open, setOpen] = useState(false);
   const [notifications, setNotifications] = useState<any[]>([]);
+  const [totalUnread, setTotalUnread] = useState(0);
 
   const updateNotifications = (id: string) => {
       fetch(`/api/notifications/${id}`, {
@@ -32,10 +35,15 @@ export default function NotificationBell() {
   };
 
   useEffect(() => {
-    fetch('/api/notifications')
+    fetch('/api/notifications?notifiedUser=' + data?.user?.id)
       .then(res => res.json())
-      .then(data => setNotifications(data))
+      .then(data => {
+        setNotifications(data);
+        const unread = data.filter((n: any) => !n.read).length;
+        setTotalUnread(unread);
+      })
       .catch(err => console.error('Failed to fetch notifications:', err));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -48,9 +56,9 @@ export default function NotificationBell() {
         <Bell size={22} />
 
         {/* Notification Badge */}
-        { notifications.length > 0 && (
+        { totalUnread > 0 && (
           <span className="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full px-1">
-            {notifications.length}
+            {totalUnread}
           </span>
         )}
       </button>
