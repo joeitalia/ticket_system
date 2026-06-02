@@ -70,11 +70,17 @@ export default function NotificationBell() {
             Notifications
           </div>
 
-          <div className="max-h-80 overflow-y-auto">
+          <div className="max-h-80 overflow-y-auto text-xs">
             {notifications.length > 0 ? (
               notifications.map((notif, index) => (
-                <div className={`p-3 last:border-0 border-b border-gray-300 hover:bg-gray-50 cursor-pointer ${notif.read ? '' : 'bg-blue-100'}`} key={notif.id + '-' + index}>
-                  <div>{ notif.status }</div>
+                <div className={`flex flex-col gap-y-1 p-3 last:border-0 border-b border-gray-300 hover:bg-gray-50 cursor-pointer ${notif.read ? '' : 'bg-blue-100'}`} key={notif.id + '-' + index}>
+                  <div className="font-semibold flex items-end gap-x-1">
+                    { notif.status }
+                    <span> - </span>
+                    <span className="text-gray-500 italic">
+                      {notif.dateAdded}
+                    </span>
+                  </div>
                   <Link href={`/tickets/edit/${notif.ticketId}`} className="text-blue-500 hover:underline" onClick={() => updateNotifications(notif._id)}>
                     {notif.message}
                   </Link>
