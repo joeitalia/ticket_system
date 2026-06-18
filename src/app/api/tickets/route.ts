@@ -17,6 +17,7 @@ export async function GET(
 
     const departmentId = searchParams.get("departmentId");
     const assigneeId = searchParams.get("assigneeId");
+    const createdById = searchParams.get("createdById");
 
     const search = searchParams.get("search")?.trim();
     const searchBy = searchParams.get("searchBy")?.trim();
@@ -43,6 +44,14 @@ export async function GET(
       pipeline.push({
         $match: {
           assigneeId,
+        },
+      });
+    }
+
+    if (createdById) {
+      pipeline.push({
+        $match: {
+          createdBy: createdById,
         },
       });
     }

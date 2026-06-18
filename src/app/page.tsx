@@ -13,25 +13,27 @@ export default function Home() {
   const [agingTickets, setAgingTickets] = useState([]);
 
   const getRecentlyAdded = async () => {
-    const params = new URLSearchParams({
+    const query: any = {
       page: "1",
       limit: "5",
       departmentId: data?.user?.department.id,
-    });
-
+    }
+    if (data?.user?.userType === "User") query.assigneeId = data?.user?.id;
+    const params = new URLSearchParams(query);
     const res = await fetch(`/api/tickets?${params}`)
     const recentAdded = await res.json();
     setRecentlyAdded(recentAdded.data);
   }
 
   const getAgingTickets = async () => {
-    const params = new URLSearchParams({
+    const query: any = {
       page: "1",
       limit: "5",
       departmentId: data?.user?.department.id,
       aging: "true",
-    });
-
+    }
+    if (data?.user?.userType === "User") query.assigneeId = data?.user?.id;
+    const params = new URLSearchParams(query);
     const res = await fetch(`/api/tickets?${params}`)
     const agingTickets = await res.json();
     setAgingTickets(agingTickets.data);
@@ -126,7 +128,7 @@ export default function Home() {
                       <td className="px-2 py-1">{ticket.title}</td>
                       <td className="px-2 py-1">{ticket.importance}</td>
                       <td className="px-2 py-1">{ticket.status}</td>
-                      <td className="px-2 py-1">{formatDate(ticket.targetDate)}</td>
+                      <td className="px-2 py-1 text-red-400">{formatDate(ticket.targetDate)}</td>
                     </tr>
                   ))}
                 </tbody>

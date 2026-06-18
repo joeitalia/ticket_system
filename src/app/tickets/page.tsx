@@ -24,8 +24,10 @@ const ShowTickets = () => {
   const [searchBy, setSearchBy] = useState("Created By");
   const [searchTerm, setSearchTerm] = useState("")
   const [totalPages, setTotalPages] = useState(1)
-  const [totalPagesAssigned, setTotalPagesAssigned] = useState(1)
-  const [assignee, setAssignee] = useState([])
+  const [totalPagesAssigned, setTotalPagesAssigned] = useState(1);
+  const [createdTickets, setCreatedTickets] = useState([]);
+  const [pageCreated, setPageCreated] = useState(1);
+  const [totalPagesCreated, setTotalPagesCreated] = useState(1);
   
   /**
    * fetch tickets 
@@ -169,6 +171,11 @@ const ShowTickets = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageAssigned, data])
 
+  useEffect(() => {
+    if (pageCreated) getTickets(pageCreated, { createdBy: data?.user?.id }, setTotalPagesCreated, setCreatedTickets)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pageCreated, data])
+
   return (
     <DefaultLayout>
       {isOverlayOpen && <LoadingOverlay />}
@@ -199,10 +206,10 @@ const ShowTickets = () => {
                     <th className="p-2 text-left">Importance</th>
                     <th className="p-2 text-left">Status</th>
                     <th className="p-2 text-left">Assignee</th>
-                    <th className="p-2 text-left">Reported Date</th>
+                    <th className="p-2 text-left">Start Date</th>
                     <th className="p-2 text-left">Target Date</th>
-                    <th className="p-2 text-left">Reported By</th>
-                    <th className="p-2 text-left">Reported Date</th>
+                    <th className="p-2 text-left">Created By</th>
+                    <th className="p-2 text-left">Created Date</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y">
@@ -270,19 +277,6 @@ const ShowTickets = () => {
         )}
         <div className="flex flex-row justify-between items-center mt-6">
           <h1 className="font-semibold text-2xl">Tickets assigned to you</h1>
-          {data?.user?.userType === "User" && (
-            <div className="flex gap-1">
-              <button onClick={() => setReportModalOpen(true)} className="border-green-500 rounded px-2 py-1 bg-green-500 text-white hover:bg-green-600 shadow font-semibold cursor-pointer">
-                Generate Report
-              </button>
-              <Link
-                href={`/tickets/new`}
-                className="border-blue-500 rounded px-2 py-1 bg-blue-500 text-white hover:bg-blue-600 shadow font-semibold"
-              >
-                Create Ticket
-              </Link>
-            </div>
-          )}
         </div>
         <div className="bg-white px-2 py-3 mt-2 rounded-lg shadow-lg text-sm">
           <table className="w-full table-auto">
@@ -293,10 +287,10 @@ const ShowTickets = () => {
                 <th className="p-2 text-left">Importance</th>
                 <th className="p-2 text-left">Status</th>
                 <th className="p-2 text-left">Assignee</th>
-                <th className="p-2 text-left">Reported Date</th>
+                <th className="p-2 text-left">Start Date</th>
                 <th className="p-2 text-left">Target Date</th>
-                <th className="p-2 text-left">Reported By</th>
-                <th className="p-2 text-left">Reported Date</th>
+                <th className="p-2 text-left">Created By</th>
+                <th className="p-2 text-left">Created Date</th>
               </tr>
             </thead>
             <tbody className="divide-y">
@@ -354,6 +348,83 @@ const ShowTickets = () => {
                 type="button"
                 className={`py-1 px-2 shadow rounded border border-gray-300 ${pageAssigned === totalPagesAssigned ? "bg-gray-100 text-gray-400" : "cursor-pointer bg-white hover:bg-gray-100"}`}
                 disabled={pageAssigned === totalPagesAssigned}
+              >
+                Next
+              </button>
+            </div>
+          )}
+        </div>
+        <div className="flex flex-row justify-between items-center mt-6">
+          <h1 className="font-semibold text-2xl">Your Created Tickets</h1>
+        </div>
+        <div className="bg-white px-2 py-3 mt-2 rounded-lg shadow-lg text-sm">
+          <table className="w-full table-auto">
+            <thead className="border-b">
+              <tr>
+                <th className="p-2 text-left">Ticket</th>
+                <th className="p-2 text-left">Title</th>
+                <th className="p-2 text-left">Importance</th>
+                <th className="p-2 text-left">Status</th>
+                <th className="p-2 text-left">Assignee</th>
+                <th className="p-2 text-left">Start Date</th>
+                <th className="p-2 text-left">Created Date</th>
+                <th className="p-2 text-left">Target Date</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y">
+              {createdTickets.length === 0 && (
+                <tr>
+                  <td colSpan={8} className="p-2 text-center">
+                    No tickets found.
+                  </td>
+                </tr>
+              )}
+              {createdTickets.map((ticket: any) => (
+                <tr key={ticket.issueNo} className="odd:bg-gray-50 hover:bg-gray-100">
+                  <td className="px-2 py-1">
+                    <Link 
+                      href={`../tickets/edit/${ticket.issueNo}`}
+                      className="underline text-blue-500 cursor-pointer"
+                    >
+                      TN-{ticket.issueNo}
+                    </Link>
+                  </td>
+                  <td className="px-2 py-1">{ticket.title}</td>
+                  <td className="px-2 py-1">{ticket.importance}</td>
+                  <td className="px-2 py-1">{ticket.status}</td>
+                  <td className="px-2 py-1">{displayAssignee(ticket.assigneeId)}</td>
+                  <td className="px-2 py-1">{formatDate(ticket.startDate)}</td>
+                  <td className="px-2 py-1">{formatDate(ticket.targetDate)}</td>
+                  <td className="px-2 py-1">{formatDate(ticket.createdDate)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <div className="flex justify-between text-sm mt-2">
+          <div></div>
+          {totalPagesCreated > 1 && (
+            <div className="flex gap-x-2 items-center">
+              <button
+                onClick={() => {
+                  setTicketCreators([])
+                  setPageCreated((prev) => Math.max(prev - 1, 1))
+                }}
+                type="button"
+                className={`py-1 px-2 shadow rounded border border-gray-300 ${pageCreated === 1 ? "bg-gray-100 text-gray-400" : "cursor-pointer bg-white hover:bg-gray-100"}`}
+                disabled={pageCreated === 1}
+              >
+                Prev
+              </button>
+              <span>Page {pageCreated} of {totalPagesCreated}</span>
+              <button
+                onClick={() => {
+                  setTicketCreators([])
+                  setPageCreated((prev) => Math.min(prev + 1, totalPagesCreated))
+                }}
+                type="button"
+                className={`py-1 px-2 shadow rounded border border-gray-300 ${pageCreated === totalPagesCreated ? "bg-gray-100 text-gray-400" : "cursor-pointer bg-white hover:bg-gray-100"}`}
+                disabled={pageCreated === totalPagesCreated}
               >
                 Next
               </button>
