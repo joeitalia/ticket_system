@@ -76,7 +76,7 @@ const EditTicket = () => {
       }
 
       if (ticket.departmentId) {
-        const userManagers = await getUserByDepartment(ticket.departmentId)
+        const userManagers = await getUserByDepartment(ticket.departmentId, true)
         setManagers(userManagers)
       }
     }
@@ -87,9 +87,9 @@ const EditTicket = () => {
    * @param ticket 
    * @returns 
    */
-  const getUserByDepartment = async (departmentId: string) => {
+  const getUserByDepartment = async (departmentId: string, isManager: boolean = false) => {
     try {
-      const res = await fetch(`/api/users/department/${departmentId}`)
+      const res = await fetch(`/api/users/department/${departmentId}?isManager=${isManager}`)
       const userApi = await res.json()
       if (userApi.data) {
         return userApi?.data?.map((user: any) => {
@@ -219,8 +219,8 @@ const EditTicket = () => {
           body: JSON.stringify({
             ticketId: notification.ticketId,
             message: notification.message,
-            notifiedUser: mg.email,
             status: notification.status,
+            notifiedUser: mg.email,
             read: false,
             dateAdded: new Date().toISOString(),
           }),
@@ -368,7 +368,7 @@ const EditTicket = () => {
                     </select>
                   </div>
                 </div>
-                <div className="flex flex-col gap-1 flex-1">
+                <div className="flex flex-col gap-1 w-1/3">
                   <label className="whitespace-pre mr-3 font-semibold">Department:</label>
                   <div className="flex w-full">
                     <select 
@@ -424,18 +424,20 @@ const EditTicket = () => {
                   </div>
                 </div>
               </div>
-              <div className='flex flex-row gap-4 w-full'> 
-                <div className="flex flex-col gap-1 w-1/3">
-                  <label className="whitespace-pre mr-3 font-semibold">Assignee:</label>
-                  <div className="flex gap-x-1 w-full">
-                    <Autocompleter
-                      disabled={!data?.user?.isAdmin || data?.user?._id !== createdBy.value || !managers?.map((m) => m.email).includes(data?.user?.email)}
-                      options={assigneeOptions}
-                      input={assignee.label}
-                      setInput={setAssignee}
-                    />
+              <div className='flex flex-row gap-4 w-full'>
+                {data?.user?.userType !== "User" && 
+                  <div className="flex flex-col gap-1 w-1/3">
+                    <label className="whitespace-pre mr-3 font-semibold">Assignee:</label>
+                    <div className="flex gap-x-1 w-full">
+                      <Autocompleter
+                        disabled={!data?.user?.isAdmin || data?.user?._id !== createdBy.value || !managers?.map((m) => m.email).includes(data?.user?.email)}
+                        options={assigneeOptions}
+                        input={assignee.label}
+                        setInput={setAssignee}
+                      />
+                    </div>
                   </div>
-                </div>
+                }
                 <div className="flex flex-col gap-1 w-1/3">
                   <label className="whitespace-pre mr-3 font-semibold">Reported By:</label>
                   <div className="flex w-full flex-1 items-center">

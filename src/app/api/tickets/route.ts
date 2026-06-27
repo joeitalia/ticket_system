@@ -17,7 +17,7 @@ export async function GET(
 
     const departmentId = searchParams.get("departmentId");
     const assigneeId = searchParams.get("assigneeId");
-    const createdById = searchParams.get("createdById");
+    const createdById = searchParams.get("createdBy");
 
     const search = searchParams.get("search")?.trim();
     const searchBy = searchParams.get("searchBy")?.trim();

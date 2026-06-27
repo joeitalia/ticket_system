@@ -55,7 +55,7 @@ const CreateTicket = () => {
     try {
       const getTotalTicket = await fetch(`/api/tickets/totalCount`);
       const totalTicketData = await getTotalTicket.json();
-      const newTicketNumber = totalTicketData.returnValue + 1;  
+      const newTicketNumber = (totalTicketData.returnValue ?? 0) + 1;  
 
       const res = await fetch(`/api/tickets`, {
         method: "POST",
@@ -121,12 +121,12 @@ const CreateTicket = () => {
    * @param ticket 
    * @returns 
    */
-  const getUserByDepartment = async (departmentId: string) => {
+  const getUserByDepartment = async (departmentId: string, isManager: boolean = false) => {
     try {
-      const res = await fetch(`/api/users/department/${departmentId}`)
+      const res = await fetch(`/api/users/department/${departmentId}?isManager=${isManager}`)
       const userApi = await res.json()
-      if (userApi) {
-        return userApi.map((user: any) => {
+      if (userApi.data.length > 0) {
+        return userApi.data.map((user: any) => {
           return {
             label: `${user.firstName} ${user.middleName} ${user.lastName}`,
             value: user._id,
@@ -196,7 +196,8 @@ const CreateTicket = () => {
 
   const handleDepartmentSelect = async (value: string) => {
     setDepartment(value);
-    const userManagers = await getUserByDepartment(value)
+    const userManagers = await getUserByDepartment(value, true);
+    console.log(userManagers)
     setManagers(userManagers)
   }
 

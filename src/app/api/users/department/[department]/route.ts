@@ -12,10 +12,16 @@ export async function GET(
 ) {
   try {
     const { department } = await params;
+    const { searchParams } = new URL(request.url);
+
+    const query: any = { departmentId: department };
+    if (searchParams.has("isManager")) {
+      query.userType = searchParams.get("isManager") === "true" ? "Manager" : { $ne: "Manager" };
+    }
+
     const user: any = await db
       .collection(collectionName)
-      .find(
-        { departmentId: department },
+      .find(query,
         { projection: { password: 0 } }
       )
       .toArray();

@@ -43,11 +43,12 @@ const ShowTickets = () => {
         const ticketsWithReporter: any = await Promise.all(
           ticketsApi?.data?.map(async (ticket: any) => {
             const reportedBy = await getUser(ticket.createdBy)
-            const assigneeName = await getUser(ticket.assigneeId)
+            let assigneeName = '';
+            if (ticket.assigneeId) assigneeName = await getUser(ticket.assigneeId)
             return {
               userId: ticket.createdBy,
               createdBy: reportedBy,
-              assigneeId: ticket.assigneeId,
+              assigneeId: ticket.assigneeId ?? '',
               assignee: assigneeName
             }
           })
@@ -277,6 +278,16 @@ const ShowTickets = () => {
         )}
         <div className="flex flex-row justify-between items-center mt-6">
           <h1 className="font-semibold text-2xl">Tickets assigned to you</h1>
+          {
+            data?.user?.userType === "User" && <div className="flex gap-1">
+              <Link
+                href={`/tickets/new`}
+                className="border-blue-500 rounded px-2 py-1 bg-blue-500 text-white hover:bg-blue-600 shadow font-semibold"
+              >
+                Create Ticket
+              </Link>
+            </div>
+          }
         </div>
         <div className="bg-white px-2 py-3 mt-2 rounded-lg shadow-lg text-sm">
           <table className="w-full table-auto">
