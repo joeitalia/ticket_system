@@ -52,7 +52,7 @@ const EditTicket = () => {
 
   const getTicket = async () => {
     const ticketApi = await fetch(`/api/tickets/issueNo/${params.ticketNo}`);
-    const ticket = await ticketApi.json()    
+    const ticket = await ticketApi.json();
     if (ticket) {
       setTicketId(ticket._id)
       setIssueNo(ticket.issueNo)

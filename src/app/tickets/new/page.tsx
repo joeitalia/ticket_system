@@ -55,8 +55,7 @@ const CreateTicket = () => {
     try {
       const getTotalTicket = await fetch(`/api/tickets/totalCount`);
       const totalTicketData = await getTotalTicket.json();
-      const newTicketNumber = (totalTicketData.returnValue ?? 0) + 1;  
-
+      const newTicketNumber = (totalTicketData.totalRecords ?? 0) + 1; 
       const res = await fetch(`/api/tickets`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
