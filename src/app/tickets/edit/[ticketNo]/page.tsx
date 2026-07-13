@@ -164,7 +164,7 @@ const EditTicket = () => {
       const apiData = await res.json();
       
       await saveNotification({
-        message: `#${ticketId}: ${title} created`,
+        message: `#${issueNo}: ${title} created`,
         ticketId,
         status: ticketStatus,
         managers,

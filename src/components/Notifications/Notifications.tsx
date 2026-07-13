@@ -35,7 +35,7 @@ export default function NotificationBell() {
   };
 
   useEffect(() => {
-    fetch('/api/notifications?notifiedUser=' + data?.user?.id)
+    fetch('/api/notifications?notifiedUser=' + data?.user?.email)
       .then(res => res.json())
       .then(data => {
         setNotifications(data);
