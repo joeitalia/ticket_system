@@ -163,7 +163,7 @@ const ShowTickets = () => {
   }
   
   useEffect(() => {
-    if (page) getTickets(page, { departmentId: data?.user?.department.id }, setTotalPages, setTickets)
+    if (page) getTickets(page, { departmentId: data?.user?.department?.id }, setTotalPages, setTickets)
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, data])
 
