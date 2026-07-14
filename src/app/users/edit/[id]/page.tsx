@@ -168,7 +168,7 @@ const AddUser = () => {
                 <div className="flex w-full">
                   <select 
                     defaultValue={department}
-                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setDepartment(e.target.value)}
+                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setDepartment(e.currentTarget.value)}
                     className='border border-gray-100 p-2 rounded w-full outline-gray-200 bg-white'
                   >
                     <option>Select...</option>
