@@ -281,7 +281,6 @@ const EditTicket = () => {
     }, 0); // delay API until user stops typing
     
     return () => clearTimeout(delay); // cancel previous timers
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [assignee]);
   
   return (

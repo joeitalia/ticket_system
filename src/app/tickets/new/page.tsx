@@ -187,8 +187,7 @@ const CreateTicket = () => {
     else if (value === "High") tDate.setDate(tDate.getDate() + 1); // 1 days
     else if (value === "Medium") tDate.setDate(tDate.getDate() + 2); // 2 days
     else if (value === "Low") tDate.setDate(tDate.getDate() + 3); // 3 days
-    
-    let formattedTargetDate = formatDateInput(tDate.toLocaleDateString('en-GB'));
+    let formattedTargetDate = formatDateInput(tDate.toLocaleDateString('en-US'));
     if (!value) formattedTargetDate = ''; 
     setTargetDate(formattedTargetDate);
   }
